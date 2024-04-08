@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "资讯",
+  "usingComponents": {
+    "uni-load-more": "/uni_modules/uni-load-more/components/uni-load-more/uni-load-more",
+    "wwqy-header": "/components/wwqy-header/index",
+    "wwqy-footer": "/components/wwqy-footer/index"
+  }
+}
