@@ -544,18 +544,16 @@ VALUES (9, 'sms', 'huawei', '{\"name\":\"华为云短信\",\"alias\":\"huawei\"}
 INSERT INTO `la_system_config`
 VALUES (10, 'website', 'name', '无畏契约后台管理', 1660620367, 1660620367);
 INSERT INTO `la_system_config`
-VALUES (11, 'website', 'logo', '/api/static/backend_logo.png', 1660620367, 1660620367);
+VALUES (11, 'website', 'logo', '/api/static/logo.png', 1660620367, 1660620367);
 INSERT INTO `la_system_config`
-VALUES (12, 'website', 'favicon', '/api/static/backend_favicon.ico', 1660620367, 1660620367);
+VALUES (12, 'website', 'favicon', '/api/static/favicon.png', 1660620367, 1660620367);
 INSERT INTO `la_system_config`
-VALUES (13, 'website', 'backdrop', '/api/static/backend_backdrop.png', 1660620367, 1660620367);
+VALUES (13, 'website', 'backdrop', '/api/static/backdrop.png', 1660620367, 1660620367);
 INSERT INTO `la_system_config`
 VALUES (14, 'website', 'copyright', '[{\"name\":\"无畏契约后台管理系统\",\"link\":\"http://www.beian.gov.cn\"}]',
         1660620367, 1660620367);
 INSERT INTO `la_system_config`
-VALUES (15, 'website', 'homeBanner', '[]', 1631255140, 1631255140);
-INSERT INTO `la_system_config`
-VALUES (16, 'website', 'shopLogo', '/api/static/shop_logo.png', 1631255140, 1631255140);
+VALUES (15, 'website', 'homeBanner', '/api/static/banner0.jpg,/api/static/banner1.jpg', 1631255140, 1631255140);
 INSERT INTO `la_system_config`
 VALUES (17, 'protocol', 'service', '{\"name\":\"服务协议\",\"content\":\"\"}', 1660620367, 1660620367);
 INSERT INTO `la_system_config`

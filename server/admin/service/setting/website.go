@@ -5,6 +5,7 @@ import (
 	"likeadmin/admin/schemas/req"
 	"likeadmin/core/response"
 	"likeadmin/util"
+	"strings"
 )
 
 type ISettingWebsiteService interface {
@@ -28,17 +29,34 @@ func (wSrv settingWebsiteService) Detail() (res map[string]string, e error) {
 	if e = response.CheckErr(err, "Detail Get err"); e != nil {
 		return
 	}
-	return map[string]string{
+	homeBannerItems := strings.Split(data["homeBanner"], ",")
+	var absoluteHomeBannerUrls []string
+	for _, item := range homeBannerItems {
+		absoluteUrl := util.UrlUtil.ToAbsoluteUrl(strings.TrimSpace(item))
+		absoluteHomeBannerUrls = append(absoluteHomeBannerUrls, absoluteUrl)
+	}
+	homeBanner := strings.Join(absoluteHomeBannerUrls, ",")
+	res = map[string]string{
 		"name":       data["name"],
 		"logo":       util.UrlUtil.ToAbsoluteUrl(data["logo"]),
 		"favicon":    util.UrlUtil.ToAbsoluteUrl(data["favicon"]),
 		"backdrop":   util.UrlUtil.ToAbsoluteUrl(data["backdrop"]),
-		"homeBanner": data["homeBanner"],
-	}, nil
+		"homeBanner": homeBanner,
+	}
+	return res, nil
 }
 
 // Save 保存网站信息
 func (wSrv settingWebsiteService) Save(wsReq req.SettingWebsiteReq) (e error) {
+	var urls []string
+	// Process homeBanner URLs
+	bannerItems := strings.Split(wsReq.HomeBanner, ",")
+	for _, item := range bannerItems {
+		parsedUrl := util.UrlUtil.ToAbsoluteUrl(strings.TrimSpace(item))
+		urls = append(urls, parsedUrl)
+	}
+	wsReq.HomeBanner = strings.Join(urls, ",")
+	// Save website info
 	err := util.ConfigUtil.Set(wSrv.db, "website", "name", wsReq.Name)
 	if e = response.CheckErr(err, "Save Set name err"); e != nil {
 		return

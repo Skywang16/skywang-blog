@@ -40,7 +40,9 @@
                         </el-form-item>
                         <el-form-item label="发布时间" prop="publishTime">
                             <div class="w-80">
-                                <el-input v-model="formData.publishTime" placeholder="请输入发布时间" />
+                                <el-date-picker v-model="formData.publishTime" align="right" type="date"
+                                    placeholder="选择日期">
+                                </el-date-picker>
                             </div>
                         </el-form-item>
                         <el-form-item label="文章状态" required prop="status">
@@ -75,6 +77,7 @@ import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
 import { articleDetail, articleEdit, articleAdd } from '@/api/article'
 import useMultipleTabs from '@/hooks/useMultipleTabs'
+import moment from 'moment'
 
 const route = useRoute()
 const router = useRouter()
@@ -115,6 +118,7 @@ const getDetails = async () => {
 
 const handleSave = async () => {
     await formRef.value?.validate()
+    formData.publishTime = moment(formData.publishTime).format('YYYY-MM-DD');
     if (route.query.id) {
         await articleEdit(formData)
     } else {

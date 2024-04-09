@@ -22,7 +22,7 @@
                         <div class="form-tips">建议尺寸：200*200像素，支持jpg，jpeg，png格式</div>
                     </div>
                 </el-form-item>
-                <el-form-item label="登录页广告图" prop="backdrop">
+                <el-form-item label="登录页图" prop="backdrop">
                     <div>
                         <material-picker v-model="formData.backdrop" :limit="1" />
                         <div class="form-tips">建议尺寸：400*400像素，支持jpg，jpeg，png格式</div>
@@ -57,7 +57,7 @@ const formData = reactive({
     name: '', // 网站名称
     favicon: '', // 网站图标
     logo: '', // 网站logo
-    backdrop: '', // 登录页广告图
+    backdrop: '', // 登录页图
     homeBanner: ''
 })
 
@@ -87,7 +87,7 @@ const rules = {
     backdrop: [
         {
             required: true,
-            message: '请选择登录页广告图',
+            message: '请选择登录页图',
             trigger: ['change']
         }
     ],

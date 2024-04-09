@@ -102,7 +102,6 @@ export function findFirstValidRoute(
 
 //通过权限字符查询路由路径
 export function getRoutePath(perms: string) {
-    console.log(perms, "asdas d asd as d  asd asd asd asd asd as");
     const routerObj = useRouter() || router;
     return (
         routerObj.getRoutes().find((item) => item.meta?.perms == perms)?.path || ""
