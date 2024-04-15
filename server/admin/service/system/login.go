@@ -107,7 +107,6 @@ func (loginSrv systemLoginService) Login(c *gin.Context, req *req.SystemLoginReq
 	// 缓存登录信息
 	util.RedisUtil.Set(config.AdminConfig.BackstageTokenKey+token, adminIdStr, 7200)
 	loginSrv.adminSrv.CacheAdminUserByUid(sysAdmin.ID)
-
 	// 更新登录信息
 	err = loginSrv.db.Model(&sysAdmin).Updates(
 		system.SystemAuthAdmin{LastLoginIp: c.ClientIP(), LastLoginTime: time.Now().Unix()}).Error
@@ -133,16 +132,58 @@ func (loginSrv systemLoginService) Logout(req *req.SystemLogoutReq) (e error) {
 	return
 }
 
-// RecordLoginLog 记录登录日志
+// RecordLoginLog 记录登录日志并更新访问量
 func (loginSrv systemLoginService) RecordLoginLog(c *gin.Context, adminId uint, username string, errStr string) (e error) {
 	ua := core.UAParser.Parse(c.GetHeader("user-agent"))
 	var status uint8
 	if errStr == "" {
 		status = 1
 	}
+	// 获取当前日期
+	today := time.Now().UTC().Format("2006-01-02")
+	// 检查是否存在当前日期的记录
+	var authLog system.SystemAuthLog
+	result := loginSrv.db.Where("create_time = ?", today).First(&authLog)
+	if result.Error != nil {
+		// 如果记录不存在，遍历表中每一天并计算总访问量
+		var totalVisits int64
+		var allLogs []system.SystemAuthLog
+		loginSrv.db.Find(&allLogs)
+		for _, log := range allLogs {
+			totalVisits += log.TodayVisits
+		}
+		// 创建新记录
+		authLog = system.SystemAuthLog{
+			CreateTime:  time.Now().UTC(),
+			TodayVisits: 1,
+			TotalVisits: totalVisits + 1,
+			UpdateTime:  time.Now().UTC(),
+		}
+		err := loginSrv.db.Create(&authLog).Error
+		if err != nil {
+			return response.CheckErr(err, "RecordLoginLog Create err")
+		}
+	} else {
+		// 如果记录存在，增加访问量
+		authLog.TodayVisits++
+		authLog.TotalVisits++
+		authLog.UpdateTime = time.Now().UTC()
+		err := loginSrv.db.Model(&authLog).Where("create_time = ?", today).Updates(&authLog).Error
+		if err != nil {
+			return response.CheckErr(err, "RecordLoginLog Save err")
+		}
+	}
+	// 记录登录日志
 	err := loginSrv.db.Create(&system.SystemLogLogin{
-		AdminId: adminId, Username: username, Ip: c.ClientIP(), Os: ua.Os.Family,
-		Browser: ua.UserAgent.Family, Status: status}).Error
-	e = response.CheckErr(err, "RecordLoginLog Create err")
-	return
+		AdminId:  adminId,
+		Username: username,
+		Ip:       c.ClientIP(),
+		Os:       ua.Os.Family,
+		Browser:  ua.UserAgent.Family,
+		Status:   status,
+	}).Error
+	if err != nil {
+		return response.CheckErr(err, "RecordLoginLog Create err")
+	}
+	return nil
 }

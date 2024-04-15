@@ -6,26 +6,24 @@
                 <el-form-item label="账号" prop="username">
                     <el-input v-model="formData.username" placeholder="请输入账号" clearable />
                 </el-form-item>
-                <el-form-item label="头像">
+                <el-form-item label="头像" prop="avatar">
                     <div>
-                        <div>
-                            <material-picker v-model="formData.avatar" :limit="1" />
-                        </div>
+                        <material-picker v-model="formData.avatar" :limit="1" />
                         <div class="form-tips">建议尺寸：100*100px，支持jpg，jpeg，png格式</div>
                     </div>
                 </el-form-item>
                 <el-form-item label="名称" prop="nickname">
                     <el-input v-model="formData.nickname" placeholder="请输入名称" clearable />
                 </el-form-item>
-                <el-form-item label="归属部门" prop="deptId">
-                    <el-tree-select class="flex-1" v-model="formData.deptId" :data="optionsData.dept" clearable
-                        node-key="id" :props="{
-            value: 'id',
-            label: 'name',
-            disabled(data: any) {
-                return !!data.isStop
-            }
-        }" check-strictly :default-expand-all="true" placeholder="请选择上级部门" />
+                <el-form-item v-if="formData.id !== 1" label="归属部门" prop="deptId">
+                    <el-tree-select class="flex-1" v-model="formData.deptId"
+                        :data="optionsData.dept" clearable node-key="id" :props="{
+                            value: 'id',
+                            label: 'name',
+                            disabled(data: any) {
+                                return !!data.isStop
+                            }
+                        }" check-strictly :default-expand-all="true" placeholder="请选择上级部门" />
                 </el-form-item>
                 <!-- <el-form-item label="岗位" prop="postId">
                     <el-select class="flex-1" clearable v-model="formData.postId" placeholder="请选择岗位" multiple>
@@ -35,14 +33,15 @@
                 </el-form-item> -->
 
                 <el-form-item label="角色" prop="role">
-                    <el-select v-model="formData.role" class="flex-1" clearable placeholder="请选择角色">
+                    <el-select v-if="formData.id !== 1" v-model="formData.role" class="flex-1" clearable
+                        placeholder="请选择角色">
                         <el-option v-for="(item, index) in optionsData.role" :key="index" :label="item.name"
                             :value="item.id" />
                     </el-select>
+                    <el-input v-else v-model="adminRole" placeholder="请输入角色" desabled />
                 </el-form-item>
-
                 <el-form-item label="密码" prop="password">
-                    <el-input v-model.trim="formData.password" show-password clearable placeholder="请输入密码" />
+                    <el-input v-model.trim="formData.password" show-password clzearable placeholder="请输入密码" />
                 </el-form-item>
 
                 <el-form-item label="确认密码" prop="passwordConfirm">
@@ -79,6 +78,8 @@ const mode = ref('add')
 const popupTitle = computed(() => {
     return mode.value == 'edit' ? '编辑管理员' : '新增管理员'
 })
+
+const adminRole = '超级管理员'
 
 const formData = reactive({
     id: '',
@@ -184,16 +185,18 @@ const setFormData = async (row: any) => {
     const data = await adminDetail({
         id: row.id
     })
+    console.log(data, 'zxcvzxczxczxczxczxc')
     for (const key in formData) {
         if (data[key] != null && data[key] != undefined) {
-            //后端返回string类型做处理
+            // 后端返回string类型做处理
             if (key === 'role') {
                 //@ts-ignore
                 formData[key] = Number(data[key])
-                return
+            } else {
+                //@ts-ignore
+                formData[key] = data[key]
             }
-            //@ts-ignore
-            formData[key] = data[key]
+            console.log(formData, '22222')
         }
         Number(formData.deptId) == 0 && (formData.deptId = '')
     }

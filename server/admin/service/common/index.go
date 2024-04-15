@@ -5,6 +5,7 @@ import (
 	"likeadmin/config"
 	"likeadmin/core"
 	"likeadmin/core/response"
+	"likeadmin/model/system"
 	"likeadmin/util"
 	"time"
 )
@@ -37,31 +38,46 @@ func (iSrv indexService) Console() (res map[string]interface{}, e error) {
 		"website": "www.likeadmin.cn",
 		"based":   "Vue3.x、ElementUI、MySQL",
 		"channel": map[string]string{
-			"gitee":   "https://gitee.com/likeadmin/likeadmin_python",
-			"website": "https://www.likeadmin.cn",
+			"gitee": "https://gitee.com/ciaovita/graduation-design",
 		},
+	}
+	// 从数据库中获取访问量数据
+	var authLog system.SystemAuthLog
+	// 这里假设您有一个方法来查询最新的 SystemAuthLog 记录
+	err = iSrv.db.Order("create_time desc").First(&authLog).Error
+	if e = response.CheckErr(err, "Failed to get SystemAuthLog"); e != nil {
+		return
+	}
+	var totalUsers int64
+	if err := iSrv.db.Model(&system.SystemAuthAdmin{}).Where("role = ?", "2").Count(&totalUsers).Error; err != nil {
+		// 处理错误
 	}
 	// 今日数据
 	today := map[string]interface{}{
-		"time":        "2022-08-11 15:08:29",
-		"todayVisits": 10,  // 访问量(人)
-		"totalVisits": 100, // 总访问量
-		"todaySales":  30,  // 销售额(元)
-		"totalSales":  65,  // 总销售额
-		"todayOrder":  12,  // 订单量(笔)
-		"totalOrder":  255, // 总订单量
-		"todayUsers":  120, // 新增用户
-		"totalUsers":  360, // 总访用户
+		"time":        time.Now().Format("2006-01-02 15:04"), // 使用当前时间，精确到分钟
+		"todayVisits": authLog.TodayVisits,                   // 从数据库中获取当天访问量
+		"totalVisits": authLog.TotalVisits,                   // 从数据库中获取总访问量
+		"todayUsers":  authLog.TodayUsers,                    // 这里假设您没有记录新增用户，可能需要添加逻辑来获取
+		"totalUsers":  totalUsers,                            // 从数据库中获取总用户数
 	}
 	// 访客图表
 	now := time.Now()
 	var date []string
+	var visits []int
 	for i := 14; i >= 0; i-- {
 		date = append(date, now.AddDate(0, 0, -i).Format(core.DateFormat))
+		// 查询数据库获取当天的访问量数据
+		var authLog system.SystemAuthLog
+		err := iSrv.db.Where("create_time >= ? AND create_time < ?", now.AddDate(0, 0, -i).Format("2006-01-02 00:00:00"), now.AddDate(0, 0, -i+1).Format("2006-01-02 00:00:00")).First(&authLog).Error
+		if err != nil {
+			// 处理错误
+		}
+		// 将int64转换为int
+		visits = append(visits, int(authLog.TodayVisits))
 	}
 	visitor := map[string]interface{}{
 		"date": date,
-		"list": []int{12, 13, 11, 5, 8, 22, 14, 9, 456, 62, 78, 12, 18, 22, 46},
+		"list": visits,
 	}
 	return map[string]interface{}{
 		"version": version,

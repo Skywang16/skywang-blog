@@ -100,7 +100,8 @@ export default {
 			showLoading: false, // 自定义遮罩显影
 			firstContent: '', // 自定义遮罩第一行文本
 			secondContent: '', // 自定义遮罩第二行文本
-			messageText: '错误信息'
+			messageText: '错误信息',
+			homeBanner: ''
 		};
 	},
 

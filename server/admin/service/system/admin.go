@@ -202,6 +202,14 @@ func (adminSrv systemAuthAdminService) Add(addReq req.SystemAuthAdminAddReq) (e 
 	sysAdmin.Avatar = util.UrlUtil.ToRelativeUrl(addReq.Avatar)
 	err = adminSrv.db.Create(&sysAdmin).Error
 	e = response.CheckErr(err, "Add Create err")
+	// 如果 Role 为 2，则将 SystemAuthLog 表中的 todayUsers 字段加一
+	if addReq.Role == 2 {
+		// 更新 SystemAuthLog 表中的 TodayUsers 字段
+		var authLog system.SystemAuthLog
+		if err := adminSrv.db.Model(&authLog).Where("create_time = ?", time.Now().UTC().Format("2006-01-02")).Update("today_users", gorm.Expr("today_users + ?", 1)).Error; err != nil {
+			return err
+		}
+	}
 	return
 }
 

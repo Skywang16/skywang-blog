@@ -1,7 +1,7 @@
 <template>
     <div class="workbench">
         <div class="md:flex">
-            <el-card class="!border-none mb-4 md:mr-4" shadow="never">
+            <el-card class="!border-none mb-4 flex-1 md:mr-4" shadow="never">
                 <template #header>
                     <span class="card-title">版本信息</span>
                 </template>
@@ -27,32 +27,18 @@
                 </template>
 
                 <div class="flex flex-wrap">
-                    <div class="w-1/2 md:w-1/4">
+                    <div class="w-1/2 md:w-1/2">
                         <div class="leading-10">访问量(人)</div>
                         <div class="text-6xl">{{ workbenchData.today.todayVisits }}</div>
                         <div class="text-tx-secondary text-xs">
                             总访问量：{{ workbenchData.today.totalVisits }}
                         </div>
                     </div>
-                    <div class="w-1/2 md:w-1/4">
-                        <div class="leading-10">销售额(元)</div>
-                        <div class="text-6xl">{{ workbenchData.today.todaySales }}</div>
-                        <div class="text-tx-secondary text-xs">
-                            总销售额：{{ workbenchData.today.totalSales }}
-                        </div>
-                    </div>
-                    <div class="w-1/2 md:w-1/4">
-                        <div class="leading-10">订单量(笔)</div>
-                        <div class="text-6xl">{{ workbenchData.today.todayOrder }}</div>
-                        <div class="text-tx-secondary text-xs">
-                            总订单量：{{ workbenchData.today.totalOrder }}
-                        </div>
-                    </div>
-                    <div class="w-1/2 md:w-1/4">
+                    <div class="w-1/2 md:w-1/2">
                         <div class="leading-10">新增用户</div>
                         <div class="text-6xl">{{ workbenchData.today.todayUsers }}</div>
                         <div class="text-tx-secondary text-xs">
-                            总访用户：{{ workbenchData.today.totalUsers }}
+                            总用户量：{{ workbenchData.today.totalUsers }}
                         </div>
                     </div>
                 </div>
@@ -83,14 +69,14 @@
                     <v-charts style="height: 350px" :option="workbenchData.visitorOption" :autoresize="true" />
                 </div>
             </el-card>
-            <el-card class="!border-none mb-4" shadow="never">
+            <!-- <el-card class="!border-none mb-4" shadow="never">
                 <template #header>
                     <span>服务支持</span>
                 </template>
                 <div>
                     <div v-for="(item, index) in workbenchData.support" :key="index">
                         <div class="flex items-center pb-10 pt-10" :class="{
-                            'border-b border-br': index == 0,
+                            'border-b border-br': index == 0
                         }">
                             <img width="120" height="120" class="flex-none" :src="item.image" />
                             <div class="ml-2">
@@ -100,139 +86,139 @@
                         </div>
                     </div>
                 </div>
-            </el-card>
+            </el-card> -->
         </div>
     </div>
 </template>
 
 <script lang="ts" setup name="workbench">
-import { getWorkbench } from "@/api/app";
-import vCharts from "vue-echarts";
-import menu_admin from "./image/menu_admin.png";
-import menu_role from "./image/menu_role.png";
-import menu_dept from "./image/menu_dept.png";
-import menu_dict from "./image/menu_dict.png";
-import menu_generator from "./image/menu_generator.png";
-import menu_file from "./image/menu_file.png";
-import menu_auth from "./image/menu_auth.png";
-import menu_web from "./image/menu_web.png";
-import qq_group from "./image/qq_group.png";
-import customer_service from "./image/customer_service.png";
+import { getWorkbench } from '@/api/app'
+import vCharts from 'vue-echarts'
+import menu_admin from './image/menu_admin.png'
+import menu_role from './image/menu_role.png'
+import menu_dept from './image/menu_dept.png'
+import menu_dict from './image/menu_dict.png'
+import menu_generator from './image/menu_generator.png'
+import menu_file from './image/menu_file.png'
+import menu_auth from './image/menu_auth.png'
+import menu_web from './image/menu_web.png'
+import qq_group from './image/qq_group.png'
+import customer_service from './image/customer_service.png'
 // 表单数据
 const workbenchData: any = reactive({
     version: {
-        version: "", // 版本号
-        website: "", // 官网
-        based: "",
+        version: '', // 版本号
+        website: '', // 官网
+        based: '',
         channel: {
-            gitee: "",
-            website: "",
-        },
+            gitee: '',
+            website: ''
+        }
     },
     support: [
         {
             image: qq_group,
-            title: "扫码进入QQ交流群",
-            desc: "疑难疑点 进入QQ群",
+            title: '扫码进入QQ交流群',
+            desc: '疑难疑点 进入QQ群'
         },
         {
             image: customer_service,
-            title: "添加企业客服微信",
-            desc: "想了解更多请添加客服",
-        },
+            title: '添加企业客服微信',
+            desc: '想了解更多请添加客服'
+        }
     ],
     today: {}, // 今日数据
     menu: [
         {
-            name: "管理员",
+            name: '管理员',
             image: menu_admin,
-            url: "/permission/admin",
+            url: '/permission/admin'
         },
         {
-            name: "角色管理",
+            name: '角色管理',
             image: menu_role,
-            url: "/permission/role",
+            url: '/permission/role'
         },
         {
-            name: "部门管理",
+            name: '部门管理',
             image: menu_dept,
-            url: "/organization/department",
+            url: '/organization/department'
         },
         {
-            name: "字典管理",
+            name: '字典管理',
             image: menu_dict,
-            url: "/dev_tools/dict",
+            url: '/dev_tools/dict'
         },
         {
-            name: "代码生成器",
+            name: '系统日志',
             image: menu_generator,
-            url: "/dev_tools/code",
+            url: '/setting/system/journal'
         },
         {
-            name: "素材中心",
+            name: '素材中心',
             image: menu_file,
-            url: "/material/index",
+            url: '/material/index'
         },
         {
-            name: "菜单权限",
+            name: '菜单权限',
             image: menu_auth,
-            url: "/permission/menu",
+            url: '/permission/menu'
         },
         {
-            name: "网站信息",
+            name: '网站信息',
             image: menu_web,
-            url: "/setting/website/information",
-        },
+            url: '/setting/website/information'
+        }
     ], // 常用功能
     visitor: [], // 访问量
     article: [], // 文章阅读量
 
     visitorOption: {
         xAxis: {
-            type: "category",
-            data: [0],
+            type: 'category',
+            data: [0]
         },
         yAxis: {
-            type: "value",
+            type: 'value'
         },
         legend: {
-            data: ["访问量"],
+            data: ['访问量']
         },
         itemStyle: {
             // 点的颜色。
-            color: "red",
+            color: 'red'
         },
         tooltip: {
-            trigger: "axis",
+            trigger: 'axis'
         },
         series: [
             {
-                name: "访问量",
+                name: '访问量',
                 data: [0],
-                type: "line",
-                smooth: true,
-            },
-        ],
-    },
-});
+                type: 'line',
+                smooth: true
+            }
+        ]
+    }
+})
 
 // 获取工作台主页数据
 const getData = async () => {
-    const res = await getWorkbench();
-    workbenchData.version = res.version;
-    workbenchData.today = res.today;
-    workbenchData.visitor = res.visitor;
+    const res = await getWorkbench()
+    workbenchData.version = res.version
+    workbenchData.today = res.today
+    workbenchData.visitor = res.visitor
 
     // 清空echarts 数据
-    workbenchData.visitorOption.xAxis.data = [];
-    workbenchData.visitorOption.series[0].data = [];
+    workbenchData.visitorOption.xAxis.data = []
+    workbenchData.visitorOption.series[0].data = []
 
     // 写入从后台拿来的数据
-    workbenchData.visitorOption.xAxis.data = res.visitor.date;
-    workbenchData.visitorOption.series[0].data = res.visitor.list;
-};
+    workbenchData.visitorOption.xAxis.data = res.visitor.date
+    workbenchData.visitorOption.series[0].data = res.visitor.list
+}
 
-getData();
+getData()
 </script>
 
 <style lang="scss" scoped></style>

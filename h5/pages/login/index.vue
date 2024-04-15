@@ -75,7 +75,7 @@ export default {
 			this.autoLogin = this.$route.query.autoLogin;
 		} else {
 			let params = {
-				username: 'admin',
+				username: 'user',
 				password: '123456',
 				terminal: 1
 			};

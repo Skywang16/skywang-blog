@@ -34,7 +34,9 @@
                 <el-form-item label="首页轮播图" prop="homeBanner">
                     <div>
                         <material-picker v-model="formData.homeBanner" :limit="4" />
-                        <div class="form-tips">建议比例：18：9，支持jpg，jpeg，png格式，最多4张</div>
+                        <div class="form-tips">
+                            建议比例：18：9，支持jpg，jpeg，png格式，最多4张
+                        </div>
                     </div>
                 </el-form-item>
             </el-card>
@@ -116,15 +118,15 @@ const getData = async () => {
 
 // 设置备案信息
 const handleSubmit = async () => {
-    await formRef.value?.validate();
+    await formRef.value?.validate()
     // 将数组转换为以逗号分隔的字符串
-    const homeBannerStr = formData.homeBanner.join(',');
+    const homeBannerStr = formData.homeBanner.join(',')
     // 更新formData中的homeBanner字段为字符串
-    formData.homeBanner = homeBannerStr;
-    await setWebsite(formData);
-    feedback.msgSuccess('操作成功');
-    getConfig();
-    getData();
+    formData.homeBanner = homeBannerStr
+    await setWebsite(formData)
+    feedback.msgSuccess('操作成功')
+    getConfig()
+    getData()
 }
 
 getData()

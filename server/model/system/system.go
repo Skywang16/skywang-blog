@@ -1,5 +1,7 @@
 package system
 
+import "time"
+
 // SystemConfig 系统配置实体
 type SystemConfig struct {
 	ID         uint   `gorm:"primarykey;comment:'主键'"`
@@ -108,6 +110,15 @@ type SystemLogLogin struct {
 	Browser    string `gorm:"not null;default:'';comment:'浏览器'"`
 	Status     uint8  `gorm:"not null;default:0;comment:'操作状态: 1=成功, 0=失败'"`
 	CreateTime int64  `gorm:"autoCreateTime;not null;comment:'创建时间'"`
+}
+
+// SystemAuthLog 系统访问日志实体
+type SystemAuthLog struct {
+	CreateTime  time.Time `gorm:"type:date;not null;default:CURRENT_TIMESTAMP;comment:'创建时间'"`
+	TodayVisits int64     `gorm:"not null;default:0;comment:'当天访问量'"`
+	TotalVisits int64     `gorm:"not null;default:0;comment:'总访问量'"`
+	TodayUsers  int64     `gorm:"not null;default:0;comment:'当天新增用户量'"`
+	UpdateTime  time.Time `gorm:"type:date;not null;default:CURRENT_DATE;comment:'更新时间'"`
 }
 
 // SystemLogOperate 系统操作日志实体

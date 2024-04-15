@@ -285,6 +285,20 @@ CREATE TABLE `la_system_auth_admin`
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统管理成员表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for la_system_auth_log
+-- ----------------------------
+DROP TABLE IF EXISTS `la_system_auth_log`;
+CREATE TABLE `la_system_auth_log`
+(
+    `create_time` DATE NOT NULL COMMENT '创建时间',
+    `today_visits` bigint(20) NOT NULL DEFAULT 0 COMMENT '全局当天访问量',
+    `total_visits` bigint(20) NOT NULL DEFAULT 0 COMMENT '总访问量',
+    `today_users`  bigint(20) NOT NULL DEFAULT 0 COMMENT '全局当天新增用户量',
+    `update_time` DATE NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='系统管理成员表' ROW_FORMAT=Dynamic;
+
+-- ----------------------------
 -- Table structure for la_system_auth_dept
 -- ----------------------------
 DROP TABLE IF EXISTS `la_system_auth_dept`;
@@ -504,6 +518,9 @@ VALUES (1, 0, '默认部门', 'wjj', '19858851348', 10, 0, 0, 1649841995, 166019
 INSERT INTO `la_system_auth_admin`
 VALUES (1, 0, 'admin', 'admin', '7fac2474740becfaf1ecbdd6cc8fb076', '/api/static/backend_avatar.png', '0', '5Xar0', 0,
         1, 0, 0, '127.0.0.1', 1660641347, 1642321599, 1660287325, 0);
+INSERT INTO `la_system_auth_admin`
+VALUES (2, 1, 'user', 'user', 'a7dafd36071a23776a992822e4617b12', '/api/static/backend_avatar.png', '2', 'A5ENl', 1,
+        1, 0, 0, '::1', 1712713471, 1712713453, 1712713471, 0);
 INSERT INTO `la_system_auth_role`
 VALUES (1, '审核员', '审核数据', 999, 0, 1668679451, 1668679468);
 INSERT INTO `la_system_auth_role`
