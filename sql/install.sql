@@ -475,7 +475,7 @@ DROP TABLE IF EXISTS `la_information_weapons`;
 CREATE TABLE `la_information_weapons`
 (
     `id`          int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `name`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '武器封面',
+    `name`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '武器名称',
     `types`       varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '武器类型',
     `level`       varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '武器等级',
     `image`       varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '武器图片',
@@ -506,6 +506,42 @@ CREATE TABLE `la_information_weapons_series`
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '武器系列管理表' ROW_FORMAT = Dynamic;
 
+-- ----------------------------
+-- Table structure for la_information_hero
+-- ----------------------------
+DROP TABLE IF EXISTS `la_information_hero`;
+CREATE TABLE `la_information_hero`
+(
+    `id`          int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`        varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '角色名称',
+    `types`       varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '角色定位',
+    `image`       varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '角色图片',
+    `status`      tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态: 0=否, 1=是',
+    `is_stop`     tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否禁用: 0=否, 1=是',
+    `is_delete`   tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除: 0=否, 1=是',
+    `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+    `delete_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '删除时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '武器表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for la_information_hero_type
+-- ----------------------------
+DROP TABLE IF EXISTS `la_information_hero_type`;
+CREATE TABLE `la_information_hero_type`
+(
+    `id`          int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`        varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '系列名称',
+    `remark`      varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注信息',
+    `sort`        smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '系列排序',
+    `is_disable`  tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否禁用: 0=否, 1=是',
+    `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `update_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '武器系列管理表' ROW_FORMAT = Dynamic;
+
+
 SET
 FOREIGN_KEY_CHECKS = 1;
 
@@ -528,6 +564,15 @@ VALUES (2, '用户', '用户', 998, 0, 1711078383, 1711078383);
 INSERT INTO `la_system_auth_role`
 VALUES (3, '测试人员', '测试', 997, 0, 1711078383, 1711078383);
 COMMIT;
+
+INSERT INTO `la_system_auth_log` VALUES ('2024-04-10', 2, 2, 0, '2024-04-10');
+INSERT INTO `la_system_auth_log` VALUES ('2024-04-11', 9, 11, 0, '2024-04-11');
+INSERT INTO `la_system_auth_log` VALUES ('2024-04-12', 24, 25, 1, '2024-04-12');
+INSERT INTO `la_system_auth_log` VALUES ('2024-04-13', 10, 36, 0, '2024-04-13');
+INSERT INTO `la_system_auth_log` VALUES ('2024-04-14', 2, 37, 0, '2024-04-14');
+INSERT INTO `la_system_auth_log` VALUES ('2024-04-15', 22, 58, 0, '2024-04-15');
+INSERT INTO `la_system_auth_log` VALUES ('2024-04-17', 18, 77, 0, '2024-04-17');
+
 
 BEGIN;
 INSERT INTO `la_system_config`
@@ -819,10 +864,10 @@ INSERT INTO `la_system_auth_menu`
 VALUES (701, 700, 'C', '素材中心', 'el-icon-PictureRounded', 0, '', 'index', 'material/index', '', '', 0, 1, 0,
         1660203402, 1663301493);
 INSERT INTO `la_system_auth_menu`
-VALUES (703, 0, 'M', '文章资讯', 'el-icon-ChatLineSquare', 900, '', 'article', '', '', '', 0, 1, 0, 1661757636,
+VALUES (703, 0, 'M', '文章资讯', 'el-icon-ChatLineSquare', 900, '', 'article:news', '', '', '', 0, 1, 0, 1661757636,
         1664416659);
 INSERT INTO `la_system_auth_menu`
-VALUES (704, 703, 'C', '文章管理', 'el-icon-ChatDotSquare', 3, 'article:list', 'lists', 'article/lists/index', '', '',
+VALUES (704, 703, 'C', '文章管理', 'el-icon-ChatDotSquare', 3, 'article:news:list', 'lists', 'article/lists/index', '', '',
         1, 1, 0, 1661757743, 1663658220);
 -- INSERT INTO `la_system_auth_menu` VALUES (705, 703, 'C', '文章栏目', 'el-icon-CollectionTag', 0, 'article:cate:list', 'column', 'article/column/index', '', '', 1, 1, 0, 1661759218, 1663578137);
 -- INSERT INTO `la_system_auth_menu` VALUES (706, 0, 'M', '渠道设置', 'el-icon-Message', 46, '', 'channel', '', '', '', 0, 1, 0, 1661767630, 1664416682);
@@ -860,7 +905,7 @@ VALUES (714, 714, 'A', '用户编辑', '', 0, 'user:edit', 'detail', 'consumer/l
 -- INSERT INTO `la_system_auth_menu` VALUES (736, 705, 'A', '栏目删除', '', 0, 'article:cate:del', '', '', '', '', 0, 1, 0, 1662626060, 1662626060);
 -- INSERT INTO `la_system_auth_menu` VALUES (737, 705, 'A', '栏目状态', '', 0, 'article:cate:change', '', '', '', '', 0, 1, 0, 1662626077, 1662626077);
 INSERT INTO `la_system_auth_menu`
-VALUES (738, 703, 'A', '文章编辑', '', 0, 'article:edit', 'lists/edit', 'article/lists/edit', '', '', 0, 0, 0,
+VALUES (738, 703, 'A', '文章编辑', '', 0, 'article:news:edit', 'lists/edit', 'article/lists/edit', '', '', 0, 0, 0,
         1662626554, 1663309550);
 INSERT INTO `la_system_auth_menu`
 VALUES (739, 712, 'C', '用户详情', '', 0, 'user:detail', 'detail', 'consumer/lists/detail', '/consumer/lists', '', 0, 0,
@@ -900,19 +945,19 @@ VALUES (740, 739, 'A', '用户编辑', '', 0, 'user:edit', '', '', '', '', 0, 1,
 -- INSERT INTO `la_system_auth_menu` VALUES (773, 752, 'A', '删除', '', 0, 'channel:oaReplyDefault:del', '', '', '', '', 1, 1, 0, 1664517778, 1664517778);
 -- INSERT INTO `la_system_auth_menu` VALUES (774, 610, 'A', '导入数据表列表', '', 0, 'gen:db', '', '', '', '', 1, 1, 0, 1665646316, 1665646316);
 INSERT INTO `la_system_auth_menu`
-VALUES (775, 703, 'C', '文章添加/编辑', '', 0, 'article:add/edit', 'lists/edit', 'article/lists/edit', '/article/lists',
+VALUES (775, 703, 'C', '文章添加/编辑', '', 0, 'article:news:add/edit', 'lists/edit', 'article/lists/edit', '/article/lists',
         '', 0, 0, 0, 1668677477, 1668677477);
 INSERT INTO `la_system_auth_menu`
 VALUES (776, 0, 'M', '资料管理', 'el-icon-Grid', 950, '', 'information', '', '', '', 1, 1, 0, 1711439525, 1711439525);
 INSERT INTO `la_system_auth_menu`
-VALUES (777, 776, 'C', '武器管理', '', 3, '', 'weapons', 'information/weapons', '', '', 1, 1, 0, 1711417265, 1711417265);
+VALUES (777, 776, 'C', '武器管理', '', 3, '', 'information:weapons:list', 'information/weapons', '', '', 1, 1, 0, 1711417265, 1711417265);
 INSERT INTO `la_system_auth_menu`
-VALUES (778, 777, 'A', '武器编辑', '', 0, 'weapons:edit', '', '', '', '', 1, 1, 0, 1711417662, 1711417662);
+VALUES (778, 777, 'A', '武器编辑', '', 0, 'information:weapons:edit', '', '', '', '', 1, 1, 0, 1711417662, 1711417662);
 INSERT INTO `la_system_auth_menu`
-VALUES (779, 777, 'C', '武器添加/编辑', '', 0, 'weapons:add/edit', 'edit', 'information/weapons/edit', 'information/weapons/index', '', 0, 0, 0, 1711418200, 1711418200);
+VALUES (779, 777, 'C', '武器添加/编辑', '', 0, 'information:weapons:add/edit', 'edit', 'information/weapons/edit', 'information/weapons/index', '', 0, 0, 0, 1711418200, 1711418200);
 INSERT INTO `la_system_auth_menu`
-VALUES (780, 777, 'C', '武器列表', '', 0, 'weapons:list', 'weapons', 'information/weapons/index', '/information/weapons/index', '', 1, 1, 0, 1711433509, 1711433509);
+VALUES (780, 777, 'C', '武器列表', '', 0, 'information:weapons:list', 'weapons', 'information/weapons/index', '/information/weapons/index', '', 1, 1, 0, 1711433509, 1711433509);
 INSERT INTO `la_system_auth_menu`
-VALUES (781, 777, 'C', '系列管理', '', 3, 'weapons:series:list', 'series', 'information/weapons/series/index', '', '', 1, 1, 0, 1711693863, 1711693863);
+VALUES (781, 777, 'C', '系列管理', '', 3, 'information:weapons:series:list', 'series', 'information/weapons/series/index', '', '', 1, 1, 0, 1711693863, 1711693863);
 
 COMMIT;

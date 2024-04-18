@@ -70,7 +70,66 @@ type InformationWeaponsSeriesEditReq struct {
 	Remark    string `form:"remark" binding:"max=200"`             // 武器系列备注
 }
 
-// InformationWeaponsSeriesDelReq 删除武器系列参数
+// InformationWeaponsSeriesDelReq 删除角色定位参数
 type InformationWeaponsSeriesDelReq struct {
+	ID uint `form:"id" binding:"required,gt=0"` // 主键
+}
+
+// InformationHeroListReq 角色列表参数
+type InformationHeroListReq struct {
+	Name   string `form:"name"`                                  // 角色名称
+	Status int8   `form:"status" binding:"oneof= -1 0 1"`        // 状态: [-1=全部, 0=否, 1=是]
+	Types  int8   `form:"types" binding:"oneof= -1 0 1 2 3 4 5"` // 角色定位
+}
+
+// InformationHeroDetailReq 角色详情参数
+type InformationHeroDetailReq struct {
+	ID uint `form:"id" binding:"required,gt=0"` // 主键
+}
+
+// InformationHeroAddReq 角色新增参数
+type InformationHeroAddReq struct {
+	Image  string `form:"image" binding:"required"`              // 角色图片
+	Name   string `form:"name" binding:"required"`               // 角色名称
+	Types  int8   `form:"types" binding:"oneof= -1 0 1 2 3 4 5"` // 角色定位
+	Status int    `form:"status" binding:"oneof=-1 0 1"`         // 角色状态: [-1=全部, 0=否, 1=是]
+}
+
+// InformationHeroEditReq 角色编辑参数
+type InformationHeroEditReq struct {
+	ID     uint   `form:"id" binding:"required,gt=0"`            // 角色主键
+	Image  string `form:"image" binding:"required"`              // 角色图片
+	Types  int8   `form:"types" binding:"oneof= -1 0 1 2 3 4 5"` // 角色定位
+	Name   string `form:"name" binding:"required"`               // 角色名称
+	Status int    `form:"status" binding:"oneof=-1 0 1"`         // 角色状态: [-1=全部, 0=否, 1=是]
+}
+
+// InformationHeroDelReq 角色删除参数
+type InformationHeroDelReq struct {
+	ID uint `form:"id" binding:"required,gt=0"` // 主键
+}
+
+// InformationHeroTypeDetailReq 角色定位详情参数
+type InformationHeroTypeDetailReq struct {
+	ID uint `form:"id" binding:"required,gt=0"` // 主键
+}
+
+// InformationHeroTypeAddReq 新增角色定位参数
+type InformationHeroTypeAddReq struct {
+	Name      string `form:"name" binding:"required,min=1,max=30"` // 角色定位名称
+	IsDisable uint8  `form:"isDisable" binding:"oneof=0 1"`        // 是否禁用: [0=否, 1=是]
+	Remark    string `form:"remark" binding:"max=200"`             // 角色定位备注
+}
+
+// InformationHeroTypeEditReq 编辑角色定位参数
+type InformationHeroTypeEditReq struct {
+	ID        uint   `form:"id" binding:"required,gt=0"`           // 主键
+	Name      string `form:"name" binding:"required,min=1,max=30"` // 角色定位名称
+	IsDisable uint8  `form:"isDisable" binding:"oneof=0 1"`        // 是否禁用: [0=否, 1=是]
+	Remark    string `form:"remark" binding:"max=200"`             // 角色定位备注
+}
+
+// InformationHeroTypeDelReq 删除角色定位参数
+type InformationHeroTypeDelReq struct {
 	ID uint `form:"id" binding:"required,gt=0"` // 主键
 }

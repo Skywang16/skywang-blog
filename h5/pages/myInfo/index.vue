@@ -1,6 +1,8 @@
 <template>
 	<view class="container">
-		<view id="bg"></view>
+		<view class="header">
+			<wwqy-header></wwqy-header>
+		</view>
 		<view class="main">
 			<view class="inform-header-box">
 				<view class="inform-headerImg">
@@ -9,57 +11,82 @@
 					</view>
 				</view>
 				<view class="inform-header">
-					<view class="inform-title">{{user.nickname}}</view>
-					<view class="inform-personal-identity">{{user.mobile}}</view>
+					<view class="inform-title">{{ user.nickname }}</view>
+					<view class="inform-personal-identity">{{ user.mobile }}</view>
 				</view>
 			</view>
 		</view>
 		<view class="foot-box">
-			<view class="foot" @click="handleClick2">
-				<span style="color: #3f6fff">《用户隐私协议》</span>
+			<view>
+				<span @click="handleClick1" class="foot" >《{{data.privacy.name}}》</span>
+				<span @click="handleClick2" class="foot">《{{data.service.name}}》</span>
 			</view>
-			<view class="foot">
-				<span style="color: #3f6fff">wang测试</span>
+			<view>
+				<span class="foot">wang测试</span>
 			</view>
 		</view>
-		<uni-popup ref="details" type="dialog" background-color="#fff">
+		<uni-popup ref="details1" type="dialog" background-color="#fff">
 			<view class="details1">
 				<scroll-view scroll-y="true" :refresher-threshold="40" style="height: 100%; overflow: auto" @scroll="scroll">
-					122123
+					<view v-html="data.privacy.content"></view>
 				</scroll-view>
 			</view>
 			<view class="popConfig-btn">
 				<button class="popupVerify" @click="popupVerify">确认</button>
 			</view>
 		</uni-popup>
+		<uni-popup ref="details2" type="dialog" background-color="#fff">
+			<view class="details1">
+				<scroll-view scroll-y="true" :refresher-threshold="40" style="height: 100%; overflow: auto" @scroll="scroll">
+					<view v-html="data.service.content"></view>
+				</scroll-view>
+			</view>
+			<view class="popConfig-btn">
+				<button class="popupVerify" @click="popupVerify">确认</button>
+			</view>
+		</uni-popup>
+		<view class="footer"></view>
 	</view>
 </template>
 
 <script>
+import wwqyHeader from '@/components/wwqy-header/index.vue';
+import wwqyFooter from '@/components/wwqy-footer/index.vue';
+import { protocol } from '@/common/api/business.js';
 export default {
+	components: { wwqyHeader, wwqyFooter },
 	data() {
 		return {
-			
+			data: {}
 		};
 	},
 	onLoad() {
 		this.user = uni.getStorageSync('userInfo');
+		this.protocol();
 	},
 	methods: {
+		protocol() {
+			protocol().then((res) => {
+				let result = res.data;
+				if (result.code === 200) {
+					this.data = result.data;
+				} else {
+					that.messageText = result.msg;
+					that.$refs.message.open();
+				}
+			});
+		},
 		handleClick1() {
 			this.fileType = '1';
-			this.$refs.details.open('center');
+			this.$refs.details1.open('center');
 		},
 		handleClick2() {
 			this.fileType = '2';
-			this.$refs.details.open('center');
-		},
-		handleClick3() {
-			this.fileType = '3';
-			this.$refs.details.open('center');
+			this.$refs.details2.open('center');
 		},
 		popupVerify() {
-			this.$refs.details.close();
+			this.$refs.details1.close();
+			this.$refs.details2.close();
 		}
 	}
 };
@@ -70,13 +97,6 @@ page {
 	height: 100%;
 	background-color: #fff;
 }
-
-#bg {
-	background-image: url('@/static/myInfo/bc.png');
-	background-size: 100%;
-	height: 700rpx;
-	width: 100%;
-}
 .title {
 	text-align: center;
 	width: 100%;
@@ -85,10 +105,10 @@ page {
 	color: #fff;
 	padding: 25px 0px;
 }
-.main {
-	margin: -590rpx 30rpx 30rpx 30rpx;
-}
+
 .inform-header-box {
+	margin-top: 40rpx;
+	margin-left: 30rpx;
 	display: flex;
 	.inform-headerImg {
 		margin-right: 20rpx;
@@ -152,6 +172,9 @@ page {
 	text-align: center;
 	position: absolute;
 	bottom: 30rpx;
+	.foot {
+		color: $descColor;
+	}
 }
 .details1 {
 	width: 80vw;

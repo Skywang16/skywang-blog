@@ -1,41 +1,20 @@
 <template>
-    <div class="weapons-lists">
+    <div class="hero-lists">
         <el-card class="!border-none" shadow="never">
             <el-form ref="formRef" class="mb-[-16px]" :model="queryParams" :inline="true">
-                <el-form-item label="武器名称">
+                <el-form-item label="角色名称">
                     <el-input class="w-[280px]" v-model="queryParams.name" clearable @keyup.enter="resetPage" />
                 </el-form-item>
-                <el-form-item label="武器等级">
-                    <el-input class="w-[280px]" v-model="queryParams.level" clearable @keyup.enter="resetPage" />
-                </el-form-item>
-                <!-- <el-form-item label="栏目作者">
-                    <el-select class="w-[280px]" v-model="queryParams.level">
-                        <el-option label="全部" value />
-                        <el-option v-for="item in optionsData.weaponsCate" :key="item.id" :label="item.name"
-                            :value="item.id" />
-                    </el-select>
-                </el-form-item> -->
-                <el-form-item label="武器状态">
+                <el-form-item label="角色状态">
                     <el-select class="w-[280px]" v-model="queryParams.status">
                         <el-option label="全部" :value="-1" />
                         <el-option label="显示" :value="1" />
                         <el-option label="隐藏" :value="0" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="武器类型">
-                    <el-select class="w-[280px]" v-model="queryParams.types">
-                        <el-option label="全部" :value="-1" />
-                        <el-option label="随身武器" :value="0" />
-                        <el-option label="冲锋枪" :value="1" />
-                        <el-option label="散弹枪" :value="2" />
-                        <el-option label="步枪" :value="3" />
-                        <el-option label="狙击步枪" :value="4" />
-                        <el-option label="机枪" :value="5" />
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="武器系列">
-                    <el-select class="w-[280px]" v-model="queryParams.series">
-                        <el-option v-for="item in seriesList" :key="item.id" :label="item.name"
+                <el-form-item label="角色定位">
+                    <el-select class="w-[280px]" v-model="queryParams.type">
+                        <el-option v-for="item in typeList" :key="item.id" :label="item.name"
                             :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -47,14 +26,14 @@
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
             <div>
-                <router-link v-perms="['weapons:add', 'weapons:add/edit']" :to="{
-                path: getRoutePath('weapons:add/edit'),
-            }">
+                <router-link v-perms="['hero:add', 'hero:add/edit']" :to="{
+                    path: getRoutePath('hero:add/edit'),
+                }">
                     <el-button type="primary" class="mb-4">
                         <template #icon>
                             <icon name="el-icon-Plus" />
                         </template>
-                        新增武器
+                        新增角色
                     </el-button>
                 </router-link>
             </div>
@@ -71,29 +50,27 @@
                             :preview-src-list="[row.image]" preview-teleported fit="contain" />
                     </template>
                 </el-table-column>
-                <el-table-column label="武器名称" prop="name" min-width="160" show-tooltip-when-overflow />
-                <el-table-column label="武器等级" prop="level" min-width="60" />
-                <el-table-column label="武器类型" prop="types" min-width="60" />
-                <el-table-column label="武器系列" prop="series" min-width="60" />
+                <el-table-column label="角色名称" prop="name" min-width="160" show-tooltip-when-overflow />
+                <el-table-column label="角色定位" prop="type" min-width="60" />
                 <el-table-column label="状态" min-width="100">
                     <template #default="{ row }">
-                        <el-switch v-perms="['weapons:cate:change']" v-model="row.status" :active-value="1"
+                        <el-switch v-perms="['hero:cate:change']" v-model="row.status" :active-value="1"
                             :inactive-value="0" @change="changeStatus(row)" />
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="120" fixed="right">
                     <template #default="{ row }">
-                        <el-button v-perms="['weapons:edit', 'weapons:add/edit']" type="primary" link>
+                        <el-button v-perms="['hero:edit', 'hero:add/edit']" type="primary" link>
                             <router-link :to="{
-                path: getRoutePath('weapons:add/edit'),
-                query: {
-                    id: row.id,
-                },
-            }">
+                                path: getRoutePath('hero:add/edit'),
+                                query: {
+                                    id: row.id,
+                                },
+                            }">
                                 编辑
                             </router-link>
                         </el-button>
-                        <el-button v-perms="['weapons:del']" type="danger" link @click="handleDelete(row.id)">
+                        <el-button v-perms="['hero:del']" type="danger" link @click="handleDelete(row.id)">
                             删除
                         </el-button>
                     </template>
@@ -105,13 +82,13 @@
         </el-card>
     </div>
 </template>
-<script lang="ts" setup name="weaponsLists">
-import { weaponsLists, weaponsDelete, weaponsEdit, weaponsSeriesLists } from "@/api/information";
+<script lang="ts" setup name="heroLists">
+import { heroLists, heroDelete, heroEdit, heroTypeLists } from "@/api/information";
 import { usePaging } from "@/hooks/usePaging";
 import { getRoutePath } from "@/router";
 import feedback from "@/utils/feedback";
 
-interface WeaponSeries {
+interface heroType {
     id: number;
     name: string;
 }
@@ -121,22 +98,22 @@ const queryParams = reactive({
     level: "",
     types: -1,
     status: -1,
-    series: ''
+    type: ''
 });
 
 const { pager, getLists, resetPage, resetParams } = usePaging({
-    fetchFun: weaponsLists,
+    fetchFun: heroLists,
     params: queryParams,
 });
 
-const seriesList = reactive<WeaponSeries[]>([]);
+const typeList = reactive<heroType[]>([]);
 
 const fetchData = async () => {
     try {
-        const response = await weaponsSeriesLists();
+        const response = await heroTypeLists();
         console.log(response, 'response');
         if (response.lists && response.lists.length > 0) {
-            seriesList.splice(0, seriesList.length, ...response.lists as WeaponSeries[]);
+            typeList.splice(0, typeList.length, ...response.lists as heroType[]);
         }
     } catch (error) {
         console.error(error);
@@ -147,7 +124,7 @@ const changeStatus = async (row: any) => {
     const data: any = { ...row };
     data.status = data.status === 1 ? 0 : 1;
     try {
-        await weaponsEdit(row);
+        await heroEdit(row);
         feedback.msgSuccess("修改成功");
         getLists();
     } catch (error) {
@@ -157,13 +134,13 @@ const changeStatus = async (row: any) => {
 
 const handleDelete = async (id: number) => {
     await feedback.confirm("确定要删除？");
-    await weaponsDelete({ id });
+    await heroDelete({ id });
     feedback.msgSuccess("删除成功");
     getLists();
 };
 
 onActivated(() => {
-    fetchData();  // 在页面加载时调用接口获取武器类型列表
+    fetchData();
     getLists();
 });
 

@@ -26,3 +26,27 @@ type InformationWeaponsSeries struct {
 	CreateTime int64  `gorm:"autoCreateTime;not null;comment:'创建时间'"`
 	UpdateTime int64  `gorm:"autoUpdateTime;not null;comment:'更新时间'"`
 }
+
+// InformationHero 武器实体
+type InformationHero struct {
+	ID         uint   `gorm:"primarykey;comment:'主键'"`
+	Name       string `gorm:"not null;default:'';comment:'角色名称''"`
+	Types      string `gorm:"not null;default:'';comment:'角色定位'"`
+	Image      string `gorm:"not null;default:'';comment:'角色图片'"`
+	Status     int8   `gorm:"not null;default:0;comment:'状态: 0=否, 1=是'"`
+	IsDelete   uint8  `gorm:"not null;default:0;comment:'是否删除: 0=否, 1=是'"`
+	CreateTime int64  `gorm:"autoCreateTime;not null;comment:'创建时间'"`
+	UpdateTime int64  `gorm:"autoUpdateTime;not null;comment:'更新时间'"`
+	DeleteTime int64  `gorm:"not null;default:0;comment:'删除时间'"`
+}
+
+// InformationHeroType 武器系列实体
+type InformationHeroType struct {
+	ID         uint   `gorm:"primarykey;comment:'主键'"`
+	Name       string `gorm:"not null;default:'';comment:'角色定位名称''"`
+	Remark     string `gorm:"not null;default:'';comment:'备注信息'"`
+	IsDisable  uint8  `gorm:"not null;default:0;comment:'是否禁用: 0=否, 1=是'"`
+	Sort       uint16 `gorm:"not null;default:0;comment:'角色定位排序'"`
+	CreateTime int64  `gorm:"autoCreateTime;not null;comment:'创建时间'"`
+	UpdateTime int64  `gorm:"autoUpdateTime;not null;comment:'更新时间'"`
+}

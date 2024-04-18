@@ -15,25 +15,24 @@ var AdminConfig = adminConfig{
 
 	// 免登录验证
 	NotLoginUri: []string{
-		"system:login",             // 登录接口
-		"common:index:config",      // 配置接口
-		"article:news:list",        // 文章列表
-		"information:weapons:list", // 武器列表
-		"setting:website:detail",   //文章信息
+		"system:login",        // 登录接口
+		"common:index:config", // 配置接口
 	},
 
 	// 免权限验证
 	NotAuthUri: []string{
-		"system:logout",         // 退出登录
-		"system:menu:menus",     // 系统菜单
-		"system:menu:route",     // 菜单路由
-		"system:admin:upInfo",   // 管理员更新
-		"system:admin:self",     // 管理员信息
-		"system:role:all",       // 所有角色
-		"system:post:all",       // 所有岗位
-		"system:dept:list",      // 所有部门
-		"setting:dict:type:all", // 所有字典类型
-		"setting:dict:data:all", // 所有字典数据
+		"system:logout",           // 退出登录
+		"system:menu:menus",       // 系统菜单
+		"system:menu:route",       // 菜单路由
+		"system:admin:upInfo",     // 管理员更新
+		"system:admin:self",       // 管理员信息
+		"system:role:all",         // 所有角色
+		"system:post:all",         // 所有岗位
+		"system:dept:list",        // 所有部门
+		"setting:website:detail",  // 网站信息
+		"setting:dict:type:all",   // 所有字典类型
+		"setting:dict:data:all",   // 所有字典数据
+		"setting:protocol:detail", // 政策协议
 	},
 
 	// 演示模式白名单

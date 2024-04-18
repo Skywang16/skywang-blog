@@ -31,6 +31,12 @@
 			}
 		},
 		{
+			"path": "pages/information/components/hero/detail",
+			"style": {
+				"navigationBarTitleText": "角色详细"
+			}
+		},
+		{
 			"path": "pages/news/newsDetail",
 			"style": {
 				"navigationBarTitleText": "资讯详细"

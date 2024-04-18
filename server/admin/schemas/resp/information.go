@@ -2,9 +2,9 @@ package resp
 
 import "likeadmin/core"
 
-// InformationWeaponsResp 资讯列表返回信息
+// InformationWeaponsResp 武器列表返回信息
 type InformationWeaponsResp struct {
-	ID     uint   `json:"id" structs:"id"`         // 武器资讯ID
+	ID     uint   `json:"id" structs:"id"`         // 武器ID
 	Image  string `json:"image" structs:"image"`   // 武器图片
 	Types  int8   `json:"types" structs:"types"`   // 武器类型
 	Name   string `json:"name" structs:"name"`     // 武器名称
@@ -28,6 +28,34 @@ type InformationWeaponsSeriesResp struct {
 	Name       string      `json:"name" structs:"name"`             // 角色名称
 	Remark     string      `json:"remark" structs:"remark"`         // 角色备注
 	Sort       uint16      `json:"sort" structs:"sort"`             // 角色排序
+	IsDisable  uint8       `json:"isDisable" structs:"isDisable"`   // 是否禁用: [0=否, 1=是]
+	CreateTime core.TsTime `json:"createTime" structs:"createTime"` // 创建时间
+	UpdateTime core.TsTime `json:"updateTime" structs:"updateTime"` // 更新时间
+}
+
+// InformationHeroResp 角色列表返回信息
+type InformationHeroResp struct {
+	ID     uint   `json:"id" structs:"id"`         // 角色ID
+	Image  string `json:"image" structs:"image"`   // 角色图片
+	Types  int8   `json:"types" structs:"types"`   // 角色定位
+	Name   string `json:"name" structs:"name"`     // 角色名称
+	Status int8   `json:"status" structs:"status"` // 角色状态: [-1=全部, 0=否, 1=是]
+}
+
+// InformationHeroTypeSimpleResp 角色定位返回简单信息
+type InformationHeroTypeSimpleResp struct {
+	ID         uint        `json:"id" structs:"id"`                 // 主键
+	Name       string      `json:"name" structs:"name"`             // 角色定位名称
+	CreateTime core.TsTime `json:"createTime" structs:"createTime"` // 创建时间
+	UpdateTime core.TsTime `json:"updateTime" structs:"updateTime"` // 更新时间
+}
+
+// InformationHeroTypeResp 角色定位系列返回信息
+type InformationHeroTypeResp struct {
+	ID         uint        `json:"id" structs:"id"`                 // 主键
+	Name       string      `json:"name" structs:"name"`             // 角色定位名称
+	Remark     string      `json:"remark" structs:"remark"`         // 角色定位备注
+	Sort       uint16      `json:"sort" structs:"sort"`             // 角色定位排序
 	IsDisable  uint8       `json:"isDisable" structs:"isDisable"`   // 是否禁用: [0=否, 1=是]
 	CreateTime core.TsTime `json:"createTime" structs:"createTime"` // 创建时间
 	UpdateTime core.TsTime `json:"updateTime" structs:"updateTime"` // 更新时间

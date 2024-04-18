@@ -49,3 +49,53 @@ export function weaponsSeriesDelete(params: any) {
 export function weaponsSeriesDetail(params: any) {
     return request.get({url: "/information/weaponsSeries/detail", params});
 }
+
+// 角色列表
+export function heroLists(params?: any) {
+    return request.get({url: "/information/hero/list", params});
+}
+
+// 添加角色
+export function heroAdd(params: any) {
+    return request.post({url: "/information/hero/add", params});
+}
+
+// 编辑角色
+export function heroEdit(params: any) {
+    return request.post({url: "/information/hero/edit", params});
+}
+
+// 删除角色
+export function heroDelete(params: any) {
+    return request.post({url: "/information/hero/del", params});
+}
+
+// 角色详情
+export function heroDetail(params: any) {
+    return request.get({url: "/information/hero/detail", params});
+}
+
+// 角色定位列表
+export function heroTypeLists(params?: any) {
+    return request.get({url: "/information/heroType/list", params});
+}
+
+// 添加角色定位
+export function heroTypeAdd(params: any) {
+    return request.post({url: "/information/heroType/add", params});
+}
+
+// 编辑角色定位
+export function heroTypeEdit(params: any) {
+    return request.post({url: "/information/heroType/edit", params});
+}
+
+// 删除角色定位
+export function heroTypeDelete(params: any) {
+    return request.post({url: "/information/heroType/del", params});
+}
+
+// 角色定位详情
+export function heroTypeDetail(params: any) {
+    return request.get({url: "/information/heroType/detail", params});
+}
