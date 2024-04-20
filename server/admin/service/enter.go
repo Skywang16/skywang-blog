@@ -35,4 +35,5 @@ var InitFunctions = []interface{}{
 	information.NewInformationWeaponsSeriesService,
 	information.NewInformationHeroService,
 	information.NewInformationHeroTypeService,
+	information.NewInformationMapsService,
 }

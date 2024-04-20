@@ -10,6 +10,7 @@ const API = {
 	newsList: `article/news/list`, // 资讯列表
 	weaponList: `information/weapons/list`, // 武器列表
 	heroList: `information/hero/list`, // 角色列表
+	mapList: `information/maps/list`, // 地图列表
 	website: `setting/website/detail`, // 网站配置
 	protocol:`setting/protocol/detail`, // 政策协议
 };
@@ -49,6 +50,16 @@ export function website(pramter) {
 		method: "GET",
 	});
 }
+
+// 地图列表
+export function mapList(pramter) {
+	return request({
+		url: API.mapList,
+		data: pramter,
+		method: "GET",
+	});
+}
+
 
 // 政策协议
 export function protocol(pramter) {

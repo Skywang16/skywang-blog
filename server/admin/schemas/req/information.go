@@ -133,3 +133,42 @@ type InformationHeroTypeEditReq struct {
 type InformationHeroTypeDelReq struct {
 	ID uint `form:"id" binding:"required,gt=0"` // 主键
 }
+
+// InformationMapsListReq 地图列表参数
+type InformationMapsListReq struct {
+	Name   string `form:"name"`                           // 地图名称
+	Status int8   `form:"status" binding:"oneof= -1 0 1"` // 状态: [-1=全部, 0=否, 1=是]
+}
+
+// InformationMapsDetailReq 地图详情参数
+type InformationMapsDetailReq struct {
+	ID uint `form:"id" binding:"required,gt=0"` // 主键
+}
+
+// InformationMapsAddReq 地图新增参数
+type InformationMapsAddReq struct {
+	Name          string `form:"name" binding:"required"`                   // 地图名称
+	Image         string `form:"image" binding:"required"`                  // 地图图片
+	Locations     string `form:"locations"`                                 // 地图地点
+	PlantQuantity int8   `form:"plantQuantity" binding:"oneof= -1 1 2 3 4"` // 包点数量
+	Mechanics     string `form:"mechanics"`                                 // 地图机制
+	Thumbnail     string `form:"thumbnail"`                                 // 缩略图
+	Status        int    `form:"status" binding:"oneof=-1 0 1"`             // 地图状态: [-1=全部, 0=否, 1=是]
+}
+
+// InformationMapsEditReq 地图编辑参数
+type InformationMapsEditReq struct {
+	ID            uint   `form:"id" binding:"required,gt=0"`                // 地图主键
+	Name          string `form:"name" binding:"required"`                   // 地图名称
+	Image         string `form:"image" binding:"required"`                  // 地图图片
+	Locations     string `form:"locations"`                                 // 地图地点
+	PlantQuantity int8   `form:"plantQuantity" binding:"oneof= -1 1 2 3 4"` // 包点数量
+	Mechanics     string `form:"mechanics"`                                 // 地图机制
+	Thumbnail     string `form:"thumbnail"`                                 // 缩略图
+	Status        int    `form:"status" binding:"oneof=-1 0 1"`             // 地图状态: [-1=全部, 0=否, 1=是]
+}
+
+// InformationMapsDelReq 地图删除参数
+type InformationMapsDelReq struct {
+	ID uint `form:"id" binding:"required,gt=0"` // 主键
+}

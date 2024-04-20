@@ -50,3 +50,19 @@ type InformationHeroType struct {
 	CreateTime int64  `gorm:"autoCreateTime;not null;comment:'创建时间'"`
 	UpdateTime int64  `gorm:"autoUpdateTime;not null;comment:'更新时间'"`
 }
+
+// InformationMaps 地图实体
+type InformationMaps struct {
+	ID            uint   `gorm:"primarykey;comment:'主键'"`
+	Name          string `gorm:"not null;default:'';comment:'地图名称''"`
+	Image         string `gorm:"not null;default:'';comment:'地图图片'"`
+	Locations     string `gorm:"not null;default:'';comment:'地图地点'"`
+	PlantQuantity int8   `gorm:"not null;default:2;comment:'包点数量'"`
+	Mechanics     string `gorm:"not null;default:'';comment:'地图机制'"`
+	Thumbnail     string `gorm:"not null;default:'';comment:'缩略图'"`
+	Status        int8   `gorm:"not null;default:0;comment:'状态: 0=否, 1=是'"`
+	IsDelete      uint8  `gorm:"not null;default:0;comment:'是否删除: 0=否, 1=是'"`
+	CreateTime    int64  `gorm:"autoCreateTime;not null;comment:'创建时间'"`
+	UpdateTime    int64  `gorm:"autoUpdateTime;not null;comment:'更新时间'"`
+	DeleteTime    int64  `gorm:"not null;default:0;comment:'删除时间'"`
+}

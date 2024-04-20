@@ -38,4 +38,5 @@ var InitRouters = []*core.GroupBase{
 	information.WeaponsSeriesGroup,
 	information.HeroGroup,
 	information.HeroTypeGroup,
+	information.MapsGroup,
 }

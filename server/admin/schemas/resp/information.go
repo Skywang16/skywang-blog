@@ -60,3 +60,14 @@ type InformationHeroTypeResp struct {
 	CreateTime core.TsTime `json:"createTime" structs:"createTime"` // 创建时间
 	UpdateTime core.TsTime `json:"updateTime" structs:"updateTime"` // 更新时间
 }
+
+// InformationMapsResp 地图列表返回信息
+type InformationMapsResp struct {
+	ID            uint   `json:"id" structs:"id"`                       // 地图ID
+	Name          string `json:"name" structs:"name"`                   // 地图名称
+	Image         string `json:"image" structs:"image"`                 // 地图图片
+	Locations     string `json:"locations" structs:"locations"`         // 地图地点
+	PlantQuantity int8   `json:"plantQuantity" structs:"plantQuantity"` // 包点数量
+	Mechanics     string `json:"mechanics" structs:"mechanics"`         // 地图机制
+	Status        int8   `json:"status" structs:"status"`               // 地图状态: [-1=全部, 0=否, 1=是]
+}

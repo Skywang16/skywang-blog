@@ -53,8 +53,8 @@
 						<view v-if="tabIndex === 2">
 							<view class="content">
 								<view class="list">
-									<view class="weaponList" v-for="(heroItem, index) in tableData" :key="index" @click="goToDetail('map')">
-										<hero :heroItem="heroItem"></hero>
+									<view class="weaponList" v-for="(mapItem, index) in tableData" :key="index" @click="goToDetail('map')">
+										<maps :mapItem="mapItem"></maps>
 									</view>
 								</view>
 								<view class="loadOut">
@@ -95,11 +95,11 @@ import wwqyHeader from '@/components/wwqy-header/index.vue';
 import wwqyFooter from '@/components/wwqy-footer/index.vue';
 import weapon from './components/weapon/index.vue';
 import hero from './components/hero/index.vue';
-import map from './components/map/index.vue';
+import maps from './components/map/index.vue';
 import tool from './components/weapon/index.vue';
-import { weaponList, heroList } from '@/common/api/business.js';
+import { weaponList, heroList, mapList } from '@/common/api/business.js';
 export default {
-	components: { wwqyHeader, wwqyFooter, weapon, hero, map, tool },
+	components: { wwqyHeader, wwqyFooter, weapon, hero, maps, tool },
 	data() {
 		return {
 			page: 1,
@@ -126,7 +126,14 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getWeaponList();
+		let index = uni.getStorageSync('switchTabKey')
+		if (index ===0) {
+			this.getHeroList();
+		} else if (index ===1) {
+			this.getWeaponList();
+		} else if (index ===2) {
+			this.getMapList();
+		}
 	},
 	onShow() {
 		this.tabIndex = uni.getStorageSync('switchTabKey') || 0;
@@ -201,6 +208,40 @@ export default {
 				}
 			});
 		},
+		// 地图列表
+		getMapList() {
+			this.setLoadingOptions(true);
+			let params = {
+				pageNo: this.page,
+				pageSize: 10,
+				status: 1
+			};
+			mapList(params).then((res) => {
+				let result = res.data;
+				if (result.code === 200) {
+					if (result.data.count === this.tableData.length) {
+						// 数据已全部加载
+						this.loadingStatus = 'no-more';
+						uni.stopPullDownRefresh();
+						this.setLoadingOptions(false);
+						return;
+					}
+					// 拼接数组
+					this.tableData = this.tableData.concat(result.data.lists);
+					// 判断数组总量是否小于页面Size
+					if (this.tableData.length == result.data.count) {
+						this.loadingStatus = 'no-more';
+					} else {
+						this.loadingStatus = 'more';
+					}
+					uni.stopPullDownRefresh();
+					this.setLoadingOptions(false);
+				} else {
+					this.messageText = result.msg;
+					this.$refs.message.open();
+				}
+			});
+		},
 		/* 列表请求数据结束 */
 
 		/* tab事件开始 */
@@ -227,6 +268,10 @@ export default {
 			this.tabIndex = index;
 			if (index === 1) {
 				this.getHeroList();
+			} else if (index === 0) {
+				this.getWeaponList();
+			} else if (index === 2) {
+				this.getMapList();
 			}
 			uni.setStorageSync('switchTabKey', this.tabIndex);
 			// 当前tabbar选中Id改为点击的Id
