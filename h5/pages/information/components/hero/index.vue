@@ -8,7 +8,7 @@
 			<view class="info">
 				<view class="row">
 					<view class="left">角色定位：</view>
-					<view class="right">{{ heroItem.series }}</view>
+					<view class="right">{{ typesTexts[heroItem.types] }}</view>
 				</view>
 			</view>
 		</view>
@@ -19,6 +19,13 @@
 export default {
 	data() {
 		return {
+			typesTexts: {
+				0: '精选',
+				1: '奢华',
+				2: '尊爵',
+				3: '究极',
+				4: '限定'
+			}
 		};
 	},
 	props: {

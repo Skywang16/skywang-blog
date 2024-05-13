@@ -2,17 +2,17 @@
     <div class="hero-lists">
         <el-card class="!border-none" shadow="never">
             <el-form ref="formRef" class="mb-[-16px]" :model="queryParams" :inline="true">
-                <el-form-item label="角色名称">
+                <el-form-item label="英雄名称">
                     <el-input class="w-[280px]" v-model="queryParams.name" clearable @keyup.enter="resetPage" />
                 </el-form-item>
-                <el-form-item label="角色状态">
+                <el-form-item label="英雄状态">
                     <el-select class="w-[280px]" v-model="queryParams.status">
                         <el-option label="全部" :value="-1" />
                         <el-option label="显示" :value="1" />
                         <el-option label="隐藏" :value="0" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="角色定位">
+                <el-form-item label="英雄定位">
                     <el-select class="w-[280px]" v-model="queryParams.type">
                         <el-option v-for="item in typeList" :key="item.id" :label="item.name"
                             :value="item.id"></el-option>
@@ -33,7 +33,7 @@
                         <template #icon>
                             <icon name="el-icon-Plus" />
                         </template>
-                        新增角色
+                        新增英雄
                     </el-button>
                 </router-link>
             </div>
@@ -50,12 +50,10 @@
                             :preview-src-list="[row.image]" preview-teleported fit="contain" />
                     </template>
                 </el-table-column>
-                <el-table-column label="角色名称" prop="name" min-width="160" show-tooltip-when-overflow />
-                <el-table-column label="角色定位" prop="type" min-width="60" />
-                <el-table-column label="状态" min-width="100">
+                <el-table-column label="英雄名称" prop="name" min-width="160" show-tooltip-when-overflow />
+                <el-table-column label="英雄定位" prop="types" min-width="60">
                     <template #default="{ row }">
-                        <el-switch v-perms="['hero:cate:change']" v-model="row.status" :active-value="1"
-                            :inactive-value="0" @change="changeStatus(row)" />
+                        {{ typeList.find(item => item.id === row.types)?.name }}
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="120" fixed="right">

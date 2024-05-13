@@ -128,7 +128,7 @@ const fetchData = async () => {
 const handleSave = async () => {
     formData.level = Number(formData.level)
     formData.types = Number(formData.types)
-    formData.series = String(formData.series)
+    formData.series = String(formData.series.id)
     await formRef.value?.validate()
     if (route.query.id) {
         await weaponsEdit(formData)

@@ -112,7 +112,7 @@ export default {
 				{ id: 'a4', name: '工具' }
 			],
 			// 加载信息
-			loadingStatus: 'more',
+			loadingStatus: 'no-more',
 			contentText: {
 				contentdown: '上拉显示更多',
 				contentrefresh: '加载中...',
@@ -126,17 +126,29 @@ export default {
 		};
 	},
 	onLoad() {
-		let index = uni.getStorageSync('switchTabKey')
-		if (index ===0) {
-			this.getHeroList();
-		} else if (index ===1) {
+		let index = uni.getStorageSync('switchTabKey');
+		if (index === 0) {
 			this.getWeaponList();
-		} else if (index ===2) {
+		} else if (index === 1) {
+			this.getHeroList();
+		} else if (index === 2) {
 			this.getMapList();
 		}
 	},
+	// 
 	onShow() {
 		this.tabIndex = uni.getStorageSync('switchTabKey') || 0;
+	},
+	// tab切换事件
+	onTabItemTap() {
+		let index = uni.getStorageSync('switchTabKey');
+		if (index === 0) {
+			this.getWeaponList();
+		} else if (index === 1) {
+			this.getHeroList();
+		} else if (index === 2) {
+			this.getMapList();
+		}
 	},
 	methods: {
 		/* 列表请求数据开始 */
@@ -282,16 +294,16 @@ export default {
 		// 页面跳转
 		goToDetail(e) {
 			if (e === 'hero') {
-				/* uni.navigateTo({
+				uni.navigateTo({
 					url: './components/hero/detail',
 					animationType: 'fade-in',
 					animationDuration: 300
-				}); */
-				uni.showToast({
+				});
+				/* uni.showToast({
 					title: '功能开发中',
 					icon: 'none',
 					duration: 1000
-				});
+				}); */
 			}
 		},
 		// 滚动到底部
@@ -362,6 +374,7 @@ export default {
 	font-weight: 600;
 }
 .scroll-h {
+	background-color: rgb(235, 231, 226) !important;
 	height: 40px;
 	background-color: #fff;
 	font-weight: 500;
@@ -369,6 +382,9 @@ export default {
 }
 // 滑动区域高度
 .swiper-box {
+	background-size: 100%;
+	background-size:cover;
+	background-image: url('@/static/information/bj.webp');
 	height: calc(100vh - 302rpx) !important;
 }
 </style>

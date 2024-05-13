@@ -50,7 +50,7 @@ type InformationHeroTypeSimpleResp struct {
 	UpdateTime core.TsTime `json:"updateTime" structs:"updateTime"` // 更新时间
 }
 
-// InformationHeroTypeResp 角色定位系列返回信息
+// InformationHeroTypeResp 角色定位返回信息
 type InformationHeroTypeResp struct {
 	ID         uint        `json:"id" structs:"id"`                 // 主键
 	Name       string      `json:"name" structs:"name"`             // 角色定位名称

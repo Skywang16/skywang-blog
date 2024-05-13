@@ -965,6 +965,9 @@ VALUES (740, 739, 'A', '用户编辑', '', 0, 'user:edit', '', '', '', '', 0, 1,
 -- INSERT INTO `la_system_auth_menu` VALUES (772, 752, 'A', '状态', '', 0, 'channel:oaReplyDefault:status', '', '', '', '', 1, 1, 0, 1664517757, 1664517757);
 -- INSERT INTO `la_system_auth_menu` VALUES (773, 752, 'A', '删除', '', 0, 'channel:oaReplyDefault:del', '', '', '', '', 1, 1, 0, 1664517778, 1664517778);
 -- INSERT INTO `la_system_auth_menu` VALUES (774, 610, 'A', '导入数据表列表', '', 0, 'gen:db', '', '', '', '', 1, 1, 0, 1665646316, 1665646316);
+INSERT INTO `la_system_auth_menu`
+VALUES (775, 703, 'C', '文章添加/编辑', '', 0, 'article:add/edit', 'lists/edit', 'article/lists/edit', '/article/lists',
+        '', 0, 0, 0, 1668677477, 1668677477);
 INSERT INTO `la_system_auth_menu` VALUES (776, 0, 'M', '资料管理', 'el-icon-Grid', 950, '', 'information', 'information', '', '', 1, 1, 0, 1711439525, 1711439525);
 INSERT INTO `la_system_auth_menu` VALUES (777, 776, 'M', '武器管理', '', 3, '', 'weapons', 'information/weapons/index', '', '', 1, 1, 0, 1711417265, 1711417265);
 INSERT INTO `la_system_auth_menu` VALUES (778, 777, 'A', '武器编辑', '', 0, 'information:weapons:edit', '', '', '', '', 1, 1, 0, 1711417662, 1711417662);

@@ -6,7 +6,13 @@
                     <el-input class="w-[280px]" v-model="queryParams.name" clearable @keyup.enter="resetPage" />
                 </el-form-item>
                 <el-form-item label="武器等级">
-                    <el-input class="w-[280px]" v-model="queryParams.level" clearable @keyup.enter="resetPage" />
+                    <el-select class="w-[320px]" v-model="queryParams.level" clearable @keyup.enter="resetPage">
+                        <el-option label="精选" :value="0" />
+                        <el-option label="奢华" :value="1" />
+                        <el-option label="尊爵" :value="2" />
+                        <el-option label="究极" :value="3" />
+                        <el-option label="限定" :value="4" />
+                    </el-select>
                 </el-form-item>
                 <!-- <el-form-item label="栏目作者">
                     <el-select class="w-[280px]" v-model="queryParams.level">
@@ -48,8 +54,8 @@
         <el-card class="!border-none mt-4" shadow="never">
             <div>
                 <router-link v-perms="['weapons:add', 'weapons:add/edit']" :to="{
-                path: getRoutePath('weapons:add/edit'),
-            }">
+                    path: getRoutePath('weapons:add/edit'),
+                }">
                     <el-button type="primary" class="mb-4">
                         <template #icon>
                             <icon name="el-icon-Plus" />
@@ -72,9 +78,30 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="武器名称" prop="name" min-width="160" show-tooltip-when-overflow />
-                <el-table-column label="武器等级" prop="level" min-width="60" />
-                <el-table-column label="武器类型" prop="types" min-width="60" />
-                <el-table-column label="武器系列" prop="series" min-width="60" />
+                <el-table-column label="武器等级" prop="level" min-width="60">
+                    <template #default="{ row }">
+                        <span v-if="row.level === 0">精选</span>
+                        <span v-else-if="row.level === 1">奢华</span>
+                        <span v-else-if="row.level === 2">尊爵</span>
+                        <span v-else-if="row.level === 3">究极</span>
+                        <span v-else-if="row.level === 4">限定</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="武器类型" prop="types" min-width="60">
+                    <template #default="{ row }">
+                        <span v-if="row.types === 0">随身武器</span>
+                        <span v-else-if="row.types === 1">冲锋枪</span>
+                        <span v-else-if="row.types === 2">散弹枪</span>
+                        <span v-else-if="row.types === 3">步枪</span>
+                        <span v-else-if="row.types === 4">狙击步枪</span>
+                        <span v-else-if="row.types === 5">机枪</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="武器系列" min-width="60">
+                    <template #default="{ row }">
+                        {{ seriesList.find(item => item.id === row.series)?.name }}
+                    </template>
+                </el-table-column>
                 <el-table-column label="状态" min-width="100">
                     <template #default="{ row }">
                         <el-switch v-perms="['weapons:cate:change']" v-model="row.status" :active-value="1"
@@ -85,11 +112,11 @@
                     <template #default="{ row }">
                         <el-button v-perms="['weapons:edit', 'weapons:add/edit']" type="primary" link>
                             <router-link :to="{
-                path: getRoutePath('weapons:add/edit'),
-                query: {
-                    id: row.id,
-                },
-            }">
+                                path: getRoutePath('weapons:add/edit'),
+                                query: {
+                                    id: row.id,
+                                },
+                            }">
                                 编辑
                             </router-link>
                         </el-button>

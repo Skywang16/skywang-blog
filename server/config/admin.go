@@ -33,6 +33,7 @@ var AdminConfig = adminConfig{
 		"setting:dict:type:all",   // 所有字典类型
 		"setting:dict:data:all",   // 所有字典数据
 		"setting:protocol:detail", // 政策协议
+		"article:news:list",
 	},
 
 	// 演示模式白名单

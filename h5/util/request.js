@@ -37,6 +37,36 @@ export function request(params) {
 				uni.hideLoading();
 				typeof params.fail == "function" && params.fail(err.data);
 			},
+			complete: (response) => {
+				if (response.data.code === 333) {
+					// 已登录过
+					uni.showLoading({
+						title: "登录超时，请重新登录",
+						icon: "none",
+						success: () => {
+							uni.removeStorageSync(token);
+							setTimeout(() => {
+								uni.hideLoading();
+								uni.reLaunch({
+									url: "/pages/login/index",
+								});
+							}, 1000);
+						},
+					});
+				} else if (response.data.code === 332) {
+					uni.showToast({
+						title: "您还未登录",
+						icon: "none",
+					});
+					setTimeout(() => {
+						uni.hideLoading();
+						uni.reLaunch({
+							url: "/pages/login/index",
+						});
+					}, 1000);
+				}
+
+			}
 		});
 	});
 }
