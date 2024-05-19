@@ -1,5 +1,22 @@
 {
-	"pages": [
+	"pages": [{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/blog/index",
+			"style": {
+				"navigationBarTitleText": "文章"
+			}
+		},
+		{
+			"path": "pages/blog/detail",
+			"style": {
+				"navigationBarTitleText": "文章详细"
+			}
+		},
 		{
 			"path": "pages/login/index",
 			"style": {
@@ -7,49 +24,17 @@
 			}
 		},
 		{
-			"path": "pages/home/index",
+			"path": "pages/login/register",
 			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
-		{
-			"path": "pages/myInfo/index",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
-		{
-			"path": "pages/news/index",
-			"style": {
-				"navigationBarTitleText": "资讯"
-			}
-		},
-		{
-			"path": "pages/information/index",
-			"style": {
-				"navigationBarTitleText": "资料"
-			}
-		},
-		{
-			"path": "pages/information/components/hero/detail",
-			"style": {
-				"navigationBarTitleText": "角色详细"
-			}
-		},
-		{
-			"path": "pages/news/newsDetail",
-			"style": {
-				"navigationBarTitleText": "资讯详细"
+				"navigationBarTitleText": "注册"
 			}
 		}
-		
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
 		"navigationBarBackgroundColor": "#FFFFFF",
-		"backgroundColor": "#F3F5F8",
-		"navigationStyle": "custom"
+		"backgroundColor": "#F3F5F8"
 	},
 	"tabBar": {
 		"color": "#7A7E83",
@@ -58,21 +43,15 @@
 		"backgroundColor": "#F8F8F8",
 		"list": [{
 				"pagePath": "pages/home/index",
-				"selectedIconPath": "static/tabIcon/home-fill.png",
-				"iconPath": "static/tabIcon/home.png",
+				"selectedIconPath": "static/tabIcon/all-fill.png",
+				"iconPath": "static/tabIcon/all.png",
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/information/index",
-				"selectedIconPath": "static/tabIcon/all-fill.png",
-				"iconPath": "static/tabIcon/all.png",
-				"text": "资料"
-			},
-			{
-				"pagePath": "pages/news/index",
+				"pagePath": "pages/blog/index",
 				"selectedIconPath": "static/tabIcon/news-fill.png",
 				"iconPath": "static/tabIcon/news.png",
-				"text": "资讯"
+				"text": "文章"
 			}
 		]
 	}

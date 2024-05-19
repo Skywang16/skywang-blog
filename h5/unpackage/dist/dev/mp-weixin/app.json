@@ -1,16 +1,17 @@
 {
   "pages": [
     "pages/home/index",
-    "pages/news/index",
-    "pages/information/index"
+    "pages/blog/index",
+    "pages/blog/detail",
+    "pages/login/index",
+    "pages/login/register"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "",
     "navigationBarBackgroundColor": "#FFFFFF",
-    "backgroundColor": "#F3F5F8",
-    "navigationStyle": "custom"
+    "backgroundColor": "#F3F5F8"
   },
   "tabBar": {
     "color": "#7A7E83",
@@ -20,23 +21,20 @@
     "list": [
       {
         "pagePath": "pages/home/index",
-        "selectedIconPath": "static/tabIcon/home-fill.png",
-        "iconPath": "static/tabIcon/home.png",
+        "selectedIconPath": "static/tabIcon/all-fill.png",
+        "iconPath": "static/tabIcon/all.png",
         "text": "首页"
       },
       {
-        "pagePath": "pages/information/index",
-        "selectedIconPath": "static/tabIcon/all-fill.png",
-        "iconPath": "static/tabIcon/all.png",
-        "text": "资料"
-      },
-      {
-        "pagePath": "pages/news/index",
+        "pagePath": "pages/blog/index",
         "selectedIconPath": "static/tabIcon/news-fill.png",
         "iconPath": "static/tabIcon/news.png",
-        "text": "资讯"
+        "text": "文章"
       }
     ]
   },
-  "usingComponents": {}
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {
+    "loading": "/components/loading"
+  }
 }

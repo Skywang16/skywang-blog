@@ -1,0 +1,125 @@
+
+.modal-box{
+	position: fixed;
+	display: block;
+	width: 10000px;
+	height: 10000px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	z-index: 100;
+}
+.loading-modal{
+	display: inline-block;
+	height: 110px;
+	width: 150px;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+	box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.2);
+	font-size: 14px;
+	z-index: 9999;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 70px;
+	left: 0;
+	margin: auto;
+}
+.loader-three {
+	position: relative;
+	width: 100px;
+	height: 48px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 15px;
+}
+.loader-three:after {
+	position: absolute;
+	top: 0px;
+	left: 26px;
+	content: "";
+	width: 36px;
+	height: 36px;
+	border: solid transparent 3px;
+	border-top: solid #fff 3px;
+	border-left: solid #fff 3px;
+	border-right: solid #fff 3px;
+	border-radius: 50%;
+	-webkit-animation: loader3AnimationAfter 1.5s linear infinite;
+	        animation: loader3AnimationAfter 1.5s linear infinite;
+}
+.loader-text{
+	color: #fff;
+	text-align: center;
+	line-height: 20px;
+}
+.loader-img{
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 6px;
+	left: 32px;
+}
+@-webkit-keyframes loader3Animation {
+0% {
+		-webkit-transform: rotate(0deg);
+		        transform: rotate(0deg);
+}
+100% {
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+}
+}
+@keyframes loader3Animation {
+0% {
+		-webkit-transform: rotate(0deg);
+		        transform: rotate(0deg);
+}
+100% {
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+}
+}
+@-webkit-keyframes loader3AnimationBefore {
+0% {
+		-webkit-transform: rotate(0deg);
+		        transform: rotate(0deg);
+}
+100% {
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+}
+}
+@keyframes loader3AnimationBefore {
+0% {
+		-webkit-transform: rotate(0deg);
+		        transform: rotate(0deg);
+}
+100% {
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+}
+}
+@-webkit-keyframes loader3AnimationAfter {
+0% {
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+}
+100% {
+		-webkit-transform: rotate(-360deg);
+		        transform: rotate(-360deg);
+}
+}
+@keyframes loader3AnimationAfter {
+0% {
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+}
+100% {
+		-webkit-transform: rotate(-360deg);
+		        transform: rotate(-360deg);
+}
+}
+

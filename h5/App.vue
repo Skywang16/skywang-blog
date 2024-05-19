@@ -16,6 +16,7 @@
 /*每个页面公共css */
 @import '@/uni_modules/uni-scss/index.scss';
 page {
-	background-color: #f5f5f5;
+	background-color: #f5f6f7;
 }
+
 </style>

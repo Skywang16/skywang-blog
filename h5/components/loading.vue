@@ -1,13 +1,13 @@
 <template>
-	<div class="tz-modal-box" v-if="loading">
-		<div class="tz-loading-modal" :style="secondContent === '' ? 'height: 100px' : 'height: 110px'">
+	<!-- <div class="modal-box" v-if="loading">
+		<div class="loading-modal" :style="secondContent === '' ? 'height: 100px' : 'height: 110px'">
 			<div class="loader loader-three">
 				<image class="loader-img" src="@/static/home/icon/hero.png"></image>
 			</div>
 			<div class="loader-text loader-first">{{ firstContent === '' ? '加载中' : firstContent }}</div>
 			<div class="loader-text loader-second" v-if="secondContent !== ''">{{ secondContent }}</div>
 		</div>
-	</div>
+	</div> -->
 </template>
 
 <script>
@@ -36,7 +36,7 @@
 </script>
 
 <style>
-	.tz-modal-box{
+	.modal-box{
 		position: fixed;
 		display: block;
 		width: 10000px;
@@ -48,7 +48,7 @@
 		margin: auto;
 		z-index: 100;
 	}
-	.tz-loading-modal{
+	.loading-modal{
 		display: inline-block;
 		height: 110px;
 		width: 150px;

@@ -53,19 +53,7 @@ export function request(params) {
 							}, 1000);
 						},
 					});
-				} else if (response.data.code === 332) {
-					uni.showToast({
-						title: "您还未登录",
-						icon: "none",
-					});
-					setTimeout(() => {
-						uni.hideLoading();
-						uni.reLaunch({
-							url: "/pages/login/index",
-						});
-					}, 1000);
 				}
-
 			}
 		});
 	});

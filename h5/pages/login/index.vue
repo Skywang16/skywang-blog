@@ -1,23 +1,23 @@
 <template>
 	<view class="login-index">
 		<view class="title" style="text-align: center">用户登录</view>
-		<view class="input-list" v-if="autoLogin === '1'">
+		<view class="input-list">
 			<view class="input-item">
 				<view class="img-box">
-					<img src="@/static/icon/auth-sjh.png" alt="" />
+					<image mode="widthFix" src="@/static/icon/auth-xm.png" alt="" />
 				</view>
 				<input class="uni-input" v-model="form.username" placeholder="账号" />
 			</view>
 			<view class="input-item input-code">
 				<view class="img-box">
-					<img src="@/static/icon/auth-yzm.png" alt="" />
+					<image mode="widthFix" src="@/static/icon/auth-yzm.png" alt="" />
 				</view>
 				<input class="uni-input" password v-model="form.password" placeholder="密码" />
 			</view>
 		</view>
-		<view class="button" v-if="autoLogin === '1'">
-			<!-- <view>忘记密码</view> -->
+		<view class="button">
 			<button class="btn" type="primary" @click="login">登录</button>
+			<view class="register" @click="register">立即注册</view>
 		</view>
 		<!-- <view class="seleteuser">
 			<uni-data-checkbox style="width: 40rpx; margin-right: 10rpx" @change="changeRadio" v-model="hobby" multiple :localdata="hobbys" />
@@ -54,37 +54,23 @@ export default {
 				}
 			],
 			messageText: '错误信息',
-			timer: '',
-			name: '',
-			creditCode: '',
-			unionid: '',
-			cubeCorpId: '',
-			userId: '',
-			userInfo: {},
-			uniteData: {},
-			enterpriseCode: '',
 			isCheck: true,
 			showLoading: false, // 自定义遮罩显影
 			firstContent: '', // 自定义遮罩第一行文本
-			secondContent: '', // 自定义遮罩第二行文本
-			autoLogin: '0'
+			secondContent: '' // 自定义遮罩第二行文本
 		};
 	},
-	onLoad() {
-		if (this.$route.query.autoLogin) {
-			this.autoLogin = this.$route.query.autoLogin;
-		} else {
-			let params = {
-				username: 'user',
-				password: '123456',
-				terminal: 1
-			};
-			this.onGetToken(params);
-		}
-	},
+	onLoad() {},
 	methods: {
 		changeRadio(e) {
 			this.isCheck = !this.isCheck;
+		},
+		register() {
+			uni.navigateTo({
+				url: './register',
+				animationType: 'fade-in',
+				animationDuration: 300
+			});
 		},
 		login() {
 			var that = this;
@@ -98,13 +84,6 @@ export default {
 				that.$refs.message.open();
 				return;
 			}
-			/* if (this.isCheck) {
-				uni.showToast({
-					title: '需要同意协议后才可登录',
-					icon: 'none'
-				});
-				return;
-			} */
 			let params = {
 				username: that.form.username,
 				password: that.form.password,
@@ -133,7 +112,7 @@ export default {
 				let result = res.data;
 				if (result.code === 200) {
 					console.log(result.data);
-					uni.setStorageSync('userInfo', result.data.user);
+					uni.setStorageSync('userData', result.data.user);
 					this.toIndex();
 				} else {
 					this.setLoadingOptions(false);
@@ -194,7 +173,7 @@ page {
 		.img-box {
 			width: 60rpx;
 			display: flex;
-			img {
+			image {
 				width: 40rpx;
 			}
 		}
@@ -204,6 +183,11 @@ page {
 	width: 100%;
 	margin-top: 20rpx;
 	margin-bottom: 20rpx;
+}
+.register {
+	display: flex;
+	justify-content: center;
+	margin-top: 30rpx;
 }
 .btn {
 	height: 80rpx;
