@@ -33,6 +33,7 @@ var InitRouters = []*core.GroupBase{
 	system.RoleGroup,
 	// article
 	article.NewsGroup,
+	article.KeyWordsGroup,
 	// information
 	information.WeaponsGroup,
 	information.WeaponsSeriesGroup,

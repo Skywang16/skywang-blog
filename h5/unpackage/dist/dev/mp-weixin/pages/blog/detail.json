@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "文章详细",
-  "usingComponents": {}
+  "usingComponents": {
+    "mp-html": "/components/mp-html/mp-html",
+    "md-highlight": "/components/cmder-MDParserHighlight/index"
+  }
 }

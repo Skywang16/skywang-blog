@@ -82,7 +82,7 @@
 }
 .list .articlesList .title.data-v-d75a0a44 {
   margin: 20rpx;
-  font-size: 32rpx;
+  font-size: 36rpx;
 }
 .list .articlesList .introduction.data-v-d75a0a44 {
   margin: 20rpx;

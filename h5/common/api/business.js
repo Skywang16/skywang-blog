@@ -10,6 +10,7 @@ const API = {
 	newsList: `article/news/list`, // 资讯列表
 	website: `setting/website/detail`, // 网站配置
 	protocol:`setting/protocol/detail`, // 政策协议
+	keyWordsLists: `article/keyWords/list` // 文章关键词列表
 };
 
 // 资讯列表
@@ -66,6 +67,15 @@ export function protocol(pramter) {
 		method: "GET",
 	});
 }
+
+export function keyWordsLists(pramter) {
+	return request({
+		url: API.keyWordsLists,
+		data: pramter,
+		method: "GET",
+	});
+}
+
 
 
 

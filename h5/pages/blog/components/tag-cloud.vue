@@ -1,12 +1,12 @@
 <template>
-	<view ref="rolls" class="rolls" :style="{ '--trans-late': `-${totalWidth}px` }">
+	<view ref="rolls" class="rolls" :style="{ '--trans-late': `-${totalWidth}px`, '--animation-duration': animationSpeed + 's' }">
 		<!--实际数据组 GO-->
 		<view
 			class="roll"
 			v-for="(item, index) in rollList"
 			:key="index"
 			@click="goSearch(item)"
-			:style="{ fontSize: item.size + 'px', color: item.color, backgroundColor: item.backgroundColor }"
+			:style="{ fontSize: item.size + 'px', color: item.color, backgroundColor: item.backgroundColor || getColorOpacity(item.color) }"
 		>
 			{{ item.text }}
 		</view>
@@ -16,7 +16,7 @@
 			v-for="(item, index) in rollList"
 			:key="item.text + index"
 			@click="goSearch(item)"
-			:style="{ fontSize: item.size + 'px', color: item.color, backgroundColor: item.backgroundColor }"
+			:style="{ fontSize: item.size + 'px', color: item.color, backgroundColor: item.backgroundColor || getColorOpacity(item.color) }"
 		>
 			{{ item.text }}
 		</view>
@@ -31,31 +31,57 @@ export default {
 			default() {
 				return [];
 			}
+		},
+		bcAlpha: {
+			type: Number,
+			default() {
+				return 0.2;
+			}
+		},
+		animationSpeed: {
+			type: Number,
+			default() {
+				return 5;
+			}
 		}
 	},
 	data() {
 		return {
-			totalWidth: 0,
-			aaa: false
+			totalWidth: 0
 		};
 	},
-	async mounted() {
-		this.totalWidth = await this.getElementHeight();
-		console.log(this.totalWidth);
+	mounted() {
+		setTimeout(() => {
+			this.getElementWidth();
+			console.log(this.totalWidth)
+		}, 300);
 	},
 	methods: {
-		getElementHeight() {
-			return new Promise((reslove) => {
-				let info = uni.createSelectorQuery().in(this).select('.rolls');
-				info.boundingClientRect(function (data) {}).exec((res) => reslove(res[0].width / 2));
-			});
+		getElementWidth() {
+			// 创建 Promise 对象，用于异步获取元素宽度
+			uni.createSelectorQuery()
+				.in(this)
+				.select('.rolls')
+				.boundingClientRect((data) => {
+					this.totalWidth = data.width / 2;
+				})
+				.exec();
 		},
-		goSearch(it) {
-			let options = {
-				...it
-			};
-			this.$emit('goSearch', options.id);
-			console.log(it);
+		goSearch(item) {
+			this.$emit('goSearch', item);
+		},
+		getColorOpacity(color) {
+			// 将传入的颜色转换成 RGBA 格式
+			let rgbaColor = this.hexToRGBA(color, this.bcAlpha); // 0.2 为透明度，可以根据需要调整
+			return rgbaColor;
+		},
+		// 十六转RGBA
+		hexToRGBA(hex, alpha) {
+			hex = hex.replace('#', '');
+			let r = parseInt(hex.substring(0, 2), 16);
+			let g = parseInt(hex.substring(2, 4), 16);
+			let b = parseInt(hex.substring(4, 6), 16);
+			return `rgba(${r},${g},${b},${alpha})`;
 		}
 	}
 };
@@ -63,7 +89,7 @@ export default {
 
 <style scoped lang="scss">
 .rolls {
-	animation: move 7s linear infinite;
+	animation: move var(--animation-duration) linear infinite;
 	white-space: nowrap;
 	margin-top: 20rpx;
 	.roll {
@@ -72,15 +98,11 @@ export default {
 		border-radius: 12rpx;
 		display: inline-block;
 		margin-right: 20rpx;
-		image {
-			width: 300rpx;
-			height: 300rpx;
-		}
 	}
 }
 
 .rolls:hover {
-	animation: move 7s linear infinite;
+	animation: move var(--animation-duration) linear infinite;
 }
 
 @keyframes move {

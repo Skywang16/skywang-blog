@@ -88,7 +88,7 @@ func (adminSrv systemAuthAdminService) Self(adminId uint) (res resp.SystemAuthAd
 	var admin resp.SystemAuthAdminSelfOneResp
 	response.Copy(&admin, sysAdmin)
 	admin.Dept = strconv.FormatUint(uint64(sysAdmin.DeptId), 10)
-	admin.Avatar = util.UrlUtil.ToAbsoluteUrl(sysAdmin.Avatar)
+	admin.Avatar = sysAdmin.Avatar
 	return resp.SystemAuthAdminSelfResp{User: admin, Permissions: auths}, nil
 }
 
@@ -128,7 +128,6 @@ func (adminSrv systemAuthAdminService) List(page request.PageReq, listReq req.Sy
 		return
 	}
 	for i := 0; i < len(adminResp); i++ {
-		adminResp[i].Avatar = util.UrlUtil.ToAbsoluteUrl(adminResp[i].Avatar)
 		if adminResp[i].ID == 1 {
 			adminResp[i].Role = "系统管理员"
 		}
@@ -152,7 +151,6 @@ func (adminSrv systemAuthAdminService) Detail(id uint) (res resp.SystemAuthAdmin
 		return
 	}
 	response.Copy(&res, sysAdmin)
-	res.Avatar = util.UrlUtil.ToAbsoluteUrl(res.Avatar)
 	if res.Dept == "" {
 		res.Dept = strconv.FormatUint(uint64(res.DeptId), 10)
 	}
@@ -199,7 +197,7 @@ func (adminSrv systemAuthAdminService) Add(addReq req.SystemAuthAdminAddReq) (e 
 	if addReq.Avatar == "" {
 		addReq.Avatar = "/api/static/backend_avatar.png"
 	}
-	sysAdmin.Avatar = util.UrlUtil.ToRelativeUrl(addReq.Avatar)
+	sysAdmin.Avatar = addReq.Avatar
 	err = adminSrv.db.Create(&sysAdmin).Error
 	e = response.CheckErr(err, "Add Create err")
 	// 如果 Role 为 2，则将 SystemAuthLog 表中的 todayUsers 字段加一
@@ -251,7 +249,7 @@ func (adminSrv systemAuthAdminService) Edit(c *gin.Context, editReq req.SystemAu
 	// 更新管理员信息
 	adminMap := structs.Map(editReq)
 	delete(adminMap, "ID")
-	adminMap["Avatar"] = util.UrlUtil.ToRelativeUrl(editReq.Avatar)
+	adminMap["Avatar"] = editReq.Avatar
 	role := editReq.Role
 	if editReq.ID == 1 {
 		role = 0
@@ -314,7 +312,7 @@ func (adminSrv systemAuthAdminService) Update(c *gin.Context, updateReq req.Syst
 	if updateReq.Avatar != "" {
 		avatar = updateReq.Avatar
 	}
-	adminMap["Avatar"] = util.UrlUtil.ToRelativeUrl(avatar)
+	adminMap["Avatar"] = avatar
 	delete(adminMap, "aaa")
 	if updateReq.Password != "" {
 		currPass := util.ToolsUtil.MakeMd5(updateReq.CurrPassword + admin.Salt)

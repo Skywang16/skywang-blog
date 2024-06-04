@@ -1,5 +1,5 @@
 export function request(params) {
-	const BASE_URL = "http://localhost:8001/api/";
+	const BASE_URL = "https://api.skywang.asia/api/";
 	uni.setStorageSync("BASE_URL", BASE_URL);
 	let BASE_HEADER = {
 		"content-type": params.contentType || "application/json",

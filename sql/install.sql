@@ -573,7 +573,7 @@ BEGIN;
 INSERT INTO `la_system_auth_dept`
 VALUES (1, 0, '默认部门', 'wjj', '19858851348', 10, 0, 0, 1649841995, 1660190949, 0);
 INSERT INTO `la_system_auth_admin`
-VALUES (1, 0, 'admin', 'admin', '7fac2474740becfaf1ecbdd6cc8fb076', '/api/static/backend_avatar.png', '0', '5Xar0', 0,
+VALUES (1, 0, 'admin', 'admin', '7fac2474740becfaf1ecbdd6cc8fb076', '/api/uploads/image/20242605/79452e14b6dd433585760c4e22c9c2cc.jpg', '0', '5Xar0', 0,
         1, 0, 0, '127.0.0.1', 1660641347, 1642321599, 1660287325, 0);
 INSERT INTO `la_system_auth_admin`
 VALUES (2, 1, 'user', 'user', 'a7dafd36071a23776a992822e4617b12', '/api/static/backend_avatar.png', '2', 'A5ENl', 1,

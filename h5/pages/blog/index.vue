@@ -14,9 +14,9 @@
 					<tag-cloud :rollList="rollList" @goSearch="search"></tag-cloud>
 					<tag-cloud :rollList="rollList2" @goSearch="search"></tag-cloud>
 				</view>
-				<view class="content" @click="goToDetail">
+				<view class="content">
 					<view class="list">
-						<view class="articlesList" v-for="(item, index) in tableData" :key="index">
+						<view class="articlesList" v-for="(item, index) in tableData" :key="index" @click="goToDetail(item)">
 							<view class="image-box">
 								<image mode="widthFix" :src="item.image" alt="" />
 							</view>
@@ -57,7 +57,7 @@
 
 <script>
 import tagCloud from './components/tag-cloud.vue';
-import { newsList } from '@/common/api/business.js';
+import { newsList, keyWordsLists } from '@/common/api/business.js';
 export default {
 	components: {
 		tagCloud
@@ -78,27 +78,26 @@ export default {
 			messageText: '错误信息',
 			tableData: [],
 			searchValue: '', // 搜索值
-			rollList: [
-				{ text: 'Vue.js', size: 20, color: '#3498db', backgroundColor: 'rgba(52, 152, 219, 0.2)' },
-				{ text: 'JavaScript', size: 16, color: '#2ecc71', backgroundColor: 'rgba(46, 204, 113, 0.2)' },
-				{ text: 'CSS', size: 14, color: '#e74c3c', backgroundColor: 'rgba(231, 76, 60, 0.2)' },
-				{ text: 'Golang', size: 22, color: '#9b59b6', backgroundColor: 'rgba(155, 89, 182, 0.2)' },
-				{ text: 'UniApp', size: 19, color: '#34495e', backgroundColor: 'rgba(52, 73, 94, 0.2)' }
-			],
-			rollList2: [
-				{ text: 'HTML', size: 18, color: '#f39c12', backgroundColor: 'rgba(243, 156, 18, 0.2)' },
-				{ text: 'CSS', size: 14, color: '#e74c3c', backgroundColor: 'rgba(231, 76, 60, 0.2)' },
-				{ text: 'Frontend', size: 22, color: '#9b59b6', backgroundColor: 'rgba(155, 89, 182, 0.2)' },
-				{ text: 'Web Development', size: 19, color: '#34495e', backgroundColor: 'rgba(52, 73, 94, 0.2)' }
-			],
+			rollList: [],
+			rollList2: [],
 			animationData: {},
 			isShow: false
 		};
 	},
 	onLoad() {
 		this.newsList();
+		this.rollList = uni.getStorageSync('rollList');
+		this.rollList2 = uni.getStorageSync('rollList2');
 	},
-
+	onPullDownRefresh() {
+		if (this.searchValue){
+			this.searchValue = ''
+		} else {
+			this.newsList();
+		}
+		this.rollList = uni.getStorageSync('rollList');
+		this.rollList2 = uni.getStorageSync('rollList2');
+	},
 	onPageScroll(e) {
 		if (e.scrollTop >= 800) {
 			// 显示
@@ -115,18 +114,19 @@ export default {
 	},
 	methods: {
 		/* 列表请求数据开始 */
-		// 武器列表
-		newsList() {
+		newsList(id) {
 			this.setLoadingOptions(true);
 			let params = {
 				title: this.searchValue,
 				pageNo: this.page,
 				pageSize: 10,
+				keyWords: id || '',
 				cid: '',
 				status: -1,
 				recommended: 1
 			};
 			newsList(params).then((res) => {
+				uni.stopPullDownRefresh();
 				let result = res.data;
 				if (result.code === 200) {
 					if (result.data.count === this.tableData.length) {
@@ -152,13 +152,16 @@ export default {
 				}
 			});
 		},
+
 		/* 列表请求数据结束 */
 		// 清除输入值
 		closeSearch() {
 			this.searchValue = null;
 		},
 		// 页面跳转
-		goToDetail() {
+		goToDetail(item) {
+			console.log(item);
+			uni.setStorageSync('detail', item);
 			uni.navigateTo({
 				url: './detail',
 				animationType: 'fade-in',
@@ -177,7 +180,13 @@ export default {
 			}
 			this.page++;
 			this.loadingStatus = 'loading';
-			this.getarticlesList();
+			this.newsList();
+		},
+		search(item) {
+			this.page = 1;
+			this.tableData = [];
+			console.log(item.id);
+			this.newsList(item.id);
 		},
 		// 回到顶部
 		goTop() {
@@ -213,7 +222,6 @@ export default {
 
 <style scoped lang="scss">
 .main {
-	
 	background-color: #000;
 }
 
@@ -252,7 +260,7 @@ export default {
 }
 
 .list {
-	background-color:#f5f6f7;
+	background-color: #f5f6f7;
 	.articlesList {
 		padding: 0 0 30rpx 0;
 		border-radius: 20rpx;
@@ -270,7 +278,7 @@ export default {
 		}
 		.title {
 			margin: 20rpx;
-			font-size: 32rpx;
+			font-size: 36rpx;
 		}
 		.introduction {
 			margin: 20rpx;

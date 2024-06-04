@@ -13,7 +13,7 @@
 						<uni-easyinput :maxlength="9" v-model="formData.nickname" placeholder="请输入昵称" />
 					</uni-forms-item>
 					<uni-forms-item label="密码" name="password" required>
-						<uni-easyinput :maxlength="9" type="password" v-model="formData.password" placeholder="请输入密码" />
+						<uni-easyinput :maxlength="16" type="password" v-model="formData.password" placeholder="请输入密码" />
 					</uni-forms-item>
 					<uni-forms-item label="确认密码" name="passwordConfirm" required>
 						<uni-easyinput :maxlength="9" type="password" v-model="formData.passwordConfirm" placeholder="请再次输入密码" />
@@ -163,8 +163,8 @@ export default {
 		// 上传图片
 		register() {
 			this.setLoadingOptions(true, '注册中');
-			//let BASE_URL = uni.getStorageSync('BASE_URL') ';
-			let BASE_URL = 'http://localhost:8001/api/';
+			 let BASE_URL = uni.getStorageSync('BASE_URL');
+			// let BASE_URL = 'http://localhost:8001/api/';
 			let path = 'common/upload/image';
 			// 创建随机数
 			uni.uploadFile({

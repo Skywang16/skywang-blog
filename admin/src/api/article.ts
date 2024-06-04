@@ -1,40 +1,5 @@
 import request from "@/utils/request";
 
-// 文章分类列表
-export function articleCateLists(params?: any) {
-    return request.get({url: "/article/cate/list", params});
-}
-
-// 文章分类列表
-export function articleCateAll(params?: any) {
-    return request.get({url: "/article/cate/all", params});
-}
-
-// 添加文章分类
-export function articleCateAdd(params: any) {
-    return request.post({url: "/article/cate/add", params});
-}
-
-// 编辑文章分类
-export function articleCateEdit(params: any) {
-    return request.post({url: "/article/cate/edit", params});
-}
-
-// 删除文章分类
-export function articleCateDelete(params: any) {
-    return request.post({url: "/article/cate/del", params});
-}
-
-// 文章分类详情
-export function articleCateDetail(params: any) {
-    return request.get({url: "/article/cate/detail", params});
-}
-
-// 文章分类状态
-export function articleCateStatus(params: any) {
-    return request.post({url: "/article/cate/change", params});
-}
-
 // 文章列表
 export function articleLists(params?: any) {
     return request.get({url: "/article/news/list", params});
@@ -64,3 +29,29 @@ export function articleDelete(params: any) {
 export function articleDetail(params: any) {
     return request.get({url: "/article/news/detail", params});
 }
+
+// 文章关键词列表
+export function keyWordsLists(params?: any) {
+    return request.get({ url: "/article/keyWords/list", params });
+  }
+  
+  // 添加文章关键词
+  export function keyWordsAdd(params: any) {
+    return request.post({ url: "/article/keyWords/add", params });
+  }
+  
+  // 编辑文章关键词
+  export function keyWordsEdit(params: any) {
+    return request.post({ url: "/article/keyWords/edit", params });
+  }
+  
+  // 删除文章关键词
+  export function keyWordsDelete(params: any) {
+    return request.post({ url: "/article/keyWords/del", params });
+  }
+  
+  // 文章关键词详情
+  export function keyWordsDetail(params: any) {
+    return request.get({ url: "/article/keyWords/detail", params });
+  }
+  

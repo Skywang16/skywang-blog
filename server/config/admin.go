@@ -22,6 +22,7 @@ var AdminConfig = adminConfig{
 		"system:admin:add",       // 人员新增
 		"article:news:list",      // 文章列表
 		"setting:website:detail", // 网站配置
+		"article:keyWords:list",  // 文章关键词列表
 	},
 
 	// 免权限验证

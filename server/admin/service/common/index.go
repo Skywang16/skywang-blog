@@ -28,14 +28,14 @@ type indexService struct {
 // Console 控制台数据
 func (iSrv indexService) Console() (res map[string]interface{}, e error) {
 	// 版本信息
-	name, err := util.ConfigUtil.GetVal(iSrv.db, "website", "name", "LikeAdmin-Go")
+	name, err := util.ConfigUtil.GetVal(iSrv.db, "website", "name", "Blog-Go")
 	if e = response.CheckErr(err, "Console Get err"); e != nil {
 		return
 	}
 	version := map[string]interface{}{
 		"name":    name,
 		"version": config.Config.Version,
-		"website": "www.likeadmin.cn",
+		"website": "www.Blog.cn",
 		"based":   "Vue3.x、ElementUI、MySQL",
 		"channel": map[string]string{
 			"gitee": "https://gitee.com/ciaovita/graduation-design",
@@ -107,9 +107,9 @@ func (iSrv indexService) Config() (res map[string]interface{}, e error) {
 	}
 	return map[string]interface{}{
 		"webName":     website["name"],
-		"webLogo":     util.UrlUtil.ToAbsoluteUrl(website["logo"]),
-		"webFavicon":  util.UrlUtil.ToAbsoluteUrl(website["favicon"]),
-		"webBackdrop": util.UrlUtil.ToAbsoluteUrl(website["backdrop"]),
+		"webLogo":     website["logo"],
+		"webFavicon":  website["favicon"],
+		"webBackdrop": website["backdrop"],
 		"ossDomain":   config.Config.PublicUrl,
 		"copyright":   copyright,
 	}, nil

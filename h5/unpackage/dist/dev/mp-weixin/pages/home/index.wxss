@@ -133,7 +133,6 @@
   background-color: #e6e6e6;
   position: relative;
   top: 30rpx;
-  right: 20rpx;
   border-radius: 10rpx;
 }
 .body .content .row.data-v-71e217db {

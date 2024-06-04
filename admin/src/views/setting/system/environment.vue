@@ -45,14 +45,14 @@
 
             <div class="sm:flex-1 w-1/2 mb-4">
               <div class="text-4xl mb-3">
-                {{ info.mem.used ? `${info.mem.used}%` : '-' }}
+                {{ info.mem.used ? `${info.mem.used}` : '-' }}
               </div>
               <div class="text-tx-regular">已用内存</div>
             </div>
 
             <div class="sm:flex-1 w-1/2 mb-4">
               <div class="text-4xl mb-3">
-                {{ info.mem.free ? `${info.mem.free}%` : '-' }}
+                {{ info.mem.free ? `${info.mem.free}` : '-' }}
               </div>
               <div class="text-tx-regular">剩余内存</div>
             </div>

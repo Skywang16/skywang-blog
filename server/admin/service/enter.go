@@ -30,6 +30,7 @@ var InitFunctions = []interface{}{
 	system.NewSystemLogsServer,
 	// article
 	article.NewArticleNewsService,
+	article.NewArticleNewsKeyWordsService,
 	// information
 	information.NewInformationWeaponsService,
 	information.NewInformationWeaponsSeriesService,

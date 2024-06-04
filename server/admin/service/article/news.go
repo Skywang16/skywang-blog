@@ -62,6 +62,9 @@ func (newSrv articleNewsService) List(page request.PageReq, listReq req.ArticleN
 	} else {
 		// 当Recommended为空时，不添加Recommended条件，查询所有Recommended值
 	}
+	if listReq.KeyWords != "" {
+		newModel = newModel.Where("FIND_IN_SET(?, REPLACE(key_words, ' ', ''))", listReq.KeyWords)
+	}
 	// 总数
 	var count int64
 	err := newModel.Count(&count).Error
@@ -83,6 +86,7 @@ func (newSrv articleNewsService) List(page request.PageReq, listReq req.ArticleN
 		newsResps[i].Desc = news[i].Desc
 		newsResps[i].Cid = news[i].Cid
 		newsResps[i].Content = news[i].Content
+		newsResps[i].KeyWords = news[i].KeyWords
 		newsResps[i].PublishTime = news[i].PublishTime
 		newsResps[i].Status = news[i].Status
 		newsResps[i].Recommended = news[i].Recommended

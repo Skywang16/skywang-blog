@@ -30,9 +30,9 @@ func (wSrv settingWebsiteService) Detail() (res map[string]string, e error) {
 	}
 	res = map[string]string{
 		"name":       data["name"],
-		"logo":       util.UrlUtil.ToAbsoluteUrl(data["logo"]),
-		"favicon":    util.UrlUtil.ToAbsoluteUrl(data["favicon"]),
-		"backdrop":   util.UrlUtil.ToAbsoluteUrl(data["backdrop"]),
+		"logo":       data["logo"],
+		"favicon":    data["favicon"],
+		"backdrop":   data["backdrop"],
 		"homeBanner": data["homeBanner"],
 	}
 	return res, nil
@@ -45,15 +45,15 @@ func (wSrv settingWebsiteService) Save(wsReq req.SettingWebsiteReq) (e error) {
 	if e = response.CheckErr(err, "Save Set name err"); e != nil {
 		return
 	}
-	err = util.ConfigUtil.Set(wSrv.db, "website", "logo", util.UrlUtil.ToRelativeUrl(wsReq.Logo))
+	err = util.ConfigUtil.Set(wSrv.db, "website", "logo", wsReq.Logo)
 	if e = response.CheckErr(err, "Save Set logo err"); e != nil {
 		return
 	}
-	err = util.ConfigUtil.Set(wSrv.db, "website", "favicon", util.UrlUtil.ToRelativeUrl(wsReq.Favicon))
+	err = util.ConfigUtil.Set(wSrv.db, "website", "favicon", wsReq.Favicon)
 	if e = response.CheckErr(err, "Save Set favicon err"); e != nil {
 		return
 	}
-	err = util.ConfigUtil.Set(wSrv.db, "website", "backdrop", util.UrlUtil.ToRelativeUrl(wsReq.Backdrop))
+	err = util.ConfigUtil.Set(wSrv.db, "website", "backdrop", wsReq.Backdrop)
 	if e = response.CheckErr(err, "Save Set backdrop err"); e != nil {
 		return
 	}

@@ -59,18 +59,18 @@ func loadConfig(envPath string) envConfig {
 		RootPath: runPath,
 		GinMode:  "debug",
 		// 服务运行端口
-		ServerPort: 8000,
+		ServerPort: 8001,
 		// 禁止修改操作 (演示功能,限制POST请求)
 		DisallowModify: false,
 		// 资源访问前缀
 		PublicPrefix: "/api/uploads",
 		// 上传文件路径
-		UploadDirectory: "/tmp/uploads/likeadmin-go/",
+		UploadDirectory: "/tmp/uploads/blog-go/",
 		// Redis源配置
-		RedisUrl:      "redis://localhost:6379",
+		RedisUrl:      "redis://121.40.151.239:6416",
 		RedisPoolSize: 100,
 		// 数据源配置
-		DatabaseUrl:            "root:root@tcp(localhost:3306)/likeadmin?charset=utf8mb4&parseTime=True&loc=Local",
+		DatabaseUrl:            "wjjTest:Xzw@wjj666,@tcp(121.40.151.239:3306)/blog?charset=utf8mb4&parseTime=True&loc=Local",
 		DbTablePrefix:          "la_",
 		DbDefaultStringSize:    256,
 		DbMaxIdleConns:         10,
@@ -106,7 +106,7 @@ func loadConfig(envPath string) envConfig {
 	}
 	// PublicUrl未设置设置默认值
 	if config.PublicUrl == "" {
-		config.PublicUrl = "http://127.0.0.1:" + strconv.Itoa(config.ServerPort)
+		config.PublicUrl = "http://121.40.151.239:" + strconv.Itoa(config.ServerPort)
 	}
 	return config
 }

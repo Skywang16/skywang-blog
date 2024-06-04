@@ -54,14 +54,14 @@
 				cancelText="取消"
 				confirmText="前往登录"
 				title="通知"
-				content="评论需要登录!是否前往登录。"
+				content="评论需要登录!是否前往登录。(评论功能未上线)"
 				@confirm="dialogConfirm"
 				@close="dialogClose"
 			></uni-popup-dialog>
 		</uni-popup>
 		<uni-popup ref="popup" type="center">
 			<view class="popup-content">
-				<uni-easyinput class="input" type="textarea" v-model="introduction" placeholder="请输入自我介绍" />
+				<uni-easyinput class="input" type="textarea" v-model="introduction" placeholder="请输入评论" />
 				<button class="btn" hover-class="btn-hover" @click="confirm">评论</button>
 			</view>
 		</uni-popup>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { newsList, getUserInfo, website } from '@/common/api/business.js';
+import { newsList, getUserInfo, website, keyWordsLists } from '@/common/api/business.js';
 export default {
 	data() {
 		return {
@@ -83,12 +83,20 @@ export default {
 			firstContent: '', // 自定义遮罩第一行文本
 			secondContent: '', // 自定义遮罩第二行文本
 			messageText: '错误信息',
-			homeBanner: ''
+			homeBanner: '',
+			introduction: ''
 		};
 	},
 	onLoad() {
 		this.website();
 		this.newsList();
+		this.keyWordsList();
+		this.commentsData.push({ isAdd: true });
+	},
+	onPullDownRefresh(){
+		this.website();
+		this.newsList();
+		this.keyWordsList();
 	},
 	onShow() {},
 	methods: {
@@ -98,17 +106,58 @@ export default {
 				pageNo: 1,
 				pageSize: 3, // 只展示前三个
 				title: '',
+				keyWords: '',
 				cid: '',
 				status: -1,
 				recommended: 1
 			};
 			newsList(params).then((res) => {
+				uni.stopPullDownRefresh()
 				let result = res.data;
 				if (result.code === 200) {
 					this.newsInfoData = result.data.lists;
-					this.commentsData = JSON.parse(JSON.stringify(result.data.lists));
-					this.commentsData.push({ isAdd: true });
+					// this.commentsData = JSON.parse(JSON.stringify(result.data.lists));
+					// if (result.data.lists.length > 0) {
+					// 	this.commentsData.push({ isAdd: true });
+					// }
 					this.setLoadingOptions(false);
+				} else {
+					this.messageText = result.msg;
+					this.$refs.message.open();
+				}
+			});
+		},
+		keyWordsList() {
+			let params = {
+				pageNo: 1,
+				pageSize: 100
+			};
+			keyWordsLists(params).then((res) => {
+				let result = res.data;
+				if (result.code === 200) {
+					let list = result.data.lists;
+					let rollList = list.map((item) => {
+						const size = Math.floor(Math.random() * 9) + 18; // 生成 18 到 26 之间的随机数
+						const color = '#' + Math.floor(Math.random() * 16777215).toString(16); // 生成随机颜色
+						return {
+							id: item.id,
+							text: item.name,
+							size: size,
+							color: color
+						};
+					});
+					function shuffleArray(array) {
+						for (let i = array.length - 1; i > 0; i--) {
+							const j = Math.floor(Math.random() * (i + 1));
+							[array[i], array[j]] = [array[j], array[i]];
+						}
+						return array;
+					}
+					// 克隆 rollList 数组
+					let rollList2 = [...rollList];
+					rollList2 = shuffleArray(rollList2);
+					uni.setStorageSync('rollList', rollList);
+					uni.setStorageSync('rollList2', rollList2);
 				} else {
 					this.messageText = result.msg;
 					this.$refs.message.open();
@@ -129,7 +178,7 @@ export default {
 		},
 		// 跳转到文章详情
 		gotoDetail(item) {
-			uni.setStorageSync('newsDetail', item);
+			uni.setStorageSync('detail', item)
 			uni.navigateTo({
 				url: '../blog/detail',
 				animationType: 'fade-in',
@@ -159,20 +208,9 @@ export default {
 		},
 		// 确认评论
 		confirm() {
-			let params = {
-				terminal: 1,
-				password: this.formData.password,
-				username: this.formData.username
-			};
-			token(params).then((res) => {
-				let result = res.data;
-				if (result.code === 200) {
-					uni.setStorageSync('token', result.data.token);
-					this.getUserInfo();
-				} else {
-					this.messageText = '登录失败';
-					this.$refs.message.open();
-				}
+			uni.showToast({
+				title: '评论功能未开放',
+				icon: 'none'
 			});
 		},
 		// 设置遮罩数据
@@ -303,7 +341,6 @@ export default {
 				background-color: #e6e6e6;
 				position: relative;
 				top: 30rpx;
-				right: 20rpx;
 				border-radius: 10rpx;
 			}
 		}

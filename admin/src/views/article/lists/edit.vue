@@ -4,7 +4,7 @@
             <el-page-header content="文章编辑" @back="$router.back()" />
         </el-card>
         <el-card class="mt-4 !border-none" shadow="never">
-            <el-form ref="formRef" class="ls-form" :model="formData" label-width="85px" :rules="rules">
+            <el-form ref="formRef" class="ls-form" :model="formData" label-width="100px" :rules="rules">
                 <div class="xl:flex">
                     <div>
                         <el-form-item label="文章标题" prop="title">
@@ -26,6 +26,13 @@
                                 </div>
                                 <div class="form-tips">建议尺寸：240*180px</div>
                             </div>
+                        </el-form-item>
+                        <el-form-item label="文章关键词" prop="keyWords">
+                            <el-select class="flex-1" clearable v-model="formData.keyWords" placeholder="请选择关键词"
+                                multiple>
+                                <el-option v-for="(item, index) in optionsData" :key="index" :label="item.name"
+                                    :value="item.id" />
+                            </el-select>
                         </el-form-item>
                         <el-form-item label="作者" prop="cid">
                             <div class="w-80">
@@ -75,7 +82,7 @@
 <script lang="ts" setup name="articleListsEdit">
 import type { FormInstance } from 'element-plus'
 import feedback from '@/utils/feedback'
-import { articleDetail, articleEdit, articleAdd } from '@/api/article'
+import { articleDetail, articleEdit, articleAdd, keyWordsLists } from '@/api/article'
 import useMultipleTabs from '@/hooks/useMultipleTabs'
 import moment from 'moment'
 
@@ -87,6 +94,7 @@ const formData = reactive({
     image: '',
     cid: '',
     desc: '',
+    keyWords: '',
     content: '',
     sort: 0,
     publishTime: '',
@@ -96,16 +104,36 @@ const formData = reactive({
 
 const { removeTab } = useMultipleTabs()
 const formRef = shallowRef<FormInstance>()
+interface keyWords {
+    id: number
+    name: string
+}
 const rules = reactive({
     title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
     image: [{ required: true, message: '请输入文章封面', trigger: 'blur' }],
     cid: [{ required: true, message: '请输入文章作者', trigger: 'blur' }],
+    keyWords: [{ required: true, message: '请输入文章关键词', trigger: 'blur' }],
     desc: [{ required: true, message: '请输入简介', trigger: 'blur' }],
     content: [{ required: true, message: '请输入文章内容', trigger: 'blur' }],
     sort: [{ required: true, message: '请输入文章排序', trigger: 'blur' }],
-    publishTime: [{ required: true, message: '请输入文章发布时间', trigger: 'blur' }],
+    publishTime: [{ required: true, message: '请输入文章发布时间', trigger: 'blur' }]
 })
+const optionsData = reactive<keyWords[]>([])
 
+const fetchData = async () => {
+    try {
+        const params = {
+            pageNo: 1,
+            pageSize: 100
+        }
+        const response = await keyWordsLists(params)
+        if (response.lists && response.lists.length > 0) {
+            optionsData.splice(0, optionsData.length, ...(response.lists as keyWords[]))
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
 const getDetails = async () => {
     const data = await articleDetail({
         id: route.query.id
@@ -113,12 +141,22 @@ const getDetails = async () => {
     Object.keys(formData).forEach((key) => {
         //@ts-ignore
         formData[key] = data[key]
+        if (key === 'keyWords') {
+            // 先按逗号分割字符串
+            const splitValues = formData[key].split(',')
+            // 遍历分割后的数组，将每个元素转换为数字
+            const numericValues = splitValues.map((item) => parseInt(item, 10))
+            // 将转换后的数字数组赋值回formData[key]
+            formData[key] = numericValues
+            console.log(formData[key])
+        }
     })
 }
 
 const handleSave = async () => {
     await formRef.value?.validate()
-    formData.publishTime = moment(formData.publishTime).format('YYYY-MM-DD');
+    formData.publishTime = moment(formData.publishTime).format('YYYY-MM-DD')
+    formData.keyWords = formData.keyWords.join(',')
     if (route.query.id) {
         await articleEdit(formData)
     } else {
@@ -130,4 +168,5 @@ const handleSave = async () => {
 }
 
 route.query.id && getDetails()
+fetchData()
 </script>

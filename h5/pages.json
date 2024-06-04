@@ -2,13 +2,15 @@
 	"pages": [{
 			"path": "pages/home/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh":true
 			}
 		},
 		{
 			"path": "pages/blog/index",
 			"style": {
-				"navigationBarTitleText": "文章"
+				"navigationBarTitleText": "文章",
+				"enablePullDownRefresh":true
 			}
 		},
 		{

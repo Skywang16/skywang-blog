@@ -26,8 +26,8 @@
 /* 文章场景相关 */
 /* 自定义公共变量 */
 .rolls.data-v-fcdc1ca6 {
-  -webkit-animation: move-data-v-fcdc1ca6 7s linear infinite;
-          animation: move-data-v-fcdc1ca6 7s linear infinite;
+  -webkit-animation: move-data-v-fcdc1ca6 var(--animation-duration) linear infinite;
+          animation: move-data-v-fcdc1ca6 var(--animation-duration) linear infinite;
   white-space: nowrap;
   margin-top: 20rpx;
 }
@@ -38,13 +38,9 @@
   display: inline-block;
   margin-right: 20rpx;
 }
-.rolls .roll image.data-v-fcdc1ca6 {
-  width: 300rpx;
-  height: 300rpx;
-}
 .rolls.data-v-fcdc1ca6:hover {
-  -webkit-animation: move-data-v-fcdc1ca6 7s linear infinite;
-          animation: move-data-v-fcdc1ca6 7s linear infinite;
+  -webkit-animation: move-data-v-fcdc1ca6 var(--animation-duration) linear infinite;
+          animation: move-data-v-fcdc1ca6 var(--animation-duration) linear infinite;
 }
 @-webkit-keyframes move-data-v-fcdc1ca6 {
 0% {
