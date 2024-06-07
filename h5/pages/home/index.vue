@@ -30,6 +30,7 @@
 			<view class="pubTitle">
 				<view class="en">comment</view>
 				<view class="cn">留言</view>
+				<view class="line"></view>
 			</view>
 			<scroll-view scroll-x="true">
 				<view class="card-body" v-if="commentsData.length > 0" v-for="(it, index) in commentsData" :key="index" @click="addComment(it)">
