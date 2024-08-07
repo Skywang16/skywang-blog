@@ -60,8 +60,8 @@
                 </div>
             </el-card>
         </div>
-        <div class="md:flex">
-            <el-card class="flex-1 !border-none md:mr-4 mb-4" shadow="never">
+        <div class="function mb-4">
+            <el-card class="flex-1 !border-none" shadow="never">
                 <template #header>
                     <span>访问量趋势图</span>
                 </template>
@@ -102,8 +102,8 @@ import menu_generator from './image/menu_generator.png'
 import menu_file from './image/menu_file.png'
 import menu_auth from './image/menu_auth.png'
 import menu_web from './image/menu_web.png'
-import qq_group from './image/qq_group.png'
-import customer_service from './image/customer_service.png'
+/* import qq_group from './image/qq_group.png'
+import customer_service from './image/customer_service.png' */
 // 表单数据
 const workbenchData: any = reactive({
     version: {
@@ -115,7 +115,7 @@ const workbenchData: any = reactive({
             website: ''
         }
     },
-    support: [
+    /* support: [
         {
             image: qq_group,
             title: '扫码进入QQ交流群',
@@ -126,7 +126,7 @@ const workbenchData: any = reactive({
             title: '添加企业客服微信',
             desc: '想了解更多请添加客服'
         }
-    ],
+    ], */
     today: {}, // 今日数据
     menu: [
         {
