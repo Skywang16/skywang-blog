@@ -1,7 +1,7 @@
 # 毕业设计
 
 #### Description
-个人博客小程序，小程序后台及其服务
+个人博客、博客管理系统、博客小程序
 
 #### Software Architecture
 Software architecture description

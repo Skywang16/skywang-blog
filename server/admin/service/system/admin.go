@@ -127,11 +127,11 @@ func (adminSrv systemAuthAdminService) List(page request.PageReq, listReq req.Sy
 	if e = response.CheckErr(err, "List Find err"); e != nil {
 		return
 	}
-	for i := 0; i < len(adminResp); i++ {
-		if adminResp[i].ID == 1 {
-			adminResp[i].Role = "系统管理员"
-		}
-	}
+	//for i := 0; i < len(adminResp); i++ {
+	//	if adminResp[i].ID == 1 {
+	//		adminResp[i].Role = "系统管理员"
+	//	}
+	//}
 	return response.PageResp{
 		PageNo:   page.PageNo,
 		PageSize: page.PageSize,

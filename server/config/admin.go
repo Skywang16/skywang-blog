@@ -23,6 +23,8 @@ var AdminConfig = adminConfig{
 		"article:news:list",      // 文章列表
 		"setting:website:detail", // 网站配置
 		"article:keyWords:list",  // 文章关键词列表
+		"common:album:cateList",  // 相册
+		"common:album:albumList", // 相册
 	},
 
 	// 免权限验证

@@ -1,7 +1,7 @@
 # 毕业设计
 
 #### 介绍
-无畏契约小程序，小程序后台及其服务
+个人博客、博客管理系统、博客小程序
 
 #### 软件架构
 软件架构说明
@@ -15,6 +15,11 @@ Go	>=1.16	1.18
 Mysql	>=5.7	5.7
 nginx 或 apache	无限制	-
 Redis	>=6.0	7.0.0
+
+PC端
+
+运行环境	要求版本	推荐版本
+Node.js	>=14.18.1	14.18.1
 
 后台管理
 
@@ -42,6 +47,10 @@ cd likeadmin_go/server
 * 下载依赖
 go mod tidy
 go mod download
+
+PC端
+* npm install
+* npm run dev
 
 后台管理
 * npm install

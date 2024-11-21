@@ -1,1 +1,0 @@
-import{r as e}from"./index.a935f15b.js";function s(t){return e.get({url:"/system/admin/list",params:t})}function u(t){return e.get({url:"/user/detail",params:t})}function i(t){return e.post({url:"/system/admin/detail",params:t})}export{s as a,u as g,i as u};
