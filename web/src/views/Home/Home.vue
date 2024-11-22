@@ -142,14 +142,14 @@ export default {
       const dracoLoader = new DRACOLoader();
       dracoLoader.setDecoderPath("./draco/gltf/");
       const loader = new GLTFLoader().setDRACOLoader(dracoLoader);
-      loader.load("./model/wang.glb", 
+      loader.load("./model/wang.glb",
         (gltf) => {
           console.log("模型加载成功:", gltf);
           setupModel(gltf, { scale: 3, position: { x: 0, y: 0.2, z: 0 } });
           animateModelRotation(gltf);
           showLoading.value = false; // 加载完成后隐藏加载状态
-        }, 
-        undefined, 
+        },
+        undefined,
         (error) => {
           console.error("模型加载失败:", error);
         }
@@ -531,7 +531,7 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 1;
-  /* 确保背景在���有内容的后面 */
+  /* 确保背景在有内容的后面 */
 }
 
 .fade-slide-enter-active,
@@ -559,6 +559,7 @@ export default {
   cursor: pointer !important;
   z-index: 999;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 
   .back-to-top-content {
     position: relative;
@@ -570,7 +571,7 @@ export default {
 
     .tooltip {
       position: absolute;
-      right: 120%;
+      right: 140%;
       background: rgba(0, 0, 0, 0.8);
       color: white;
       padding: 5px 10px;
@@ -578,8 +579,9 @@ export default {
       font-size: 14px;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.3s ease;
+      transition: opacity 0.3s ease;
       white-space: nowrap;
+      pointer-events: none;
 
       &::after {
         content: '';
@@ -595,24 +597,18 @@ export default {
   }
 
   &:hover {
-    transform: translateY(-5px) scale(1.05);
+    transform: scale(1.05);
     box-shadow: 0 6px 20px rgba(0, 98, 234, 0.4);
     background: linear-gradient(135deg, #00a1fb 0%, #0046ea 100%);
-
-    i {
-      transform: rotate(-45deg) scale(1.2);
-      animation: rocketShake 1s ease infinite;
-    }
 
     .tooltip {
       opacity: 1;
       visibility: visible;
-      right: 140%;
     }
   }
 
   &:active {
-    transform: translateY(-2px) scale(0.95);
+    transform: scale(0.95);
   }
 }
 

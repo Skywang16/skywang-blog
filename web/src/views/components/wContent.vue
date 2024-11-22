@@ -147,7 +147,6 @@ export default {
     },
     setup(props) {
         const { show } = toRefs(props);
-        console.log('1-开始创建组件-setup')
         const allData = reactive({
             articlesList: [],
             articlesList2: [],
@@ -157,13 +156,13 @@ export default {
         });
         const router = useRouter();
         const goToDetail = (item) => {
-            message.info('功能开发中...')
-            /* router.push({
+            // message.info('功能开发中...')
+            router.push({
                 path: '/article',
                 query: {
                     id: item.id
                 }
-            }); */
+            });
         }
         const getNewsList = (keyWords) => {
             var parameter = {

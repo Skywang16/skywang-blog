@@ -17,7 +17,6 @@
                                         :style="{ backgroundColor: item.backgroundColor, color: item.fontColor }">
                                         {{ item.name }}
                                     </div>
-
                                 </div>
                             </div>
                             <div v-for="(group, groupIndex) in cateList" :key="groupIndex" class="tags-group-icon-pair">
@@ -27,7 +26,6 @@
                                         :style="{ backgroundColor: item.backgroundColor, color: item.fontColor }">
                                         {{ item.name }}
                                     </div>
-
                                 </div>
                             </div>
                             <div v-for="(group, groupIndex) in cateList" :key="groupIndex" class="tags-group-icon-pair">
@@ -58,7 +56,6 @@
                                 <span style="position: absolute;font-size: 35px; font-weight: 600; color: #363636;">
                                     最后操作时间 {{ statistics.mostRecentTime }}
                                 </span>
-
                             </div>
                             <div class="welcome-text" style="writing-mode: vertical-rl;">
                                 {{ statistics.sizeCount }}
@@ -68,7 +65,8 @@
                 </a-col>
                 <a-col :span="24" class="announcement-box">
                     <div style="cursor: pointer;" @click="goToDetail()">
-                        <Vue3Lottie class="announcement-box-dog" width="60px" height="60px" :animation-data="lo_jsonDog" />
+                        <Vue3Lottie class="announcement-box-dog" width="60px" height="60px"
+                            :animation-data="lo_jsonDog" />
                     </div>
                     <div class="line"></div>
                 </a-col>
@@ -80,12 +78,10 @@
                             </div>
                             <div class="title">{{ item.name }}</div>
                             <div class="introduction">
-                                <div class="tip-box"
-                                    :style="getCategoryColors(item.cid) && { 
-                                        backgroundColor: getCategoryColors(item.cid).backgroundColor, 
-                                        color: getCategoryColors(item.cid).fontColor 
-                                    }"
-                                >
+                                <div class="tip-box" :style="getCategoryColors(item.cid) && {
+                                    backgroundColor: getCategoryColors(item.cid).backgroundColor,
+                                    color: getCategoryColors(item.cid).fontColor
+                                }">
                                     {{ findCategoryName(item.cid) }}
                                 </div>
                                 <div>
@@ -106,12 +102,10 @@
                             </div>
                             <div class="title">{{ item.name }}</div>
                             <div class="introduction">
-                                <div class="tip-box"
-                                    :style="getCategoryColors(item.cid) && { 
-                                        backgroundColor: getCategoryColors(item.cid).backgroundColor, 
-                                        color: getCategoryColors(item.cid).fontColor 
-                                    }"
-                                >
+                                <div class="tip-box" :style="getCategoryColors(item.cid) && {
+                                    backgroundColor: getCategoryColors(item.cid).backgroundColor,
+                                    color: getCategoryColors(item.cid).fontColor
+                                }">
                                     {{ findCategoryName(item.cid) }}
                                 </div>
                                 <div>
@@ -280,10 +274,6 @@ export default {
             });
             return mostRecentItem;
         };
-
-        onBeforeMount(() => {
-            console.log('2.组件挂载页面之前执行----onBeforeMount')
-        })
         watch(
             show,
             (val) => {
