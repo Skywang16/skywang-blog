@@ -271,15 +271,46 @@ export default {
 			}
 		};
 
-		// 监听滚动更新当前标题
-		const updateCurrentHeading = () => {
-			const headings = catalogItems.value.map(item => document.getElementById(item.id));
+		// 防抖函数
+		const debounce = (fn, delay) => {
+			let timer = null;
+			return function (...args) {
+				if (timer) clearTimeout(timer);
+				timer = setTimeout(() => {
+					fn.apply(this, args);
+				}, delay);
+			};
+		};
 
+		const updateCurrentHeading = debounce(() => {
+			const headings = catalogItems.value.map(item => document.getElementById(item.id));
+			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+			// 如果滚动到顶部附近，直接选中第一个标题
+			if (scrollTop < 100) {
+				currentHeading.value = headings[0]?.id || '';
+				return;
+			}
+
+			// 遍历所有标题检查位置
 			for (let i = headings.length - 1; i >= 0; i--) {
 				const heading = headings[i];
 				if (heading && heading.getBoundingClientRect().top <= 100) {
 					currentHeading.value = heading.id;
 					break;
+				}
+			}
+		}, 100);
+
+		// 添加一个新的滚动监听函数来处理快速滚动
+		const handleFastScroll = () => {
+			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+			// 如果快速滚动到顶部，确保选中第一个标题
+			if (scrollTop < 100) {
+				const firstHeading = catalogItems.value[0]?.id;
+				if (firstHeading) {
+					currentHeading.value = firstHeading;
 				}
 			}
 		};
@@ -289,13 +320,16 @@ export default {
 			generateCatalog();
 		});
 
-		// 添加滚动监听
+		// 修改 onMounted 钩子中的事件监听
 		onMounted(() => {
 			window.addEventListener('scroll', updateCurrentHeading);
+			window.addEventListener('scroll', handleFastScroll, { passive: true });
 		});
 
+		// 修改 onUnmounted 钩子中的事件清理
 		onUnmounted(() => {
 			window.removeEventListener('scroll', updateCurrentHeading);
+			window.removeEventListener('scroll', handleFastScroll);
 		});
 
 		const isCollapsed = ref(false);
@@ -901,6 +935,7 @@ export default {
 	backdrop-filter: blur(8px);
 	color: #1890ff;
 	font-weight: 500;
+	animation: float 3s ease-in-out infinite;
 
 	i {
 		font-size: 18px;
@@ -936,29 +971,8 @@ export default {
 			transform: translateY(0px);
 		}
 	}
-
-	animation: float 3s ease-in-out infinite;
 }
 
-// 移动端适配
-@media screen and (max-width: 768px) {
-	.back-btn {
-		position: static;
-		margin: 10px 0 20px;
-		padding: 8px 16px;
-		font-size: 14px;
-
-		i {
-			font-size: 16px;
-		}
-
-		&:hover {
-			transform: none;
-		}
-
-		animation: none;
-	}
-}
 
 // 添加全局滚动优化
 html {

@@ -41,9 +41,21 @@
       <footer class="footer">
         <div class="footer-content">
           <p>
-            <span class="miniapp"> 微信小程序：skyWang416</span>
+            <span class="miniapp">微信小程序：skyWang416</span>
+            <span class="divider">|</span>
+            <a href="https://github.com/Skywang16" target="_blank" class="github-info">
+              GitHub
+            </a>
             <span class="divider">|</span>
             <a href="https://beian.miit.gov.cn/" target="_blank" class="icp-info">浙ICP备2024096478号</a>
+          </p>
+          <p class="cloud-service">
+            本站由
+            <a href="https://www.huaweicloud.com/" target="_blank" class="cloud-link">
+              <img style="height: 18px;"
+                src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/wangxue/header/logo.svg" alt="">
+            </a>
+            提供云服务
           </p>
         </div>
       </footer>
@@ -314,7 +326,7 @@ export default {
   z-index: 2;
 
   .threeDom-box {
-    background-color: rgb(130, 112, 202);
+    background-color: #005bea;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -486,6 +498,23 @@ export default {
         }
       }
     }
+
+    .cloud-service {
+      font-size: 0.8rem;
+      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.8);
+
+      .cloud-link {
+        color: #ecf0f1;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        padding: 0 3px;
+
+        &:hover {
+          color: #3498db;
+        }
+      }
+    }
   }
 }
 
@@ -499,6 +528,13 @@ export default {
 
       .divider {
         display: none;
+      }
+    }
+
+    .footer-content {
+      .cloud-service {
+        font-size: 0.7rem;
+        margin-top: 3px;
       }
     }
   }
@@ -643,6 +679,18 @@ export default {
     .tooltip {
       display: none; // 移动端不显示提示文字
     }
+  }
+}
+
+.github-info {
+  color: #ecf0f1;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+
+  &:hover {
+    color: #3498db;
   }
 }
 </style>
