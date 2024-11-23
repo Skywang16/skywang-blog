@@ -196,7 +196,6 @@ export default {
             };
             keyWordsLists(parameter).then((res) => {
                 if (res.code == 200) {
-
                     const generateRandomColor = () => {
                         // 生成清新的颜色  
                         const randomHue = Math.floor(Math.random() * 360); // 随机色调  
@@ -217,8 +216,11 @@ export default {
                         backgroundColor: generateRandomColor().backgroundColor,
                         fontColor: generateRandomColor().fontColor
                     }));
-                    allData.keyWordsList = lists
+                    allData.keyWordsList = lists;
                     allData.statistics.keyWordsCount = res.data.count;
+
+                    // 添加缓存存储
+                    localStorage.setItem('keyWordsList', JSON.stringify(lists));
                 } else {
                     console.log(res)
                 }

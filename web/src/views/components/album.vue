@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, onBeforeMount, onMounted, watch } from 'vue'
+import { reactive, toRefs, onMounted, watch } from 'vue'
 import { cateList, albumList } from '@/api/business.js';
 import lo_jsonDog from '@/assets/lottie/dog.json';
 export default {

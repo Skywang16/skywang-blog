@@ -12,7 +12,8 @@ const API = {
 	protocol:`setting/protocol/detail`, // 政策协议
 	keyWordsLists: `article/keyWords/list`, // 文章关键词列表
 	cateList: `common/album/cateList`, // 相册
-	albumList: `common/album/albumList` // 相册
+	albumList: `common/album/albumList`, // 相册
+	articleDetail: `article/news/detail` // 文章详情
 };
 
 
@@ -38,6 +39,16 @@ export function newsList(pramter) {
 		method: "GET",
 	});
 }
+
+// 文章详情
+export function articleDetail(pramter) {
+	return request({
+		url: API.articleDetail,
+		params: pramter,
+		method: "GET",
+	});
+}
+
 
 // 武器列表
 export function weaponList(pramter) {

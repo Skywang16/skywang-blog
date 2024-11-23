@@ -25,6 +25,7 @@ var AdminConfig = adminConfig{
 		"article:keyWords:list",  // 文章关键词列表
 		"common:album:cateList",  // 相册
 		"common:album:albumList", // 相册
+		"article:news:detail",    // 文章详细
 	},
 
 	// 免权限验证
