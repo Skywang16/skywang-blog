@@ -95,8 +95,8 @@
                     <div class="title">{{ item.name }}</div>
                 </div>
             </div>
-            <a-col :span="12">
-                <div class="card">
+            <a-col :span="24">
+                <div class="card articles-container">
                     <div class="articlesList-list" v-for="(item, index) in articlesList" :key="index"
                         @click="goToDetail(item)">
                         <div class="image-box">
@@ -108,19 +108,11 @@
                     </div>
                 </div>
             </a-col>
-            <a-col :span="12">
-                <div class="card">
-                    <div class="articlesList-list" v-for="(item, index) in articlesList2" :key="index"
-                        @click="goToDetail(item)">
-                        <div class="image-box">
-                            <img :src="item.image" alt="">
-                        </div>
-                        <div class="title">{{ item.title }}</div>
-                        <div class="introduction">{{ item.desc }}</div>
-                        <div class="introduction">{{ item.publishTime }}</div>
-                    </div>
+            <div class="footer-box">
+                <div class="footer-text">
+                    已经到底啦~
                 </div>
-            </a-col>
+            </div>
         </a-row>
     </div>
 </template>
@@ -149,7 +141,6 @@ export default {
         const { show } = toRefs(props);
         const allData = reactive({
             articlesList: [],
-            articlesList2: [],
             keyWordsList: [],
             statistics: {},
             selectedItem: [],
@@ -172,15 +163,11 @@ export default {
                 keyWords: keyWords,
                 cid: '',
                 status: -1,
-                recommended: 1
+                recommended: -1
             };
             newsList(parameter).then((res) => {
                 if (res.code == 200) {
-                    const lists = res.data.lists;
-                    const length = lists.length;
-                    const midIndex = Math.floor(length / 2);
-                    allData.articlesList2 = lists.slice(0, midIndex);
-                    allData.articlesList = lists.slice(midIndex);
+                    allData.articlesList = res.data.lists;
                     allData.statistics.count = res.data.count;
                 } else {
                     console.log(res)
@@ -477,13 +464,21 @@ export default {
     }
 }
 
+.articles-container {
+    column-count: 2; // 设置两列
+    column-gap: 20px; // 设置列间距
+    padding: 0 10px;
+    background-color: transparent; // 移除card类的背景色
+}
+
 .articlesList-list {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px 0px rgba(117, 126, 136, 0.2);
-    height: 40vh;
+    break-inside: avoid;
+    display: inline-block;
+    width: 100%;
     margin-bottom: 4vh;
-    box-sizing: border-box;
+    background-color: #fff; // 给每个文章卡片添加白色背景
+    border-radius: 15px;
+    box-shadow: 2px 2px 10px 0px rgba(117, 126, 136, 0.2);
 
     .image-box {
         border-radius: 10px;
@@ -530,5 +525,11 @@ export default {
             color: #babdba;
         }
     }
+}
+
+.footer-box {
+    display: flex;
+    margin: auto;
+    color: #a3a3a3;
 }
 </style>

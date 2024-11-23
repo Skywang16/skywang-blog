@@ -407,7 +407,7 @@ export default {
 
   .wContent {
     position: relative;
-    bottom: 50px;
+    bottom: 10px;
     width: 100%;
     padding: 0 15%;
   }

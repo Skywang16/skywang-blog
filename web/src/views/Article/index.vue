@@ -79,7 +79,23 @@
 				</div>
 			</div>
 
-
+			<!-- 添加目录树组件 -->
+			<div class="article-catalog" :class="{ 'collapsed': isCollapsed }" v-show="catalogItems.length">
+				<div class="catalog-header">
+					<div class="catalog-title">目录</div>
+					<div class="catalog-toggle" @click="toggleCatalog">
+						<img style="height: 20px;" src="@/assets/icons/list.png" alt="">
+					</div>
+				</div>
+				<div class="catalog-list" v-show="!isCollapsed">
+					<div v-for="(item, index) in catalogItems" :key="index" class="catalog-item" :class="[
+						`level-${item.level}`,
+						{ active: currentHeading === item.id }
+					]" @click="scrollToHeading(item.id)">
+						{{ item.text }}
+					</div>
+				</div>
+			</div>
 		</div>
 		<!-- 添加回到顶部按钮 -->
 		<Transition name="fade-slide">
@@ -95,7 +111,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, ref, onMounted, computed, watch, onUnmounted } from 'vue'
+import { reactive, toRefs, ref, onMounted, computed, watch, onUnmounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { articleDetail, newsList } from '@/api/business'
 
@@ -219,6 +235,75 @@ export default {
 			});
 		};
 
+		const catalogItems = ref([]);
+		const currentHeading = ref('');
+
+		// 解析文章内容生成目录
+		const generateCatalog = () => {
+			nextTick(() => {
+				const content = document.querySelector('.content');
+				if (!content) return;
+
+				const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+				const items = [];
+
+				headings.forEach((heading, index) => {
+					// 为每个标题添加id
+					const id = `heading-${index}`;
+					heading.id = id;
+
+					items.push({
+						id,
+						text: heading.textContent,
+						level: parseInt(heading.tagName.charAt(1)),
+					});
+				});
+
+				catalogItems.value = items;
+			});
+		};
+
+		// 滚动到指定标题
+		const scrollToHeading = (id) => {
+			const element = document.getElementById(id);
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth' });
+			}
+		};
+
+		// 监听滚动更新当前标题
+		const updateCurrentHeading = () => {
+			const headings = catalogItems.value.map(item => document.getElementById(item.id));
+
+			for (let i = headings.length - 1; i >= 0; i--) {
+				const heading = headings[i];
+				if (heading && heading.getBoundingClientRect().top <= 100) {
+					currentHeading.value = heading.id;
+					break;
+				}
+			}
+		};
+
+		// 监听文章内容变化
+		watch(() => allData.articleData.content, () => {
+			generateCatalog();
+		});
+
+		// 添加滚动监听
+		onMounted(() => {
+			window.addEventListener('scroll', updateCurrentHeading);
+		});
+
+		onUnmounted(() => {
+			window.removeEventListener('scroll', updateCurrentHeading);
+		});
+
+		const isCollapsed = ref(false);
+
+		const toggleCatalog = () => {
+			isCollapsed.value = !isCollapsed.value;
+		};
+
 		return {
 			...toRefs(allData),
 			keyWordsList,
@@ -232,6 +317,11 @@ export default {
 			showBackToTop,
 			scrollToTop,
 			handleScroll,
+			catalogItems,
+			currentHeading,
+			scrollToHeading,
+			isCollapsed,
+			toggleCatalog,
 		}
 	},
 }
@@ -464,25 +554,26 @@ export default {
 					margin: 16px 0;
 					border-collapse: collapse;
 					border-spacing: 0;
-					
-					th, td {
+
+					th,
+					td {
 						padding: 12px;
 						border: 1px solid #e8e8e8;
 						text-align: left;
 					}
-					
+
 					th {
 						background-color: #fafafa;
 						font-weight: 600;
 						color: #1a1a1a;
 					}
-					
+
 					tr {
 						&:hover {
 							background-color: #fafafa;
 						}
 					}
-					
+
 					tbody tr:nth-child(even) {
 						background-color: #fafcff;
 					}
@@ -874,5 +965,197 @@ html {
 	scroll-behavior: smooth;
 	-webkit-overflow-scrolling: touch; // 优化iOS滚动
 	overscroll-behavior-y: none; // 防止过度滚动
+}
+
+/* 添加目录树样式 */
+.article-catalog {
+	position: fixed;
+	right: 20px;
+	top: 100px;
+	width: 250px;
+	max-height: calc(100vh - 300px);
+	overflow-y: auto;
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 12px;
+	padding: 20px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	transform-origin: right top;
+	backdrop-filter: blur(10px);
+
+	// 添加收起状态样式
+	&.collapsed {
+		width: 60px;
+		padding: 15px 12px;
+		transform: translateX(10px);
+
+		.catalog-list {
+			opacity: 0;
+			transform: translateX(20px);
+		}
+
+		.catalog-header {
+			margin-bottom: 0;
+
+			.catalog-title {
+				opacity: 0;
+				transform: translateX(20px);
+				width: 0;
+			}
+
+			.catalog-toggle {
+				transform: rotate(135deg);
+				margin-left: auto;
+			}
+		}
+	}
+
+	.catalog-header {
+		position: sticky;
+		top: -20px;
+		background: rgba(255, 255, 255, 0.95); // 确保背景色与目录一致
+		z-index: 2;
+		padding-top: 20px;
+		margin-top: -20px; // 抵消父元素的padding
+		backdrop-filter: blur(10px);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 12px;
+		padding-bottom: 8px;
+		border-bottom: 1px solid #eee;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+		.catalog-title {
+			font-size: 16px;
+			font-weight: 600;
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		.catalog-toggle {
+			cursor: pointer;
+			width: 24px;
+			height: 24px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 4px;
+			transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+			flex-shrink: 0;
+
+			&:hover {
+				background: rgba(0, 0, 0, 0.04);
+			}
+
+			i {
+				font-size: 16px;
+				color: #666;
+			}
+		}
+	}
+
+	.catalog-list {
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		opacity: 1;
+		transform: translateX(0);
+		padding-top: 5px;
+
+		.catalog-item {
+			padding: 6px 12px;
+			margin: 4px 0;
+			cursor: pointer;
+			border-radius: 6px;
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			font-size: 14px;
+			position: relative;
+			overflow: hidden;
+
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 100%;
+				width: 0;
+				background: rgba(24, 144, 255, 0.1);
+				border-radius: 6px;
+				transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				z-index: -1;
+			}
+
+			&:hover::before {
+				width: 100%;
+			}
+
+			&:hover {
+				color: #1890ff;
+			}
+
+			&.active {
+				color: #1890ff;
+				font-weight: 500;
+
+				&::before {
+					width: 100%;
+				}
+			}
+
+			&.level-1 {
+				padding-left: 12px;
+				font-weight: 600;
+			}
+
+			&.level-2 {
+				padding-left: 24px;
+			}
+
+			&.level-3 {
+				padding-left: 36px;
+			}
+
+			&.level-4 {
+				padding-left: 48px;
+			}
+
+			&.level-5 {
+				padding-left: 60px;
+			}
+
+			&.level-6 {
+				padding-left: 72px;
+			}
+		}
+	}
+
+	&:hover {
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+	}
+}
+
+// 添加展开/收起图标的动画
+.icon-collapse {
+	transform: rotate(0deg);
+}
+
+.icon-expand {
+	transform: rotate(180deg);
+}
+
+// 调整文章内容宽度,为目录留出空间
+.article-container {
+	max-width: calc(960px + 300px);
+}
+
+// 响应式处理
+@media screen and (max-width: 1200px) {
+	.article-catalog {
+		display: none !important;
+	}
+
+	.article-container {
+		max-width: 960px;
+	}
 }
 </style>
