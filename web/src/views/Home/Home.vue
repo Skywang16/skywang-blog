@@ -5,12 +5,16 @@
       <div class="logo"></div>
       <div class="menu">
         <span @click="goHome" class="menuItem">
-          <img src="@/assets/icons/home.png" alt="">
+          <img src="@/assets/icons/home.webp" alt="">
           首页
         </span>
         <span @click="goAlbum" class="menuItem">
-          <img src="@/assets/icons/album.png" alt="">
+          <img src="@/assets/icons/album.webp" alt="">
           相册
+        </span>
+        <span @click="goPan" class="menuItem">
+          <img src="@/assets/icons/clound.webp" alt="">
+          网盘
         </span>
       </div>
     </header>
@@ -47,15 +51,20 @@
               GitHub
             </a>
             <span class="divider">|</span>
+            <span class="email-wrapper" @click="copyEmail">
+              Email
+              <span class="email-tooltip">
+                1104439510@qq.com
+                <span class="copy-hint">点击复制</span>
+              </span>
+            </span>
+            <span class="divider">|</span>
             <a href="https://beian.miit.gov.cn/" target="_blank" class="icp-info">浙ICP备2024096478号</a>
           </p>
           <p class="cloud-service">
-            本站由
-            <a href="https://www.huaweicloud.com/" target="_blank" class="cloud-link">
+            本站由<a href="https://www.huaweicloud.com/" target="_blank" class="cloud-link">
               <img style="height: 18px;"
-                src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/wangxue/header/logo.svg" alt="">
-            </a>
-            提供云服务
+                src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/wangxue/header/logo.svg" alt=""></a>提供云服务
           </p>
         </div>
       </footer>
@@ -95,7 +104,7 @@ export default {
     let light;// 声明光源变量
     let gltf;
     /* 绘制背景START */
-    const backgroundCanvas = ref(null);// 定义引用，用于存储背景画布元素
+    const backgroundCanvas = ref(null);// 定义引用，用存储背景画布元素
     const pages = ref(null);
     // 自定义遮罩相关
     const showLoading = ref(false); // 自定义遮罩显影
@@ -214,7 +223,7 @@ export default {
         // 获取当前的旋转角度
         const currentRotationY = gltf.scene.rotation.y;
         // 重新启动自动旋转动画并从当前角度开始
-        autoRotateTween.kill(); // 杀掉旧的动画
+        autoRotateTween.kill(); // 杀掉的动画
         autoRotateTween = gsap.to(gltf.scene.rotation, {
           duration: 5000,
           y: currentRotationY + 360,
@@ -255,6 +264,9 @@ export default {
       albumShow.value = true;
       setupCanvasBackground(backgroundCanvas, 'tetrapod', mouseClickToBC);
     };
+    const goPan = () => {
+      window.open('https://www.pan.skywang.asia', '_blank');
+    };
 
     // 滚动监听方法
     const handleScroll = () => {
@@ -273,6 +285,22 @@ export default {
       }
     };
 
+    const copyEmail = () => {
+      const email = '1104439510@qq.com';
+      navigator.clipboard.writeText(email).then(() => {
+        // 可以添加一个复制成功的提示
+        const tooltip = document.querySelector('.copy-hint');
+        if (tooltip) {
+          tooltip.textContent = '已复制！';
+          setTimeout(() => {
+            tooltip.textContent = '点击复制';
+          }, 2000);
+        }
+      }).catch(err => {
+        console.error('复制失败:', err);
+      });
+    };
+
     onMounted(() => {
       initThreeJS();
     });
@@ -283,6 +311,7 @@ export default {
       backgroundCanvas,
       goHome,
       goAlbum,
+      goPan,
       handleDoubleClick,
       pages,
       showLoading,
@@ -292,6 +321,7 @@ export default {
       showBackToTop,
       scrollToTop,
       handleScroll,
+      copyEmail,
     };
   }
 }
@@ -544,19 +574,61 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-right: 20px;
+  display: flex;
+  gap: 15px;
 }
 
 .menuItem {
-  padding: 0 10px;
+  margin-right: 10px;
   text-decoration: none;
-  color: #000;
+  color: #333;
   font-weight: 600;
-  font-size: 18px;
-  cursor: pointer !important;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 55%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  &:hover {
+    color: #005bea;
+
+    &::after {
+      width: 100%;
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 
   img {
-    margin-right: 5px;
+    position: relative;
+    bottom: 2px;
     height: 25px;
+    margin-right: 2px;
+  }
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+  .menu {
+    gap: 8px;
+  }
+
+  .menuItem {
+    padding: 6px 12px;
+    font-size: 14px;
   }
 }
 
@@ -648,22 +720,6 @@ export default {
   }
 }
 
-@keyframes rocketShake {
-
-  0%,
-  100% {
-    transform: rotate(-45deg) translate(0, 0);
-  }
-
-  25% {
-    transform: rotate(-40deg) translate(-2px, -2px);
-  }
-
-  75% {
-    transform: rotate(-50deg) translate(2px, 2px);
-  }
-}
-
 /* 移动端适配 */
 @media (max-width: 768px) {
   .back-to-top {
@@ -691,6 +747,122 @@ export default {
 
   &:hover {
     color: #3498db;
+  }
+}
+
+/* 移动端适配样式 */
+@media screen and (max-width: 768px) {
+  .header {
+    height: 50px; // 减小header高度
+
+    .logo {
+      width: 150px; // 缩小logo
+      height: 75px;
+    }
+  }
+
+  .menuItem {
+    font-size: 16px; // 减小菜单字体
+    padding: 0 8px;
+
+    img {
+      height: 20px; // 缩小图标
+    }
+  }
+
+  .page-container {
+    .canvas-container {
+      height: 400px; // 减小3D模型容器高度
+    }
+
+    .wContent {
+      padding: 0 5%; // 减小内容区域左右padding
+    }
+  }
+
+  .waves-box {
+    bottom: 60px; // 调整波浪位置
+
+    &::after {
+      background-color: #fff !important;
+    }
+  }
+
+  .back-to-top {
+    right: 20px; // 调整返回顶部按钮位置
+    bottom: 80px;
+  }
+}
+
+.email-wrapper {
+  position: relative;
+  cursor: pointer;
+  color: #ecf0f1;
+  display: inline-block;
+
+  &:hover {
+    color: #3498db;
+
+    .email-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(-8px);
+    }
+  }
+}
+
+.email-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-5px);
+  background: white;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 8px;
+  z-index: 1000;
+  cursor: pointer;
+
+  .copy-hint {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+    text-align: center;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid white;
+  }
+
+  &:hover {
+    background: #f5f5f5;
+  }
+
+  &:active {
+    transform: translateX(-50%) translateY(-3px);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .email-tooltip {
+    font-size: 12px;
+    padding: 4px 8px;
   }
 }
 </style>

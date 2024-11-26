@@ -13,7 +13,8 @@
                             <div v-for="(group, groupIndex) in cateList" :key="groupIndex" class="tags-group-icon-pair">
                                 <div v-for="(item, index) in group" :key="index" class="tags-group-icon"
                                     @click="goToDetail(item)">
-                                    <div class="group-name"
+                                    <div class="group-name" 
+                                        :class="{ 'selected': allData.selectedCategoryId === item.id }"
                                         :style="{ backgroundColor: item.backgroundColor, color: item.fontColor }">
                                         {{ item.name }}
                                     </div>
@@ -23,6 +24,7 @@
                                 <div v-for="(item, index) in group" :key="index" class="tags-group-icon"
                                     @click="goToDetail(item)">
                                     <div class="group-name"
+                                        :class="{ 'selected': allData.selectedCategoryId === item.id }"
                                         :style="{ backgroundColor: item.backgroundColor, color: item.fontColor }">
                                         {{ item.name }}
                                     </div>
@@ -32,6 +34,7 @@
                                 <div v-for="(item, index) in group" :key="index" class="tags-group-icon"
                                     @click="goToDetail(item)">
                                     <div class="group-name"
+                                        :class="{ 'selected': allData.selectedCategoryId === item.id }"
                                         :style="{ backgroundColor: item.backgroundColor, color: item.fontColor }">
                                         {{ item.name }}
                                     </div>
@@ -62,13 +65,6 @@
                             </div>
                         </div>
                     </div>
-                </a-col>
-                <a-col :span="24" class="announcement-box">
-                    <div style="cursor: pointer;" @click="goToDetail()">
-                        <Vue3Lottie class="announcement-box-dog" width="60px" height="60px"
-                            :animation-data="lo_jsonDog" />
-                    </div>
-                    <div class="line"></div>
                 </a-col>
                 <a-col class="articlesList-box" :span="12">
                     <div class="card">
@@ -126,7 +122,6 @@
 <script>
 import { reactive, toRefs, onMounted, watch } from 'vue'
 import { cateList, albumList } from '@/api/business.js';
-import lo_jsonDog from '@/assets/lottie/dog.json';
 export default {
     name: 'wContent',
     props: {
@@ -143,7 +138,8 @@ export default {
             albumList: [],
             albumList2: [],
             colorSchemes: {},
-            statistics: {}
+            statistics: {},
+            selectedCategoryId: null
         });
         const findCategoryName = (cid) => {
             const category = allData.cateList.flat().find(cate => cate.id === cid);
@@ -229,7 +225,13 @@ export default {
         };
         const goToDetail = (item) => {
             let id = item?.id ? item.id : ''
-            getAlbumList(id)
+            if (allData.selectedCategoryId === id) {
+                allData.selectedCategoryId = null;
+                getAlbumList();
+            } else {
+                allData.selectedCategoryId = id;
+                getAlbumList(id);
+            }
         };
         const getCategoryColors = (cid) => {
             const category = allData.cateList.flat().find(item => item.id === cid);
@@ -294,7 +296,6 @@ export default {
             getCategoryColors,
             goToDetail,
             allData,
-            lo_jsonDog,
         }
     },
 }
@@ -304,15 +305,18 @@ export default {
 <style scoped lang='scss'>
 .card {
     border-radius: 15px;
+    background-color: transparent;
 }
 
 .welcome-box {
     border-radius: 15px;
-    background: radial-gradient(at 10px 0, #a974d2, #7baff8, #a1f0f0, #e1f4ff, #f6ffff, #ffffff);
+    background: #fff;
     margin-bottom: 20px;
     display: flex;
     overflow: hidden;
     height: 40vh;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
     .welcome-text {
         margin: 30px;
@@ -320,6 +324,10 @@ export default {
         font-size: 35px;
         font-weight: 600;
         color: #363636;
+        background: linear-gradient(45deg, #363636, #666);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeIn 1s ease-in;
     }
 }
 
@@ -341,7 +349,7 @@ export default {
     }
 
     .tags-group-icon {
-        cursor: pointer !important;
+        cursor: pointer;
         background-color: #fff;
         padding: 3px;
         font-size: 30px;
@@ -349,11 +357,16 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 5px 5px 13px 0px rgba(117, 126, 136, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         width: 120px;
         height: 120px;
         border-radius: 30px;
-        transition: box-shadow 0.3s, font-size 0.3s;
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
 
         .group-name {
             height: 100%;
@@ -362,13 +375,21 @@ export default {
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-    }
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
 
-    .tags-group-icon:hover {
-        border: 2px solid #7cbbf6;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        font-size: 36px;
+            &:hover {
+                opacity: 1 !important;
+                transform: translateY(-2px);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            &.selected {
+                border: 2px solid #4a9eff;
+                box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
+                transform: scale(0.95);
+            }
+        }
     }
 
     .tags-group-icon:nth-child(even) {
@@ -417,113 +438,192 @@ export default {
 
 .announcement-box {
     background-color: #fff;
-    border-radius: 5px;
+    border-radius: 15px;
     height: 5vh;
     margin-bottom: 10px;
     margin-left: 9px;
     flex: 0 0 98.833333%;
     max-width: 98.833333%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
 
-    .announcement-box-dog {
-        position: absolute;
-        bottom: 0;
-        animation: moveAndFlip 10s infinite linear;
-    }
-
-    .line {
-        position: absolute;
-        bottom: 8px;
-        left: 0;
-        height: 2px;
-        width: 100%;
-        background-color: rgb(127, 127, 127);
-    }
-
-    /* 定义动画 */
-    /* 修改后的动画 */
-    @keyframes moveAndFlip {
-        0% {
-            left: 1px;
-            /* 从左侧开始 */
-            transform: scaleX(1);
-            /* 保持正常方向 */
-        }
-
-        50% {
-            left: calc(100% - 60px);
-            /* 移动到右侧 */
-            transform: scaleX(1);
-            /* 不翻转，保持正常方向 */
-        }
-
-        51% {
-            transform: scaleX(-1);
-            /* 到达右侧后立刻翻转 */
-        }
-
-        100% {
-            left: 1px;
-            /* 回到左侧 */
-            transform: scaleX(-1);
-            /* 保持翻转状态返回 */
-        }
-    }
+.articlesList-box {
+    break-inside: avoid;
+    margin-bottom: 20px;
 }
 
 .articlesList-list {
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px 0px rgba(117, 126, 136, 0.2);
-    height: 40vh;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    height: 50vh;
+    padding-bottom: 20px;
     margin-bottom: 4vh;
     box-sizing: border-box;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
 
     .image-box {
         display: flex;
-        border-radius: 10px;
+        border-radius: 15px;
         overflow: hidden;
         height: 80%;
         width: 100%;
         justify-content: center;
         align-items: center;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
     }
 
     .title {
-        margin-left: 20px;
+        margin: 15px 20px;
         font-size: 20px;
+        color: #2c3e50;
+        font-weight: 600;
+        transition: color 0.3s ease;
+
     }
 
     .introduction {
         display: flex;
         justify-content: space-between;
-        font-size: 18px;
-        margin: 0 20px;
+        font-size: 16px;
+        margin: 10px 20px;
         color: #babdba;
 
         .tip-box {
-            width: 70px;
-            height: 30px;
-            border-radius: 10px;
+            padding: 5px 15px;
+            border-radius: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: all 0.3s ease;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .welcome-box {
+        display: none;
+
+        .welcome-text {
+            font-size: 28px;
+            margin: 20px;
         }
     }
 
-    .icon {
-        margin-left: 20px;
-        display: flex;
+    .group-wrapper {
+        width: 100%;
+        margin: 0;
+        padding: 10px;
 
-        img {
-            width: 45px;
-            height: 40px;
+        .tags-group-icon {
+            width: 100px;
+            height: 100px;
+            font-size: 24px;
+        }
+    }
+
+    .articlesList-list {
+        height: auto;
+
+        .title {
+            font-size: 18px;
+            margin: 10px 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        text {
-            margin-right: 10px;
-            line-height: 38px;
-            color: #babdba;
+        .introduction {
+            font-size: 14px;
         }
+    }
+
+    .a-row {
+        .a-col {
+            width: 100% !important;
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+        }
+    }
+
+    .articlesList-box {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .articlesList-list {
+        height: auto;
+        min-height: 300px;
+        margin-bottom: 15px;
+
+        .image-box {
+            height: 200px;
+        }
+
+        .title {
+            font-size: 18px;
+            margin: 10px 15px;
+        }
+
+        .introduction {
+            font-size: 14px;
+            margin: 8px 15px;
+            
+            .tip-box {
+                padding: 3px 10px;
+            }
+        }
+    }
+
+    .row {
+        margin: 0 10px !important;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+
+    &:hover {
+        background: #555;
     }
 }
 </style>

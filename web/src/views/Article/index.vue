@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<a-spin :spinning="loading">
 		<div class="article-container" ref="mainRef" @scroll="handleScroll">
 			<!-- 返回按钮 -->
 			<!-- <div class="back-btn" @click="goBack">
@@ -106,8 +106,7 @@
 				</div>
 			</div>
 		</Transition>
-	</div>
-
+	</a-spin>
 </template>
 
 <script>
@@ -118,18 +117,40 @@ import { articleDetail, newsList } from '@/api/business'
 export default {
 	name: 'ArticleDetail',
 	setup() {
+		// 路由相关
 		const router = useRouter()
 		const route = useRoute()
+
+		// 文章基础数据
 		const viewCount = ref(1234)
 		const likeCount = ref(88)
 		const isLiked = ref(false)
+		const loading = ref(false)
 
+		// 文章详情数据
 		const allData = reactive({
 			articleData: {},
 			relatedArticles: [],
 			keyWordsMap: {}
 		});
 
+		// DOM引用
+		const mainRef = ref(null);
+
+		// 目录相关状态
+		const catalogItems = ref([]);
+		const currentHeading = ref('');
+		const isCollapsed = ref(false);
+		const showBackToTop = ref(false);
+
+		// Observer实例
+		let headingObserver = null;
+		let imageObserver = null;
+
+		// 清理函数集合
+		const cleanupFunctions = new Set();
+
+		// 计算属性 - 关键词列表
 		const keyWordsList = computed(() => {
 			if (!allData.articleData.keyWords) return [];
 			return allData.articleData.keyWords.split(',')
@@ -137,139 +158,24 @@ export default {
 				.map(id => allData.keyWordsMap[id] || id);
 		});
 
-		const handleLike = () => {
-			if (!isLiked.value) {
-				likeCount.value++
-				isLiked.value = true
-			}
-		}
-
-		const goBack = () => {
-			router.back()
-		}
-
-		const getArticleDetail = (id) => {
-			articleDetail({ id }).then(res => {
-				allData.articleData = res.data
-				if (res.data.keyWords) {
-					getRelatedArticles(res.data.keyWords)
-				}
-			})
-		}
-
-		const getRelatedArticles = (keyWords) => {
-			const firstKeyWord = keyWords.split(',')[0]
-
-			const parameter = {
-				pageNo: 1,
-				pageSize: 3,  // 只取3篇相关文章
-				keyWords: firstKeyWord,
-				status: 1,
-				recommended: 1
-			}
-
-			newsList(parameter).then(res => {
-				if (res.code === 200) {
-					// 过滤掉当前文章
-					allData.relatedArticles = res.data.lists.filter(item => item.id !== allData.articleData.id)
-				}
-			})
-		}
-
-		const initKeyWordsMap = () => {
-			const cachedKeyWordsList = localStorage.getItem('keyWordsList');
-			if (cachedKeyWordsList) {
-				const keyWordsList = JSON.parse(cachedKeyWordsList);
-				// 创建id到name的映射
-				const mapping = {};
-				keyWordsList.forEach(item => {
-					mapping[item.id] = item.name;
-				});
-				allData.keyWordsMap = mapping;
-			}
-		};
-
-		const handleArticleClick = (id) => {
-			router.push(`/article?id=${id}`);
-			getArticleDetail(id);
-			window.scrollTo(0, 0);
-		}
-
-		watch(
-			() => route.query.id,
-			(newId) => {
-				if (newId) {
-					getArticleDetail(newId);
+		// 节流函数
+		function throttle(fn, delay) {
+			let timer = null;
+			let lastTime = 0;
+			return function (...args) {
+				const now = Date.now();
+				if (now - lastTime >= delay) {
+					fn.apply(this, args);
+					lastTime = now;
+				} else if (!timer) {
+					timer = setTimeout(() => {
+						fn.apply(this, args);
+						lastTime = now;
+						timer = null;
+					}, delay);
 				}
 			}
-		);
-
-		onMounted(() => {
-			initKeyWordsMap();
-			const id = route.query.id
-			if (id) {
-				getArticleDetail(id)
-			}
-
-			// 添加全局滚动监听
-			window.addEventListener('scroll', handleScroll);
-		});
-
-		onUnmounted(() => {
-			window.removeEventListener('scroll', handleScroll);
-		});
-
-		const mainRef = ref(null);
-		const showBackToTop = ref(false);
-
-		// 修改滚动监听方法
-		const handleScroll = () => {
-			showBackToTop.value = window.scrollY > 300;
-		};
-
-		// 修改返回顶部方法
-		const scrollToTop = () => {
-			window.scrollTo({
-				top: 0,
-				behavior: 'smooth'
-			});
-		};
-
-		const catalogItems = ref([]);
-		const currentHeading = ref('');
-
-		// 解析文章内容生成目录
-		const generateCatalog = () => {
-			nextTick(() => {
-				const content = document.querySelector('.content');
-				if (!content) return;
-
-				const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
-				const items = [];
-
-				headings.forEach((heading, index) => {
-					// 为每个标题添加id
-					const id = `heading-${index}`;
-					heading.id = id;
-
-					items.push({
-						id,
-						text: heading.textContent,
-						level: parseInt(heading.tagName.charAt(1)),
-					});
-				});
-
-				catalogItems.value = items;
-			});
-		};
-
-		// 滚动到指定标题
-		const scrollToHeading = (id) => {
-			const element = document.getElementById(id);
-			if (element) {
-				element.scrollIntoView({ behavior: 'smooth' });
-			}
-		};
+		}
 
 		// 防抖函数
 		const debounce = (fn, delay) => {
@@ -278,21 +184,167 @@ export default {
 				if (timer) clearTimeout(timer);
 				timer = setTimeout(() => {
 					fn.apply(this, args);
+					timer = null;
 				}, delay);
 			};
 		};
 
+		// 处理文章点赞
+		const handleLike = () => {
+			if (!isLiked.value) {
+				likeCount.value++
+				isLiked.value = true
+			}
+		}
+
+		// 返回上一页
+		const goBack = () => {
+			router.back()
+		}
+
+		// 获取文章详情
+		const getArticleDetail = (id) => {
+			loading.value = true
+			articleDetail({ id }).then(res => {
+				allData.articleData = res.data
+				if (res.data.keyWords) {
+					getRelatedArticles(res.data.keyWords)
+				}
+			}).finally(() => {
+				loading.value = false
+			})
+		}
+
+		// 获取相关文章推荐
+		const getRelatedArticles = (keyWords) => {
+			const firstKeyWord = keyWords.split(',')[0]
+			const parameter = {
+				pageNo: 1,
+				pageSize: 3,
+				keyWords: firstKeyWord,
+				status: 1,
+				recommended: 1
+			}
+			newsList(parameter).then(res => {
+				if (res.code === 200) {
+					allData.relatedArticles = res.data.lists.filter(item => item.id !== allData.articleData.id)
+				}
+			}).finally(() => {
+				loading.value = false
+			})
+		}
+
+		// 初始化关键词映射表
+		const initKeyWordsMap = () => {
+			const cachedKeyWordsList = localStorage.getItem('keyWordsList');
+			if (cachedKeyWordsList) {
+				const keyWordsList = JSON.parse(cachedKeyWordsList);
+				const mapping = {};
+				keyWordsList.forEach(item => {
+					mapping[item.id] = item.name;
+				});
+				allData.keyWordsMap = mapping;
+			}
+		};
+
+		// 处理文章点击事件
+		const handleArticleClick = (id) => {
+			router.push(`/article?id=${id}`);
+			getArticleDetail(id);
+			window.scrollTo(0, 0);
+		}
+
+		// 处理页面滚动事件
+		const handleScroll = throttle(() => {
+			showBackToTop.value = window.scrollY > 300;
+			updateCurrentHeading();
+			handleFastScroll();
+		}, 100);
+
+		// 滚动到页面顶部
+		const scrollToTop = () => {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
+		};
+
+		// 设置标题观察器
+		const setupHeadingObserver = () => {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							currentHeading.value = entry.target.id;
+						}
+					});
+				},
+				{
+					rootMargin: '-100px 0px -90% 0px'
+				}
+			);
+			catalogItems.value.forEach(item => {
+				const element = document.getElementById(item.id);
+				if (element) {
+					observer.observe(element);
+				}
+			});
+			return observer;
+		};
+
+		// 生成文章目录
+		const generateCatalog = () => {
+			nextTick(() => {
+				const content = document.querySelector('.content');
+				if (!content) return;
+
+				// 等待内容渲染完成
+				setTimeout(() => {
+					const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+					const items = [];
+
+					headings.forEach((heading, index) => {
+						const id = `heading-${index}`;
+						heading.id = id;
+						items.push({
+							id,
+							text: heading.textContent.trim(),
+							level: parseInt(heading.tagName.charAt(1))
+						});
+					});
+
+					catalogItems.value = items;
+
+					// 重新设置观察器
+					if (headingObserver) {
+						headingObserver.disconnect();
+					}
+					headingObserver = setupHeadingObserver();
+
+					// 默认选中第一个标题
+					if (items.length > 0) {
+						currentHeading.value = items[0].id;
+					}
+				}, 100); // 给予一定延迟确保内容已渲染
+			});
+		};
+
+		// 滚动到指定标题位置
+		const scrollToHeading = (id) => {
+			const element = document.getElementById(id);
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth' });
+			}
+		};
+
+		// 更新当前目录项
 		const updateCurrentHeading = debounce(() => {
 			const headings = catalogItems.value.map(item => document.getElementById(item.id));
 			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-			// 如果滚动到顶部附近，直接选中第一个标题
 			if (scrollTop < 100) {
 				currentHeading.value = headings[0]?.id || '';
 				return;
 			}
-
-			// 遍历所有标题检查位置
 			for (let i = headings.length - 1; i >= 0; i--) {
 				const heading = headings[i];
 				if (heading && heading.getBoundingClientRect().top <= 100) {
@@ -302,11 +354,9 @@ export default {
 			}
 		}, 100);
 
-		// 添加一个新的滚动监听函数来处理快速滚动
+		// 处理快速滚动
 		const handleFastScroll = () => {
 			const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-			// 如果快速滚动到顶部，确保选中第一个标题
 			if (scrollTop < 100) {
 				const firstHeading = catalogItems.value[0]?.id;
 				if (firstHeading) {
@@ -315,30 +365,94 @@ export default {
 			}
 		};
 
-		// 监听文章内容变化
-		watch(() => allData.articleData.content, () => {
-			generateCatalog();
-		});
-
-		// 修改 onMounted 钩子中的事件监听
-		onMounted(() => {
-			window.addEventListener('scroll', updateCurrentHeading);
-			window.addEventListener('scroll', handleFastScroll, { passive: true });
-		});
-
-		// 修改 onUnmounted 钩子中的事件清理
-		onUnmounted(() => {
-			window.removeEventListener('scroll', updateCurrentHeading);
-			window.removeEventListener('scroll', handleFastScroll);
-		});
-
-		const isCollapsed = ref(false);
-
+		// 切换目录展开/收起状态
 		const toggleCatalog = () => {
 			isCollapsed.value = !isCollapsed.value;
 		};
 
+		// 设置图片懒加载
+		const setupLazyLoading = () => {
+			const imageObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							const img = entry.target;
+							img.src = img.dataset.src;
+							imageObserver.unobserve(img);
+						}
+					});
+				},
+				{
+					rootMargin: '50px 0px'
+				}
+			);
+			const images = document.querySelectorAll('.content img');
+			images.forEach(img => {
+				if (img.src) {
+					img.dataset.src = img.src;
+					img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+					imageObserver.observe(img);
+				}
+			});
+			return imageObserver;
+		};
+
+		// 添加清理函数
+		const addCleanup = (fn) => {
+			cleanupFunctions.add(fn);
+		};
+
+		// 监听路由变化
+		watch(() => route.query.id, (newId) => {
+			if (newId) {
+				getArticleDetail(newId);
+			}
+		});
+
+		// 监听文章内容变化
+		watch(() => allData.articleData.content, () => {
+			nextTick(() => {
+				generateCatalog();
+			});
+		}, { immediate: true });
+
+		// 组件挂载
+		onMounted(() => {
+			initKeyWordsMap();
+			const id = route.query.id
+			if (id) {
+				getArticleDetail(id)
+			}
+			window.addEventListener('scroll', handleScroll, { passive: true });
+			generateCatalog();
+			imageObserver = setupLazyLoading();
+
+			const scrollHandler = handleScroll;
+			window.addEventListener('scroll', scrollHandler, { passive: true });
+			addCleanup(() => window.removeEventListener('scroll', scrollHandler));
+			const observer = setupHeadingObserver();
+			addCleanup(() => observer.disconnect());
+			const imgObserver = setupLazyLoading();
+			addCleanup(() => imgObserver.disconnect());
+		});
+
+		// 组件卸载
+		onUnmounted(() => {
+			window.removeEventListener('scroll', handleScroll);
+			if (headingObserver) {
+				headingObserver.disconnect();
+				headingObserver = null;
+			}
+			if (imageObserver) {
+				imageObserver.disconnect();
+				imageObserver = null;
+			}
+			cleanupFunctions.forEach(cleanup => cleanup());
+			cleanupFunctions.clear();
+		});
+
 		return {
+			loading,
 			...toRefs(allData),
 			keyWordsList,
 			viewCount,

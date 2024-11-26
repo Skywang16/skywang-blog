@@ -1,7 +1,7 @@
 <template>
     <div style="height: 100%;">
         <a-row class="row" :gutter="16">
-            <a-col :span="12">
+            <a-col :xs="24" :sm="24" :md="12" :lg="12">
                 <div class="welcome-box">
                     <div class="welcome-text">
                         Hi!
@@ -52,38 +52,30 @@
                     </div>
                 </div>
             </a-col>
-            <a-col :span="12">
+            <a-col :xs="24" :sm="24" :md="12" :lg="12">
                 <div class="welcome-box2">
-                    <div class="head-box">
-                        <img src="@/assets/img/7b58525685c7fa8f58fac97575111bf.png" alt="">
+                    <div class="profile-section">
+                        <div class="head-box">
+                            <img src="@/assets/img/7b58525685c7fa8f58fac97575111bf.png" alt="profile">
+                            <div class="head-box-overlay"></div>
+                        </div>
+                        <div class="name-text">SkyWang</div>
                     </div>
-                    <div class="welcome-text">
-                        SkyWang
-                    </div>
-                    <div class="welcome-text" style="font-size: 24px;">
-                        <div>
-                            <div style="display: flex; justify-content: center">
-                                关键词
-                            </div>
-                            <div style="display: flex; justify-content: center;height: 40px;">
-                                {{ statistics.keyWordsCount }}
+                    <div class="stats-section">
+                        <div class="stat-item">
+                            <div class="stat-icon">📝</div>
+                            <div class="stat-content">
+                                <div class="stat-value">{{ statistics.keyWordsCount }}</div>
+                                <div class="stat-label">关键词</div>
                             </div>
                         </div>
-                        <div>
-                            <div style="display: flex; justify-content: center">
-                                文章数
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-content">
+                                <div class="stat-value">{{ statistics.count }}</div>
+                                <div class="stat-label">文章数</div>
                             </div>
-                            <div style="display: flex; justify-content: center; height: 40px;">
-                                {{ statistics.count }}
-                            </div>
-                        </div>
-                    </div>
-                    <div style="font-size: 20px; position: relative; bottom: 30px;">
-                        <div style="display: flex; justify-content: center">
-                            运行时间
-                        </div>
-                        <div style="display: flex; justify-content: center">
-                            {{ daysToTargetDate }}
                         </div>
                     </div>
                 </div>
@@ -109,8 +101,15 @@
                 </div>
             </a-col>
             <div class="footer-box">
-                <div class="footer-text">
-                    已经到底啦~
+                <div class="footer-content">
+                    <div class="footer-divider"></div>
+                    <div class="footer-text">
+                        <span>-- 已经到底啦 --</span>
+                    </div>
+                    <div class="runtime-info">
+                        <span class="runtime-icon">⏳</span>
+                        <span class="runtime-text">运行时间: {{ daysToTargetDate }}</span>
+                    </div>
                 </div>
             </div>
         </a-row>
@@ -127,7 +126,6 @@ import lo_json6 from '@/assets/lottie/6.json';
 import lo_jsonDog from '@/assets/lottie/dog.json';
 import { reactive, toRefs, onUnmounted, onMounted, watch, ref, computed } from 'vue'
 import { newsList, keyWordsLists } from '@/api/business.js';
-import { message } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 export default {
     name: 'wContent',
@@ -292,6 +290,8 @@ export default {
     display: flex;
     overflow: hidden;
     height: 40vh;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
     .welcome-text {
         margin: 30px;
@@ -299,6 +299,10 @@ export default {
         font-size: 35px;
         font-weight: 600;
         color: #363636;
+        background: linear-gradient(45deg, #363636, #666);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeIn 1s ease-in;
     }
 
     .head-box {
@@ -307,10 +311,22 @@ export default {
         overflow: hidden;
         margin: 30px auto 0 auto;
         border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
 
         img {
             height: 150px;
             width: 150px;
+            transition: transform 0.5s ease;
+
+            &:hover {
+                transform: scale(1.1);
+            }
         }
     }
 }
@@ -321,29 +337,135 @@ export default {
     margin-bottom: 20px;
     overflow: hidden;
     height: 40vh;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
 
-    .head-box {
-        height: 150px;
-        width: 150px;
-        overflow: hidden;
-        margin: 30px auto 0 auto;
-        border-radius: 50%;
+    .profile-section {
+        text-align: center;
 
-        img {
-            height: 150px;
-            width: 150px;
+        .head-box {
+            position: relative;
+            height: 120px;
+            width: 120px;
+            margin: 0 auto;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+                .head-box-overlay {
+                    opacity: 1;
+                }
+
+                img {
+                    transform: scale(1.1);
+                }
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+
+            .head-box-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(45deg,
+                        rgba(74, 158, 255, 0.2),
+                        rgba(130, 190, 255, 0.2));
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+        }
+
+        .name-text {
+            margin-top: 15px;
+            font-size: 28px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeIn 0.5s ease;
         }
     }
 
-    .welcome-text {
-
-        margin-top: 10px;
+    .stats-section {
         display: flex;
-        justify-content: space-evenly;
-        line-height: 40px;
-        font-size: 35px;
-        font-weight: 600;
-        color: #363636;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        padding: 20px 0;
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .stat-icon {
+                font-size: 24px;
+                opacity: 0.8;
+            }
+
+            .stat-content {
+                text-align: center;
+
+                .stat-value {
+                    font-size: 28px;
+                    font-weight: 600;
+                    color: #2c3e50;
+                    margin-bottom: 5px;
+                }
+
+                .stat-label {
+                    font-size: 14px;
+                    color: #666;
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom,
+                    transparent,
+                    #ddd,
+                    transparent);
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .welcome-box2 {
+        .stats-section {
+            flex-direction: column;
+            gap: 20px;
+
+            .stat-divider {
+                width: 80%;
+                height: 1px;
+            }
+        }
+
+        .runtime-section {
+            flex-direction: column;
+            gap: 10px;
+        }
     }
 }
 
@@ -410,6 +532,7 @@ export default {
     flex: 0 0 98.833333%;
     max-width: 98.833333%;
     align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
     .tip-item {
         cursor: pointer !important;
@@ -417,11 +540,17 @@ export default {
         margin: 5px 10px;
         padding: 0 15px;
         border: 2px solid transparent;
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
     }
 
     .selected {
-        border: 2px solid #7cbbf6;
-        /* 选中的边框样式 */
+        border: 2px solid #4a9eff;
+        box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
     }
 
     .line {
@@ -467,8 +596,12 @@ export default {
 .articles-container {
     column-count: 2; // 设置两列
     column-gap: 20px; // 设置列间距
-    padding: 0 10px;
-    background-color: transparent; // 移除card类的背景色
+    background-color: transparent;
+
+    // 添加媒体查询，在移动端下改为单列
+    @media screen and (max-width: 768px) {
+        column-count: 1; // 移动端单列显示
+    }
 }
 
 .articlesList-list {
@@ -479,21 +612,41 @@ export default {
     background-color: #fff; // 给每个文章卡片添加白色背景
     border-radius: 15px;
     box-shadow: 2px 2px 10px 0px rgba(117, 126, 136, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
 
     .image-box {
         border-radius: 10px;
         overflow: hidden;
         height: 60%;
         width: 100%;
+        position: relative;
+        overflow: hidden;
 
         img {
             width: 100%;
+            transition: transform 0.5s ease;
+
+            &:hover {
+                transform: scale(1.05);
+            }
         }
     }
 
     .title {
         margin: 20px;
         font-size: 26px;
+        color: #2c3e50;
+        font-weight: 600;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: #4a9eff;
+        }
     }
 
     .introduction {
@@ -528,8 +681,186 @@ export default {
 }
 
 .footer-box {
+    width: 100%;
     display: flex;
-    margin: auto;
-    color: #a3a3a3;
+    justify-content: center;
+    padding: 20px 0;
+    margin-top: 20px;
+
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .runtime-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #666;
+        font-size: 16px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+
+
+        .runtime-icon {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        .runtime-text {
+            font-weight: 500;
+        }
+    }
+
+    .footer-divider {
+        width: 50px;
+        height: 2px;
+        background: linear-gradient(to right, transparent, #ddd, transparent);
+    }
+
+    .footer-text {
+        color: #a3a3a3;
+        font-size: 14px;
+
+        span {
+            position: relative;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                width: 15px;
+                height: 1px;
+                background: #ddd;
+            }
+
+            &::before {
+                right: 100%;
+                margin-right: 10px;
+            }
+
+            &::after {
+                left: 100%;
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+    .footer-box {
+        padding: 15px 0;
+
+        .runtime-info {
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+        }
+    }
+}
+
+// 添加一些动画
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// 添加滚动条美化
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+
+    &:hover {
+        background: #555;
+    }
+}
+
+/* 修改移动端适配部分 */
+@media screen and (max-width: 768px) {
+    .articles-container {
+        column-count: 1;
+    }
+
+    .welcome-box {
+        display: none;
+    }
+
+    .welcome-box2 {
+        height: auto;
+        margin-bottom: 10px;
+        
+        .stats-section {
+            flex-direction: column;
+            gap: 20px;
+
+            .stat-divider {
+                width: 80%;
+                height: 1px;
+            }
+        }
+    }
+
+    .tip-box {
+        height: auto;
+        flex-wrap: wrap;
+        padding: 5px;
+
+        .tip-item {
+            margin: 3px 5px;
+            font-size: 14px;
+        }
+    }
+
+    .articlesList-list {
+        .title {
+            font-size: 20px;
+            margin: 15px;
+        }
+
+        .introduction {
+            font-size: 16px;
+            margin: 8px 15px;
+        }
+    }
+
+    .footer-box {
+        padding: 15px 0;
+
+        .runtime-info {
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+        }
+    }
 }
 </style>

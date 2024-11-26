@@ -96,22 +96,31 @@ function calculateBlock(hexKey, xPos, yOffset, hexWidth, hexHeight, shapeType, i
   if (!hexMovementProperties[hexKey]) {
     const isCurrentShape = shapeType === currentActiveShape
     hexMovementProperties[hexKey] = {
-      currentY: yOffset,
-      targetY: yOffset,
-      currentWidth: isCurrentShape && !isFirstSwitch ? hexWidth : 0,
-      currentHeight: isCurrentShape && !isFirstSwitch ? hexHeight : 0,
-      targetWidth: isCurrentShape ? hexWidth : 0,
-      targetHeight: isCurrentShape ? hexHeight : 0,
-      centerX: xPos + hexWidth / 2,
-      centerY: yOffset + hexHeight / 2,
-      width: hexWidth,
-      height: hexHeight,
-      shapeType,
-      isAnimating: false, // 是否正在动画中
+      // 当前和目标Y轴位置
+      currentY: yOffset, // 当前Y坐标
+      targetY: yOffset, // 目标Y坐标
+
+      // 形状尺寸相关
+      currentWidth: isCurrentShape && !isFirstSwitch ? hexWidth : 0, // 当前宽度
+      currentHeight: isCurrentShape && !isFirstSwitch ? hexHeight : 0, // 当前高度
+      targetWidth: isCurrentShape ? hexWidth : 0, // 目标宽度
+      targetHeight: isCurrentShape ? hexHeight : 0, // 目标高度
+
+      // 中心点坐标
+      centerX: xPos + hexWidth / 2, // 形状中心X坐标
+      centerY: yOffset + hexHeight / 2, // 形状中心Y坐标
+
+      // 基础尺寸
+      width: hexWidth, // 基础宽度
+      height: hexHeight, // 基础高度
+
+      // 动画控制属性
+      shapeType, // 形状类型
+      isAnimating: false, // 是否正在执行动画
       animationStartTime: 0, // 动画开始时间
-      originalY: yOffset, // 原始Y位置
+      originalY: yOffset, // 原始Y坐标位置
       animationPhase: 'none', // 动画阶段
-      hasTriggered: false // 新增：是否已经触发过动画
+      hasTriggered: false // 是否已触发动画
     }
   }
 
