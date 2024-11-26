@@ -3,7 +3,7 @@
 		<div class="article-container" ref="mainRef" @scroll="handleScroll">
 			<!-- 返回按钮 -->
 			<!-- <div class="back-btn" @click="goBack">
-				<i class="iconfont icon-back"></i>
+				<i class="icon-font icon-back"></i>
 				返回
 			</div> -->
 			<div class="article-content">
@@ -40,16 +40,15 @@
 				<!-- 文章底部 -->
 				<div class="article-footer">
 					<!-- <div class="interaction">
-					<div class="like-btn" @click="handleLike" :class="{ active: isLiked }">
-						<i class="iconfont icon-like"></i>
-						<span>{{ likeCount }}</span>
-					</div>
-					<div class="share-btn">
-						<i class="iconfont icon-share"></i>
-						分享
-					</div>
-				</div> -->
-
+						<div class="like-btn" @click="handleLike" :class="{ active: isLiked }">
+							<i class="iconfont icon-like"></i>
+							<span>{{ likeCount }}</span>
+						</div>
+						<div class="share-btn">
+							<i class="iconfont icon-share"></i>
+							分享
+						</div>
+					</div> -->
 					<div class="tags" v-if="articleData.keyWords">
 						<div class="tags-title">
 							<i class="iconfont icon-tag"></i>
@@ -60,7 +59,6 @@
 						</span>
 					</div>
 				</div>
-
 				<!-- 相关推荐 -->
 				<div class="related-articles" v-if="relatedArticles.length > 0">
 					<h3 class="section-title">相关推荐</h3>
@@ -538,7 +536,6 @@ export default {
 			.title {
 				font-size: 38px;
 				background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
 				letter-spacing: -0.5px;
 			}
@@ -871,7 +868,6 @@ export default {
 							margin-bottom: 8px;
 							color: #1a1a1a;
 							background: linear-gradient(120deg, #2c3e50 0%, #3498db 100%);
-							-webkit-background-clip: text;
 							-webkit-text-fill-color: transparent;
 						}
 
