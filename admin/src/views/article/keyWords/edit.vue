@@ -64,7 +64,6 @@ const formData = reactive({
     remark: '',
     sort: 0,
     isDisable: 0,
-    menus: []
 })
 
 const rules = {
@@ -79,7 +78,7 @@ const rules = {
 
 const handleSubmit = async () => {
     await formRef.value?.validate()
-    const params = { ...formData, menuIds: formData.menus.join() }
+    const params = { ...formData }
     mode.value == 'edit' ? await keyWordsEdit(params) : await keyWordsAdd(params)
     popupRef.value?.close()
     feedback.msgSuccess('操作成功')

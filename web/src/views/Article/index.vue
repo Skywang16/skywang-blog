@@ -1,45 +1,46 @@
 <template>
-	<a-spin :spinning="loading">
-		<div class="article-container" ref="mainRef" @scroll="handleScroll">
-			<!-- 返回按钮 -->
-			<!-- <div class="back-btn" @click="goBack">
+	<div class="article-container" ref="mainRef" @scroll="handleScroll">
+		<!-- 返回按钮 -->
+		<!-- <div class="back-btn" @click="goBack">
 				<i class="icon-font icon-back"></i>
 				返回
 			</div> -->
-			<div class="article-content">
-				<!-- 文章头部信息 -->
-				<div class="article-header">
-					<h1 class="title">{{ articleData.title }}</h1>
-					<div class="article-meta">
-						<span class="publish-time">
-							<i class="iconfont icon-time"></i>
-							{{ articleData.publishTime }}
-						</span>
-						<span class="category">
-							作者：{{ articleData.cid }}
-						</span>
-						<span class="recommend" v-if="articleData.recommended">
-							推荐文章
-						</span>
-						<!-- <span class="views">
+		<div class="article-content">
+			<!-- 文章头部信息 -->
+			<div class="article-header">
+				<h1 class="title">{{ articleData.title }}</h1>
+				<div class="article-meta">
+					<span class="publish-time">
+						<i class="iconfont icon-time"></i>
+						{{ articleData.publishTime }}
+					</span>
+					<span class="category">
+						作者：{{ articleData.cid }}
+					</span>
+					<span class="recommend" v-if="articleData.recommended">
+						推荐文章
+					</span>
+					<!-- <span class="views">
 						<i class="iconfont icon-eye"></i>
 						{{ viewCount }} 阅读
 					</span> -->
-					</div>
-					<div class="cover-image" v-if="articleData.image">
-						<img :src="articleData.image" :alt="articleData.title">
-					</div>
-					<div class="desc">{{ articleData.desc }}</div>
 				</div>
-
-				<!-- 文章主体内容 -->
-				<div class="article-body">
-					<div class="content markdown-body" v-html="articleData.content"></div>
+				<div class="cover-image" v-if="articleData.image">
+					<img :src="articleData.image" :alt="articleData.title">
 				</div>
+				<div class="article-desc">
+					<TypeWriter :text="articleData.desc" :speed="10" class="desc" />
+				</div>
+			</div>
 
-				<!-- 文章底部 -->
-				<div class="article-footer">
-					<!-- <div class="interaction">
+			<!-- 文章主体内容 -->
+			<div class="article-body">
+				<div class="content markdown-body" v-html="articleData.content"></div>
+			</div>
+
+			<!-- 文章底部 -->
+			<div class="article-footer">
+				<!-- <div class="interaction">
 						<div class="like-btn" @click="handleLike" :class="{ active: isLiked }">
 							<i class="iconfont icon-like"></i>
 							<span>{{ likeCount }}</span>
@@ -49,71 +50,76 @@
 							分享
 						</div>
 					</div> -->
-					<div class="tags" v-if="articleData.keyWords">
-						<div class="tags-title">
-							<i class="iconfont icon-tag"></i>
-							标签：
-						</div>
-						<span class="tag" v-for="tag in keyWordsList" :key="tag">
-							{{ tag }}
-						</span>
+				<div class="tags" v-if="articleData.keyWords">
+					<div class="tags-title">
+						<i class="iconfont icon-tag"></i>
+						标签：
 					</div>
-				</div>
-				<!-- 相关推荐 -->
-				<div class="related-articles" v-if="relatedArticles.length > 0">
-					<h3 class="section-title">相关推荐</h3>
-					<div class="article-cards">
-						<div class="article-card" v-for="article in relatedArticles" :key="article.id"
-							@click="handleArticleClick(article.id)">
-							<div class="card-cover">
-								<img v-if="article.image" :src="article.image" :alt="article.title">
-							</div>
-							<div class="card-info">
-								<h4>{{ article.title }}</h4>
-								<p>{{ article.desc }}</p>
-							</div>
-						</div>
-					</div>
+					<span class="tag" v-for="tag in keyWordsList" :key="tag">
+						{{ tag }}
+					</span>
 				</div>
 			</div>
-
-			<!-- 添加目录树组件 -->
-			<div class="article-catalog" :class="{ 'collapsed': isCollapsed }" v-show="catalogItems.length">
-				<div class="catalog-header">
-					<div class="catalog-title">目录</div>
-					<div class="catalog-toggle" @click="toggleCatalog">
-						<img style="height: 20px;" src="@/assets/icons/list.png" alt="">
-					</div>
-				</div>
-				<div class="catalog-list" v-show="!isCollapsed">
-					<div v-for="(item, index) in catalogItems" :key="index" class="catalog-item" :class="[
-						`level-${item.level}`,
-						{ active: currentHeading === item.id }
-					]" @click="scrollToHeading(item.id)">
-						{{ item.text }}
+			<!-- 相关推荐 -->
+			<div class="related-articles" v-if="relatedArticles.length > 0">
+				<h3 class="section-title">相关推荐</h3>
+				<div class="article-cards">
+					<div class="article-card" v-for="article in relatedArticles" :key="article.id"
+						@click="handleArticleClick(article.id)">
+						<div class="card-cover">
+							<img v-if="article.image" :src="article.image" :alt="article.title">
+						</div>
+						<div class="card-info">
+							<h4>{{ article.title }}</h4>
+						<!-- 	<p>{{ article.desc }}</p> -->
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- 添加回到顶部按钮 -->
-		<Transition name="fade-slide">
-			<div class="back-to-top" v-if="showBackToTop" @click="scrollToTop">
-				<div class="back-to-top-content">
-					<img style="height: 30px;" src="@/assets/icons/up.png" alt="" />
-					<span class="tooltip">返回顶部</span>
+
+		<!-- 添加目录树组件 -->
+		<div class="article-catalog" v-show="catalogItems.length">
+			<div class="catalog-header">
+				<div class="catalog-title">目录</div>
+				<div class="catalog-toggle" @click="toggleCatalog" :class="{ collapsed: isCollapsed }">
+					<img style="height: 20px;" src="@/assets/icons/list.png" alt="">
 				</div>
 			</div>
-		</Transition>
-	</a-spin>
+			<div class="catalog-list" :class="{ collapsed: isCollapsed }">
+				<div v-for="(item, index) in catalogItems" :key="index" class="catalog-item" :class="[
+					`level-${item.level}`,
+					{ active: currentHeading === item.id }
+				]" @click="scrollToHeading(item.id)">
+					{{ item.text }}
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 添加回顶部按钮 -->
+	<Transition name="fade-slide">
+		<div class="back-to-top" v-if="showBackToTop" @click="scrollToTop">
+			<div class="back-to-top-content">
+				<img style="height: 30px;" src="@/assets/icons/up.png" alt="" />
+				<span class="tooltip">返回顶部</span>
+			</div>
+		</div>
+	</Transition>
 </template>
 
 <script>
 import { reactive, toRefs, ref, onMounted, computed, watch, onUnmounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { articleDetail, newsList } from '@/api/business'
+import TypeWriter from '@/components/TypeWriter.vue'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark.css'
 
 export default {
 	name: 'ArticleDetail',
+	components: {
+		TypeWriter
+	},
 	setup() {
 		// 路由相关
 		const router = useRouter()
@@ -205,6 +211,8 @@ export default {
 			loading.value = true
 			articleDetail({ id }).then(res => {
 				allData.articleData = res.data
+				// 直接设置文档标题
+				document.title = res.data.title || '文章详情'
 				if (res.data.keyWords) {
 					getRelatedArticles(res.data.keyWords)
 				}
@@ -221,7 +229,7 @@ export default {
 				pageSize: 3,
 				keyWords: firstKeyWord,
 				status: 1,
-				recommended: 1
+				recommended: -1
 			}
 			newsList(parameter).then(res => {
 				if (res.code === 200) {
@@ -411,6 +419,7 @@ export default {
 		watch(() => allData.articleData.content, () => {
 			nextTick(() => {
 				generateCatalog();
+				setupCodeCopy();
 			});
 		}, { immediate: true });
 
@@ -432,6 +441,7 @@ export default {
 			addCleanup(() => observer.disconnect());
 			const imgObserver = setupLazyLoading();
 			addCleanup(() => imgObserver.disconnect());
+			setupCodeCopy();
 		});
 
 		// 组件卸载
@@ -448,6 +458,54 @@ export default {
 			cleanupFunctions.forEach(cleanup => cleanup());
 			cleanupFunctions.clear();
 		});
+
+		// 设置代码复制功能
+		const setupCodeCopy = () => {
+			nextTick(() => {
+				const codeBlocks = document.querySelectorAll('pre code');
+				codeBlocks.forEach(block => {
+					// 应用代码高亮
+					hljs.highlightElement(block);
+
+					// 获取语言类名并转换为驼峰格式
+					const language = block.className.match(/language-(\w+)/)?.[1] || '';
+					// 为每个代码块创建复制按钮和语言标识
+					const codeWrapper = document.createElement('div');
+					codeWrapper.className = 'code-wrapper';
+
+					const languageTag = document.createElement('span');
+					languageTag.className = 'language-tag';
+					languageTag.textContent = language;
+
+					const copyButton = document.createElement('button');
+					copyButton.className = 'code-copy-btn';
+					copyButton.innerHTML = '复制';
+
+					// 包装代码块
+					block.parentNode.insertBefore(codeWrapper, block);
+					codeWrapper.appendChild(languageTag);
+					codeWrapper.appendChild(block);
+					codeWrapper.appendChild(copyButton);
+
+					// 添加点击事件
+					copyButton.addEventListener('click', () => {
+						const code = block.textContent;
+						navigator.clipboard.writeText(code).then(() => {
+							copyButton.innerHTML = '已复制';
+							setTimeout(() => {
+								copyButton.innerHTML = '复制';
+							}, 2000);
+						}).catch(err => {
+							console.error('复制失败:', err);
+							copyButton.innerHTML = '复制失败';
+							setTimeout(() => {
+								copyButton.innerHTML = '复制';
+							}, 2000);
+						});
+					});
+				});
+			});
+		};
 
 		return {
 			loading,
@@ -536,20 +594,39 @@ export default {
 			.title {
 				font-size: 38px;
 				background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+				-webkit-background-clip: text;
+				background-clip: text;
 				-webkit-text-fill-color: transparent;
 				letter-spacing: -0.5px;
 			}
 
-			.desc {
-				font-size: 16px;
-				color: #666;
-				line-height: 1.8;
-				margin: 25px 0;
-				padding: 20px;
-				background: rgba(240, 242, 245, 0.8);
-				border-radius: 12px;
-				border-left: 5px solid #1890ff;
-				box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+			.article-desc {
+				.desc {
+					display: block;
+					font-size: 16px;
+					color: #4a5568;
+					line-height: 1.8;
+					margin: 25px 0;
+					padding: 25px 30px;
+					background: #f8fafc;
+					border-radius: 20px;
+					position: relative;
+					transition: all 0.3s ease;
+					border: 1px solid #e2e8f0;
+
+					// 顶部装饰条
+					&::before {
+						content: '';
+						position: absolute;
+						top: 0;
+						left: 50%;
+						transform: translateX(-50%);
+						width: 70px;
+						height: 4px;
+						background: linear-gradient(90deg, #60a5fa, #3b82f6);
+						border-radius: 0 0 4px 4px;
+					}
+				}
 			}
 
 			.article-meta {
@@ -565,7 +642,7 @@ export default {
 					gap: 6px;
 					background: rgba(0, 0, 0, 0.03);
 					padding: 6px 12px;
-					border-radius: 20px;
+					border-radius: 10px;
 					transition: all 0.3s ease;
 
 					&:hover {
@@ -606,121 +683,454 @@ export default {
 				line-height: 1.9;
 				color: #2c3e50;
 
-				::v-deep(img) {
-					max-width: 100% !important;
-					height: auto !important;
-					border-radius: 12px;
-					box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-					transition: transform 0.3s ease;
-					display: block;
-					margin: 20px auto;
-					object-fit: contain;
+				// 基础元素样式
+				::v-deep {
 
-					@media screen and (max-width: 768px) {
-						border-radius: 8px;
-						margin: 15px auto;
-					}
-
-					&:hover {
-						transform: scale(1.02);
-					}
-				}
-
-				::v-deep(p) {
+					// 图片样式
 					img {
-						margin: 0 auto;
+						max-width: 100%;
+						height: auto;
+						display: block;
+						margin: 20px auto;
+						border-radius: 12px;
+						box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+						transition: transform 0.3s ease;
+						object-fit: contain;
+
+						&:hover {
+							transform: scale(1.02);
+						}
+
+						@media screen and (max-width: 768px) {
+							border-radius: 8px;
+							margin: 15px auto;
+						}
 					}
-				}
 
-				::v-deep(h1, h2, h3, h4) {
-					margin: 24px 0 16px;
-					font-weight: 600;
-					color: #1a1a1a;
-				}
+					// 段落样式
+					p {
+						margin-bottom: 16px;
+						line-height: 1.8;
 
-				::v-deep(p) {
-					margin-bottom: 16px;
-				}
+						&[style*="text-indent"] {
+							text-indent: 2em;
+						}
 
-				::v-deep(pre) {
-					background: #282c34;
-					padding: 20px;
-					border-radius: 12px;
-					box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-					margin: 16px 0;
-					overflow-x: auto;
+						&+p {
+							margin-top: 1em;
+						}
+					}
 
-					code {
-						color: #abb2bf; // 代码文本颜色
+					// 标题样式
+					h1,
+					h2,
+					h3,
+					h4,
+					h5,
+					h6 {
+						margin: 1.6em 0 0.8em;
+						line-height: 1.4;
+						color: #2c3e50;
+						font-weight: 600;
+					}
 
-						// 代码中的关键字
-						.hljs-keyword {
+					h1 {
+						font-size: 2em;
+					}
+
+					h2 {
+						font-size: 1.75em;
+					}
+
+					h3 {
+						font-size: 1.5em;
+					}
+
+					h4 {
+						font-size: 1.25em;
+					}
+
+					h5 {
+						font-size: 1.1em;
+					}
+
+					h6 {
+						font-size: 1em;
+					}
+
+					// 列表样式
+					ul,
+					ol {
+						padding-left: 2em;
+						margin: 1em 0;
+
+						li {
+							margin-bottom: 0.5em;
+							line-height: 1.8;
+						}
+					}
+
+					// 行内代码样式
+					code:not(pre code) {
+						background: rgba(0, 0, 0, 0.06);
+						padding: 2px 6px;
+						border-radius: 4px;
+						font-size: 0.9em;
+						color: #476582;
+						font-family: Consolas, Monaco, 'Andale Mono', monospace;
+					}
+
+					// 引用块样式
+					blockquote {
+						margin: 20px 0;
+						padding: 20px;
+						background: rgba(245, 247, 250, 0.8);
+						border-left: 4px solid #1890ff;
+						border-radius: 8px;
+						color: #5c6b77;
+						font-size: 16px;
+						line-height: 1.8;
+						position: relative;
+
+						&::before {
+							content: '"';
+							position: absolute;
+							top: -20px;
+							left: 10px;
+							font-size: 60px;
+							color: rgba(24, 144, 255, 0.1);
+							font-family: Georgia, serif;
+						}
+
+						p {
+							margin: 0;
+							position: relative;
+							z-index: 1;
+
+							&+p {
+								margin-top: 16px;
+							}
+						}
+
+						br {
+							display: block;
+							margin: 0.5em 0;
+							content: "";
+						}
+					}
+
+					// 文本样式
+					strong,
+					b {
+						font-weight: 600;
+						color: #2c3e50;
+					}
+
+					em,
+					i {
+						font-style: italic;
+					}
+
+					del,
+					s {
+						text-decoration: line-through;
+						color: #999;
+					}
+
+					u {
+						text-decoration: underline;
+						text-underline-offset: 2px;
+					}
+
+					mark {
+						background-color: #ffeaa7;
+						padding: 0 4px;
+						border-radius: 2px;
+					}
+
+					// 代码块样式
+					pre {
+						background: #282c34;
+						border-radius: 12px;
+						box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+						margin: 16px 0;
+						overflow-x: auto;
+						position: relative;
+
+						code {
+							color: #abb2bf;
+							font-family: Consolas, Monaco, 'Andale Mono', monospace;
+							font-size: 14px;
+							line-height: 1.6;
+							tab-size: 4;
+
+							// 代码高亮
+							.hljs {
+								&-keyword {
+									color: #c678dd;
+								}
+
+								&-string {
+									color: #98c379;
+								}
+
+								&-number {
+									color: #d19a66;
+								}
+
+								&-function {
+									color: #61afef;
+								}
+
+								&-comment {
+									color: #5c6370;
+									font-style: italic;
+								}
+
+								&-variable {
+									color: #e06c75;
+								}
+
+								&-attr {
+									color: #d19a66;
+								}
+
+								&-built_in {
+									color: #56b6c2;
+								}
+
+								&-title {
+									color: #61afef;
+								}
+
+								&-type {
+									color: #e5c07b;
+								}
+							}
+						}
+
+						// 复制按钮
+						.code-copy-btn {
+							position: absolute;
+							right: 10px;
+							top: 10px;
+							padding: 6px 12px;
+							background: rgba(255, 255, 255, 0.1);
+							border: 1px solid rgba(255, 255, 255, 0.2);
+							border-radius: 4px;
+							color: #abb2bf;
+							font-size: 12px;
+							cursor: pointer;
+							transition: all 0.3s ease;
+							opacity: 0;
+
+							&:hover {
+								background: rgba(255, 255, 255, 0.2);
+							}
+						}
+
+						&:hover .code-copy-btn {
+							opacity: 1;
+						}
+					}
+
+					// 代码语言标识
+					pre[class*="language-"] {
+						&::before {
+							content: attr(class);
+							position: absolute;
+							top: 0;
+							left: 20px;
+							font-size: 12px;
+							color: #abb2bf;
+							background: rgba(255, 255, 255, 0.1);
+							padding: 3px 10px;
+							border-radius: 0 0 4px 4px;
+							text-transform: uppercase;
+						}
+					}
+
+					// 代码块容器样式
+					.code-wrapper {
+						position: relative;
+						margin: 16px 0;
+						background: #282c34;
+						border-radius: 12px;
+						box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+						pre {
+							margin: 0;
+							padding: 40px 20px 20px;
+							background: transparent;
+							box-shadow: none;
+
+							code {
+								padding: 0;
+								background: transparent;
+								font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace;
+								font-size: 14px;
+								line-height: 1.6;
+								tab-size: 4;
+							}
+						}
+
+						// 语言标签样式
+						.language-tag {
+							position: absolute;
+							top: -10px;
+							left: 10px;
+							background: rgba(255, 255, 255, 0.1);
+							color: #abb2bf;
+							padding: 0 10px;
+							font-size: 12px;
+							border-radius: 5px;
+							font-family: 'Fira Code', monospace;
+						}
+
+						// 复制按钮样式
+						.code-copy-btn {
+							position: absolute;
+							right: 10px;
+							top: 10px;
+							padding: 6px 12px;
+							background: rgba(255, 255, 255, 0.1);
+							border: 1px solid rgba(255, 255, 255, 0.2);
+							border-radius: 4px;
+							color: #abb2bf;
+							font-size: 12px;
+							cursor: pointer;
+							transition: all 0.3s ease;
+							opacity: 0;
+
+							&:hover {
+								background: rgba(255, 255, 255, 0.2);
+							}
+						}
+
+						&:hover .code-copy-btn {
+							opacity: 1;
+						}
+					}
+
+					// highlight.js 的自定义主题覆盖
+					.hljs {
+						background: transparent;
+						color: #abb2bf;
+
+						&-keyword {
 							color: #c678dd;
 						}
 
-						// 字符串
-						.hljs-string {
+						&-string {
 							color: #98c379;
 						}
 
-						// 数字
-						.hljs-number {
+						&-number {
 							color: #d19a66;
 						}
 
-						// 函数名
-						.hljs-function {
+						&-function {
 							color: #61afef;
 						}
 
-						// 注释
-						.hljs-comment {
+						&-comment {
 							color: #5c6370;
 							font-style: italic;
 						}
 
-						// 变量名
-						.hljs-variable {
+						&-variable {
 							color: #e06c75;
 						}
-					}
-				}
 
-				::v-deep(code):not(pre code) {
-					background: rgba(0, 0, 0, 0.06);
-					padding: 2px 6px;
-					border-radius: 4px;
-					font-size: 0.9em;
-					color: #476582;
-				}
+						&-attr {
+							color: #d19a66;
+						}
 
-				::v-deep(table) {
-					width: 100%;
-					margin: 16px 0;
-					border-collapse: collapse;
-					border-spacing: 0;
+						&-built_in {
+							color: #56b6c2;
+						}
 
-					th,
-					td {
-						padding: 12px;
-						border: 1px solid #e8e8e8;
-						text-align: left;
-					}
+						&-title {
+							color: #61afef;
+						}
 
-					th {
-						background-color: #fafafa;
-						font-weight: 600;
-						color: #1a1a1a;
-					}
-
-					tr {
-						&:hover {
-							background-color: #fafafa;
+						&-type {
+							color: #e5c07b;
 						}
 					}
 
-					tbody tr:nth-child(even) {
-						background-color: #fafcff;
+					// 添加表格样式
+					table {
+						width: 100%;
+						margin: 16px 0;
+						border-collapse: collapse;
+						border-spacing: 0;
+						border-radius: 15px;
+						overflow: hidden;
+						background: #fff;
+						box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+						th, td {
+							padding: 12px 16px;
+							text-align: left;
+							border: 1px solid #f0f0f0;
+						}
+
+						th {
+							background: #fafafa;
+							font-weight: 600;
+							color: #1a1a1a;
+						}
+
+						tr {
+							&:nth-child(even) {
+								background: #fafafa;
+							}
+
+							&:hover {
+								background: #f5f5f5;
+							}
+						}
+
+						// 响应式处理
+						@media screen and (max-width: 768px) {
+							display: block;
+							overflow-x: auto;
+							-webkit-overflow-scrolling: touch;
+							// 添加左右滑动提示
+							&::before {
+								content: '← 左右滑动查看更多 →';
+								display: block;
+								text-align: center;
+								font-size: 12px;
+								color: #999;
+								padding: 8px 0;
+							}
+
+							th, td {
+								padding: 8px 12px;
+								min-width: 120px; // 确保单元格有最小宽度
+								white-space: nowrap; // 防止内容换行
+							}
+						}
+
+						// 超小屏幕适配
+						@media screen and (max-width: 480px) {
+							font-size: 14px;
+							th, td {
+								padding: 6px 8px;
+								min-width: 100px;
+							}
+						}
+					}
+
+					// 表格容器
+					.table-container {
+						margin: 16px 0;
+						overflow-x: auto;
+						border-radius: 8px;
+						background: #fff;
+						box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 					}
 				}
 			}
@@ -868,6 +1278,8 @@ export default {
 							margin-bottom: 8px;
 							color: #1a1a1a;
 							background: linear-gradient(120deg, #2c3e50 0%, #3498db 100%);
+							-webkit-background-clip: text;
+							background-clip: text;
 							-webkit-text-fill-color: transparent;
 						}
 
@@ -1107,40 +1519,13 @@ html {
 	transform-origin: right top;
 	backdrop-filter: blur(10px);
 
-	// 添加收起状态样式
-	&.collapsed {
-		width: 60px;
-		padding: 15px 12px;
-		transform: translateX(10px);
-
-		.catalog-list {
-			opacity: 0;
-			transform: translateX(20px);
-		}
-
-		.catalog-header {
-			margin-bottom: 0;
-
-			.catalog-title {
-				opacity: 0;
-				transform: translateX(20px);
-				width: 0;
-			}
-
-			.catalog-toggle {
-				transform: rotate(135deg);
-				margin-left: auto;
-			}
-		}
-	}
-
 	.catalog-header {
 		position: sticky;
 		top: -20px;
-		background: rgba(255, 255, 255, 0.95); // 确保背景色与目录一致
+		background: rgba(255, 255, 255, 0.95);
 		z-index: 2;
 		padding-top: 20px;
-		margin-top: -20px; // 抵消父元素的padding
+		margin-top: -20px;
 		backdrop-filter: blur(10px);
 		display: flex;
 		justify-content: space-between;
@@ -1148,12 +1533,11 @@ html {
 		margin-bottom: 12px;
 		padding-bottom: 8px;
 		border-bottom: 1px solid #eee;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 		.catalog-title {
 			font-size: 16px;
 			font-weight: 600;
-			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			transition: all 0.3s;
 			white-space: nowrap;
 			overflow: hidden;
 		}
@@ -1166,25 +1550,31 @@ html {
 			align-items: center;
 			justify-content: center;
 			border-radius: 4px;
-			transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-			flex-shrink: 0;
+			transition: all 0.3s ease;
 
-			&:hover {
-				background: rgba(0, 0, 0, 0.04);
+			img {
+				transition: transform 0.3s ease;
+				transform: rotate(0deg);
 			}
 
-			i {
-				font-size: 16px;
-				color: #666;
+			&.collapsed img {
+				transform: rotate(135deg);
 			}
 		}
 	}
 
 	.catalog-list {
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		transition: all 0.3s ease;
 		opacity: 1;
-		transform: translateX(0);
-		padding-top: 5px;
+		max-height: calc(100vh - 400px);
+		overflow: hidden;
+
+		&.collapsed {
+			max-height: 0;
+			opacity: 0;
+			margin: 0;
+			padding: 0;
+		}
 
 		.catalog-item {
 			padding: 6px 12px;
@@ -1267,7 +1657,7 @@ html {
 	transform: rotate(180deg);
 }
 
-// 调整文章内容宽度,为目录留出空间
+// 调整文章内容宽度,为目录留出空
 .article-container {
 	max-width: calc(960px + 300px);
 }

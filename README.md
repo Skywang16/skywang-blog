@@ -43,7 +43,6 @@ Node.js	>=14.18.1	14.18.1
 go env -w GO111MODULE=on
 * 步骤二、配置 GOPROXY 环境变量
 go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
-cd likeadmin_go/server
 * 下载依赖
 go mod tidy
 go mod download

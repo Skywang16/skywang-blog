@@ -1,118 +1,140 @@
 <template>
     <div style="height: 100%;">
-        <a-row class="row" :gutter="16">
-            <a-col :xs="24" :sm="24" :md="12" :lg="12">
-                <div class="welcome-box">
-                    <div class="welcome-text">
-                        Hi!
-                        <br>
-                        欢迎访问
-                    </div>
-                    <div class="group-wrapper">
-                        <div class="tags-group-icon-pair">
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json1" />
-                            </div>
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json2" />
-                            </div>
+        <div class="container">
+            <div class="row">
+                <div class="col col-xs-24 col-sm-24 col-md-12 col-lg-12">
+                    <div class="welcome-box">
+                        <div class="welcome-text">
+                            Hi!
+                            <br>
+                            欢迎访问
                         </div>
-                        <div class="tags-group-icon-pair">
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json3" />
+                        <div class="group-wrapper">
+                            <div class="tags-group-icon-pair">
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json1" />
+                                </div>
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json2" />
+                                </div>
                             </div>
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json4" />
+                            <div class="tags-group-icon-pair">
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json3" />
+                                </div>
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json4" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="tags-group-icon-pair">
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json5" />
+                            <div class="tags-group-icon-pair">
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json5" />
+                                </div>
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json6" />
+                                </div>
                             </div>
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json6" />
+                            <div class="tags-group-icon-pair">
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json1" />
+                                </div>
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json2" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="tags-group-icon-pair">
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json1" />
-                            </div>
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json2" />
-                            </div>
-                        </div>
-                        <div class="tags-group-icon-pair">
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json3" />
-                            </div>
-                            <div class="tags-group-icon">
-                                <Vue3Lottie width="200px" height="200px" renderer="canvas" :animation-data="lo_json4" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a-col>
-            <a-col :xs="24" :sm="24" :md="12" :lg="12">
-                <div class="welcome-box2">
-                    <div class="profile-section">
-                        <div class="head-box">
-                            <img src="@/assets/img/7b58525685c7fa8f58fac97575111bf.png" alt="profile">
-                            <div class="head-box-overlay"></div>
-                        </div>
-                        <div class="name-text">SkyWang</div>
-                    </div>
-                    <div class="stats-section">
-                        <div class="stat-item">
-                            <div class="stat-icon">📝</div>
-                            <div class="stat-content">
-                                <div class="stat-value">{{ statistics.keyWordsCount }}</div>
-                                <div class="stat-label">关键词</div>
-                            </div>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item">
-                            <div class="stat-icon">📚</div>
-                            <div class="stat-content">
-                                <div class="stat-value">{{ statistics.count }}</div>
-                                <div class="stat-label">文章数</div>
+                            <div class="tags-group-icon-pair">
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json3" />
+                                </div>
+                                <div class="tags-group-icon">
+                                    <Vue3Lottie width="200px" height="200px" renderer="canvas"
+                                        :animation-data="lo_json4" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </a-col>
-            <div :span="24" class="tip-box">
-                <div class="tip-item" :style="{ backgroundColor: item.backgroundColor, color: item.fontColor }"
-                    v-for="(item, index) in keyWordsList" :key="index" @click="selectItem(item)"
-                    :class="{ 'selected': selectedItem === item }">
-                    <div class="title">{{ item.name }}</div>
+                <div class="col col-xs-24 col-sm-24 col-md-12 col-lg-12">
+                    <div class="welcome-box2">
+                        <div class="profile-section">
+                            <div class="head-box">
+                                <img src="@/assets/img/7b58525685c7fa8f58fac97575111bf.png" alt="profile">
+                                <div class="head-box-overlay"></div>
+                            </div>
+                            <div class="name-text">SkyWang</div>
+                        </div>
+                        <div class="stats-section">
+                            <div class="stat-item">
+                                <div class="stat-content">
+                                    <div class="stat-value">
+                                        <CountUp :end-value="statistics.keyWordsCount" :duration="2500" />
+                                    </div>
+                                    <div class="stat-label">关键词</div>
+                                </div>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item">
+                                <div class="stat-content">
+                                    <div class="stat-value">
+                                        <CountUp :end-value="statistics.count" />
+                                    </div>
+                                    <div class="stat-label">文章数</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-item" :style="{ backgroundColor: item.backgroundColor, color: item.fontColor }"
+                        v-for="(item, index) in keyWordsList" :key="index" @click="selectItem(item)"
+                        :class="{ 'selected': selectedItem === item }">
+                        <div class="title">{{ item.name }}</div>
+                    </div>
+                </div>
+                <div class="col col-24">
+                    <div class="card articles-container">
+                        <div class="articlesList-list" v-for="(item, index) in articlesList" :key="index"
+                            @click="goToDetail(item)">
+                            <div class="image-box">
+                                <img :src="item.image" alt="">
+                            </div>
+                            <div class="title">{{ item.title }}</div>
+                            <!-- <div class="introduction">{{ item.desc }}</div> -->
+                            <div class="meta-info">
+                                <span class="publish-time">{{ item.publishTime }}</span>
+                                <div class="tags-container">
+                                    <span class="category-tag" v-for="(keyWordId, index) in item.keyWords.split(',')"
+                                        :key="index">
+                                        {{ getKeyWordName(keyWordId) }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-box">
+                    <div class="footer-content">
+                        <div class="footer-divider"></div>
+                        <div class="footer-text">
+                            <span>-- 已经到底啦 --</span>
+                        </div>
+                        <div class="runtime-info">
+                            <span class="runtime-icon">⏳</span>
+                            <span class="runtime-text">运行时间: {{ daysToTargetDate }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <a-col :span="24">
-                <div class="card articles-container">
-                    <div class="articlesList-list" v-for="(item, index) in articlesList" :key="index"
-                        @click="goToDetail(item)">
-                        <div class="image-box">
-                            <img :src="item.image" alt="">
-                        </div>
-                        <div class="title">{{ item.title }}</div>
-                        <div class="introduction">{{ item.desc }}</div>
-                        <div class="introduction">{{ item.publishTime }}</div>
-                    </div>
-                </div>
-            </a-col>
-            <div class="footer-box">
-                <div class="footer-content">
-                    <div class="footer-divider"></div>
-                    <div class="footer-text">
-                        <span>-- 已经到底啦 --</span>
-                    </div>
-                    <div class="runtime-info">
-                        <span class="runtime-icon">⏳</span>
-                        <span class="runtime-text">运行时间: {{ daysToTargetDate }}</span>
-                    </div>
-                </div>
-            </div>
-        </a-row>
+        </div>
     </div>
 </template>
 
@@ -127,6 +149,7 @@ import lo_jsonDog from '@/assets/lottie/dog.json';
 import { reactive, toRefs, onUnmounted, onMounted, watch, ref, computed } from 'vue'
 import { newsList, keyWordsLists } from '@/api/business.js';
 import { useRouter } from 'vue-router';
+import CountUp from '@/components/CountUp.vue'
 export default {
     name: 'wContent',
     props: {
@@ -135,12 +158,18 @@ export default {
             default: false
         }
     },
+    components: {
+        CountUp
+    },
     setup(props) {
         const { show } = toRefs(props);
         const allData = reactive({
             articlesList: [],
             keyWordsList: [],
-            statistics: {},
+            statistics: {
+                count: 0,
+                keyWordsCount: 0
+            },
             selectedItem: [],
         });
         const router = useRouter();
@@ -166,7 +195,7 @@ export default {
             newsList(parameter).then((res) => {
                 if (res.code == 200) {
                     allData.articlesList = res.data.lists;
-                    allData.statistics.count = res.data.count;
+                    allData.statistics.count = Number(res.data.count) || 0;
                 } else {
                     console.log(res)
                 }
@@ -182,13 +211,13 @@ export default {
             keyWordsLists(parameter).then((res) => {
                 if (res.code == 200) {
                     const generateRandomColor = () => {
-                        // 生成清新的颜色  
-                        const randomHue = Math.floor(Math.random() * 360); // 随机色调  
-                        const saturation = '60%'; // 饱和度  
-                        const lightness = '90%'; // 初始亮度  
-                        // 使用 HSL 来生成背景颜色  
+                        // 生成清新的颜色
+                        const randomHue = Math.floor(Math.random() * 360); // 随机色调
+                        const saturation = '60%'; // 饱和度
+                        const lightness = '90%'; // 初始亮度
+                        // 使用 HSL 来生成背景颜色
                         const backgroundColor = `hsl(${randomHue}, ${saturation}, ${lightness})`;
-                        // 背景颜色的亮度降低 20% 来生成字体颜色  
+                        // 背景颜色的亮度降低 20% 来生成字体颜色
                         const darkerLightness = Math.max(0, parseInt(lightness) - 50) + '%';
                         const fontColor = `hsl(${randomHue}, ${saturation}, ${darkerLightness})`;
                         return {
@@ -202,7 +231,7 @@ export default {
                         fontColor: generateRandomColor().fontColor
                     }));
                     allData.keyWordsList = lists;
-                    allData.statistics.keyWordsCount = res.data.count;
+                    allData.statistics.keyWordsCount = Number(res.data.count) || 0;
 
                     // 添加缓存存储
                     localStorage.setItem('keyWordsList', JSON.stringify(lists));
@@ -260,11 +289,19 @@ export default {
                 currentDate.value = new Date();
             }, 1000);
         })
+
+        const getKeyWordName = (keyWordsId) => {
+            if (!keyWordsId || !allData.keyWordsList.length) return '';
+            const keyWord = allData.keyWordsList.find(k => k.id === Number(keyWordsId));
+            return keyWord ? keyWord.name : '';
+        };
+
         return {
             ...toRefs(allData),
             goToDetail,
             selectItem,
             daysToTargetDate,
+            getKeyWordName,
             lo_json1,
             lo_json2,
             lo_json3,
@@ -278,7 +315,7 @@ export default {
 
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .card {
     border-radius: 15px;
 }
@@ -416,11 +453,6 @@ export default {
             align-items: center;
             gap: 10px;
 
-            .stat-icon {
-                font-size: 24px;
-                opacity: 0.8;
-            }
-
             .stat-content {
                 text-align: center;
 
@@ -429,10 +461,19 @@ export default {
                     font-weight: 600;
                     color: #2c3e50;
                     margin-bottom: 5px;
+                    transition: all 0.3s ease;
+
+                    span {
+                        display: inline-block;
+                        background: linear-gradient(45deg, #2c3e50, #3498db);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        animation: fadeIn 0.5s ease-out;
+                    }
                 }
 
                 .stat-label {
-                    font-size: 14px;
+                    font-size: 24px;
                     color: #666;
                     white-space: nowrap;
                 }
@@ -653,7 +694,7 @@ export default {
         font-size: 18px;
         margin: 10px 20px;
         color: #babdba;
-        // 超出两行省略
+        // 超出两行省���
         text-overflow: -o-ellipsis-lastline;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -676,6 +717,34 @@ export default {
             margin-right: 10px;
             line-height: 38px;
             color: #babdba;
+        }
+    }
+
+    .meta-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 20px;
+
+        .publish-time {
+            font-size: 18px;
+            color: #babdba;
+        }
+
+        .tags-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #4a9eff;
+            background-color: rgba(74, 158, 255, 0.1);
         }
     }
 }
@@ -815,7 +884,7 @@ export default {
     .welcome-box2 {
         height: auto;
         margin-bottom: 10px;
-        
+
         .stats-section {
             flex-direction: column;
             gap: 20px;
@@ -861,6 +930,73 @@ export default {
         .footer-text {
             font-size: 12px;
         }
+    }
+}
+
+/* 添加新的网格系统样式 */
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+/* 响应式列宽 */
+.col-24 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .col-md-12 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-lg-12 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@keyframes countUp {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 </style>

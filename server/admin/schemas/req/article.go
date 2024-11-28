@@ -21,7 +21,7 @@ type ArticleNewsAddReq struct {
 	Desc        string `form:"desc" binding:"required"`         // 简介
 	Cid         string `form:"cid" binding:"required"`          // 作者
 	Content     string `form:"content" binding:"required"`      // 内容
-	KeyWords    string `form:"ceywords" binding:"required"`     // 关键词
+	KeyWords    string `form:"keywords" binding:"required"`     // 关键词
 	Status      int    `form:"status" binding:"oneof= 0 1"`     // 状态: [-1=全部, 0=否, 1=是]
 	Sort        int8   `form:"sort" binding:"gte=0,lte=9999"`   // 排序
 	PublishTime string `form:"publishTime" binding:"required"`  // 发布时间

@@ -3,7 +3,6 @@ package service
 import (
 	"likeadmin/admin/service/article"
 	"likeadmin/admin/service/common"
-	"likeadmin/admin/service/information"
 	"likeadmin/admin/service/setting"
 	"likeadmin/admin/service/system"
 )
@@ -31,10 +30,4 @@ var InitFunctions = []interface{}{
 	// article
 	article.NewArticleNewsService,
 	article.NewArticleNewsKeyWordsService,
-	// information
-	information.NewInformationWeaponsService,
-	information.NewInformationWeaponsSeriesService,
-	information.NewInformationHeroService,
-	information.NewInformationHeroTypeService,
-	information.NewInformationMapsService,
 }

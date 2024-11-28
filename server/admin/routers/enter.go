@@ -3,7 +3,6 @@ package routers
 import (
 	"likeadmin/admin/routers/article"
 	"likeadmin/admin/routers/common"
-	"likeadmin/admin/routers/information"
 	"likeadmin/admin/routers/monitor"
 	"likeadmin/admin/routers/setting"
 	"likeadmin/admin/routers/system"
@@ -34,10 +33,4 @@ var InitRouters = []*core.GroupBase{
 	// article
 	article.NewsGroup,
 	article.KeyWordsGroup,
-	// information
-	information.WeaponsGroup,
-	information.WeaponsSeriesGroup,
-	information.HeroGroup,
-	information.HeroTypeGroup,
-	information.MapsGroup,
 }

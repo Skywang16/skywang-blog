@@ -16,7 +16,7 @@
                         <el-form-item label="文章简介" prop="desc">
                             <div class="w-80">
                                 <el-input v-model="formData.desc" placeholder="请输入文章简介" type="textarea"
-                                    :autosize="{ minRows: 3, maxRows: 6 }" :maxlength="200" show-word-limit clearable />
+                                    :autosize="{ minRows: 3, maxRows: 6 }" :maxlength="400" show-word-limit clearable />
                             </div>
                         </el-form-item>
                         <el-form-item label="文章封面" prop="image">

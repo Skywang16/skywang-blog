@@ -1,8 +1,11 @@
 <template>
     <div style="height: 100%;">
-        <a-spin :spinning="loading">
-            <a-row class="row" :gutter="16">
-                <a-col :span="12">
+        <div class="loading-overlay" v-if="loading">
+            <div class="loading-spinner"></div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col col-12">
                     <div class="welcome-box">
                         <div class="welcome-text">
                             Hi!
@@ -13,7 +16,7 @@
                             <div v-for="(group, groupIndex) in cateList" :key="groupIndex" class="tags-group-icon-pair">
                                 <div v-for="(item, index) in group" :key="index" class="tags-group-icon"
                                     @click="goToDetail(item)">
-                                    <div class="group-name" 
+                                    <div class="group-name"
                                         :class="{ 'selected': allData.selectedCategoryId === item.id }"
                                         :style="{ backgroundColor: item.backgroundColor, color: item.fontColor }">
                                         {{ item.name }}
@@ -42,8 +45,8 @@
                             </div>
                         </div>
                     </div>
-                </a-col>
-                <a-col :span="12">
+                </div>
+                <div class="col col-12">
                     <div class="welcome-box">
                         <div style="display: flex; justify-content: space-between; width: 100%;">
                             <div class="welcome-text">
@@ -65,12 +68,12 @@
                             </div>
                         </div>
                     </div>
-                </a-col>
-                <a-col class="articlesList-box" :span="12">
+                </div>
+                <div class="col col-12">
                     <div class="card">
                         <div class="articlesList-list" v-for="(item, index) in albumList" :key="index">
                             <div class="image-box">
-                                <a-image style="height: 100%; " :src="item.uri" alt="" />
+                                <img style="height: 100%;" :src="item.uri" alt="" />
                             </div>
                             <div class="title">{{ item.name }}</div>
                             <div class="introduction">
@@ -89,12 +92,12 @@
                             </div>
                         </div>
                     </div>
-                </a-col>
-                <a-col class="articlesList-box" :span="12">
+                </div>
+                <div class="col col-12">
                     <div class="card">
                         <div class="articlesList-list" v-for="(item, index) in albumList2" :key="index">
                             <div class="image-box">
-                                <a-image style="height: 100%; " :src="item.uri" alt="" />
+                                <img style="height: 100%;" :src="item.uri" alt="" />
                             </div>
                             <div class="title">{{ item.name }}</div>
                             <div class="introduction">
@@ -113,9 +116,9 @@
                             </div>
                         </div>
                     </div>
-                </a-col>
-            </a-row>
-        </a-spin>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -153,13 +156,13 @@ export default {
                 if (res.code == 200) {
                     // 生成随机颜色的函数
                     const generateRandomColor = () => {
-                        // 生成清新的颜色  
-                        const randomHue = Math.floor(Math.random() * 360); // 随机色调  
-                        const saturation = '60%'; // 饱和度  
-                        const lightness = '90%'; // 初始亮度  
-                        // 使用 HSL 来生成背景颜色  
+                        // 生成清新的颜色
+                        const randomHue = Math.floor(Math.random() * 360); // 随机色调
+                        const saturation = '60%'; // 饱和度
+                        const lightness = '90%'; // 初始亮度
+                        // 使用 HSL 来生成背景颜色
                         const backgroundColor = `hsl(${randomHue}, ${saturation}, ${lightness})`;
-                        // 背景颜色的亮度降低 20% 来生成字体颜色  
+                        // 背景颜色的亮度降低 20% 来生成字体颜色
                         const darkerLightness = Math.max(0, parseInt(lightness) - 50) + '%';
                         const fontColor = `hsl(${randomHue}, ${saturation}, ${darkerLightness})`;
                         return {
@@ -302,7 +305,7 @@ export default {
 
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .card {
     border-radius: 15px;
     background-color: transparent;
@@ -596,7 +599,7 @@ export default {
         .introduction {
             font-size: 14px;
             margin: 8px 15px;
-            
+
             .tip-box {
                 padding: 3px 10px;
             }
@@ -625,5 +628,66 @@ export default {
     &:hover {
         background: #555;
     }
+}
+
+/* 添加新的加载动画样式 */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 添加网格系统样式 */
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-12 {
+    flex: 0 0 50%;
+    max-width: 50%;
 }
 </style>

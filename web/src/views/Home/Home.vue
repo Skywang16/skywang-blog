@@ -614,7 +614,7 @@ export default {
 
   img {
     position: relative;
-    bottom: 2px;
+    top: 5px;
     height: 25px;
     margin-right: 2px;
   }

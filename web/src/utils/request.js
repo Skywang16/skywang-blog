@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { notification } from 'ant-design-vue'
 
-let BaseUrl = 'https://api.skywang.asia/api/'
+ let BaseUrl = 'https://api.skywang.asia/api/'
+// let BaseUrl = 'http://127.0.0.1:8001/api/'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -13,27 +13,18 @@ const request = axios.create({
 // 异常拦截处理器
 const errorHandler = (error) => {
   if (error.response) {
-    const { data = {}, status, statusText } = error.response
+    const { data = {}, status } = error.response
     // 403 无权限
     if (status === 403) {
-      notification.error({
-        message: '您没有相关访问权限',
-        description: (data && data.message) || statusText
-      })
+      console.log('您没有相关访问权限')
     }
     // 401 未登录/未授权
     if (status === 401 && !(data.result && data.result.isLogin)) {
-      notification.error({
-        message: '认证失败',
-        description: '您未登录或登录超时！'
-      })
+      console.log('认证失败')
     }
     // 自定义错误处理
     if (data.code === 333) {
-      notification.error({
-        message: '登录超时，请重新登录',
-        description: '您的会话已过期'
-      })
+      console.log('登录超时，请重新登录')
     }
   }
   return Promise.reject(error)

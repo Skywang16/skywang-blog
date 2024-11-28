@@ -70,7 +70,7 @@ func loadConfig(envPath string) envConfig {
 		RedisUrl:      "redis://121.40.151.239:6416",
 		RedisPoolSize: 100,
 		// 数据源配置
-		DatabaseUrl:            "wjjTest:Xzw@wjj666,@tcp(121.40.151.239:3306)/blog?charset=utf8mb4&parseTime=True&loc=Local",
+		DatabaseUrl:            "wjjTest:Xzw@wjj666@tcp(121.40.151.239:3306)/blog?charset=utf8mb4&parseTime=True&loc=Local",
 		DbTablePrefix:          "la_",
 		DbDefaultStringSize:    256,
 		DbMaxIdleConns:         10,

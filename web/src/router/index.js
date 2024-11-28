@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'
 
 // 初始路由
 const routes = [
@@ -9,45 +9,36 @@ const routes = [
   {
     path: '/Home',
     name: 'Home',
-    component: () => import('@/views/Home/Home.vue')
+    component: () => import('@/views/Home/Home.vue'),
   },
   {
     path: '/article',
     name: 'Article',
-    component: () => import('@/views/Article/index.vue')
-  },
-
-  /* {
-    path: '/404',
-    component: () => import('@/views/404.vue')
-  }, */
-  /* {
-    path: '/:pathMatch(.*)',
-    redirect: '/404'
-  } */
-];
+    component: () => import('@/views/Article/index.vue'),
+  }
+  // ...其他路由
+]
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
-  // 刷新时，滚动条位置还原
-  scrollBehavior: () => ({ left: 0, top: 0 }),
-});
+  scrollBehavior: () => ({ left: 0, top: 0 })
+})
 
 // 全局前置守卫
-const whileList = ['/Home', '/article']; // 白名单
+const whileList = ['/Home', '/article']
 
 router.beforeEach((to, from, next) => {
-  let hastoken = localStorage.getItem('token');
+  let hastoken = localStorage.getItem('token')
   if (hastoken) {
-    next();
+    next()
   } else {
     if (whileList.includes(to.path)) {
-      next();
+      next()
     } else {
-      next(`/Home?redirect=${to.path}`);
+      next(`/Home?redirect=${to.path}`)
     }
   }
-});
+})
 
-export default router;
+export { router }
